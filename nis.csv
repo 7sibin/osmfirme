@@ -1,0 +1,637 @@
+﻿osm_type,osm_id,name,category,place,street,housenumber,postcode,phone,phone_alt,website,email,facebook,instagram,opening_hours,lat,lon
+node,9713356980,Препород,accountant,,,,,+38118520320,,https://www.preporod.co.rs,preporodnis@gmail.com,,,,43.3152812,21.8944804
+way,473550237,Apel Apartments,apartment,Ниш,Игманска,4,18109,,,http://www.apelapartments.com/,,,,,43.3097584,21.9130126
+node,12504544965,Freya SPA & Apartments,apartment,Ниш,Мокрањчева,37,18000,+38118527161,,https://www.freyaspacentar.rs/,freyaspacentar@gmail.com,,,,43.3088256,21.9067202
+node,13697702704,Princ,apartment,Ниш,Ивана Милутиновића,28,18000,+38163446561,,https://princ.rs/kontakt/,reservations@princ.rs,,,,43.3213377,21.8784378
+node,9535723228,Top rooms,apartment,,,,,+3810601695223,,http://toproomserbia.com/,toproomsnis@hotmail.com,,,,43.3202942,21.895166
+way,1189165024,Светлост,appliance,Ниш,Обреновићева,59v,18000,+38118519016,,https://svetlostnis.rs/,,,,Mo-Fr 08:00-20:00; Sa 08:00-16:00,43.3154835,21.8948473
+node,8369930243,Историјски архив Ниш,archive,,,,,,,https://www.arhivnis.rs/,,,,,43.3265846,21.8941711
+node,12032989710,4 kids,baby_goods,,,,,+38118570075,,https://www.4kids.rs/,shop@4kids.rs,,,Mo-Sa 10:00-21:00,43.3339681,21.9367016
+way,473327608,Акса,baby_goods,Ниш,Булевар др Зорана Ђинђића,17v,18000,+38118240923,,https://www.aksa.rs/radnje/7-aksa-nis,,,,Mo-Fr 09:00-21:00; Sa 09:00-20:00; Su 09:00-17:00,43.3193488,21.9088745
+node,13683836314,Branković,bakery,Ниш,Рајићева,30,18000,+38118241046,,https://pekara-brankovic.com/,,,,Mo-Sa 06:00-14:00,43.3145611,21.8976028
+node,13132460801,Бранковић,bakery,Ниш,Булевар др Зорана Ђинђића,68,18000,+38118517990,,https://pekara-brankovic.com/,,,,Mo-Sa 06:00-14:00; Su 07:00-14:00,43.3202741,21.9018533
+node,11341631952,Житопек,bakery,,,,,,,https://zitopek.rs/,,,,Mo-Fr 06:00-16:00; Sa 06:00-13:00,43.3189581,21.9209698
+node,13132963927,Житопек,bakery,Ниш,Булевар др Зорана Ђинђића,35,18000,+381608101276,,https://zitopek.rs/,,,,Mo-Fr 06:00-16:00; Sa 06:00-13:00,43.3176649,21.9119861
+node,13145880342,Житопек,bakery,Ниш,Вожда Карађорђа,78,18000,+381608101821,,https://zitopek.rs/,,,,Mo-Fr 06:00-16:00; Sa 06:00-13:00,43.3201559,21.9030332
+node,13120184479,Калинка,bakery,Ниш,Сремска,13a,18000,+381616653410,,,,,,,43.3175213,21.9182772
+node,13112287371,Калинка лукс,bakery,Ниш,Косте Стаменковића,8a,18000,+381637078121,,,,,,Mo-Fr 05:00-16:00; Sa-Su 05:00-14:00,43.3170597,21.8979268
+node,3063730916,Пекарица,bakery,Ниш,Књажевачка,72,18000,+381641963677,,,,,,Mo-Fr 06:00-15:00; Sa-Su 06:00-14:00,43.32924,21.9225172
+node,13158768847,Пекарица,bakery,Ниш,Париске комуне,1a,18000,+381641963677,,,,,,Mo-Fr 06:00-15:00; Sa-Su 06:00-14:00,43.3207793,21.9169885
+node,6806523533,Addiko Bank,bank,,,,,+381800303303,,https://www.addiko.rs,info.rs@addiko.com,https://www.facebook.com/addiko.rs/,https://www.instagram.com/addikobank_srbija/,Mo-Fr 08:30-16:00,43.3166594,21.8948075
+node,13569968624,Addiko Bank,bank,,,,,+381800303303,,https://www.addiko.rs,info.rs@addiko.com,https://www.facebook.com/addiko.rs/,https://www.instagram.com/addikobank_srbija/,Mo-Fr 09:00-16:30,43.3183275,21.9105328
+node,12343345660,AIK banka,bank,,,,,+381800101015,+381800101172,https://www.aikbank.rs,,,,Mo-Fr 09:00-16:30,43.3210409,21.8948669
+node,12343345680,AIK banka,bank,,,,,+381800101172,+381800101307,https://www.aikbank.rs,,strata019@gmail.com,,Mo-Fr 08:00-15:30,43.3215268,21.915308
+node,13508640354,AIK banka,bank,,Николе Пашића,42,,+381800101172,,https://www.aikbank.rs/,,,,"Mo,Tu,Th,Fr 08:30-16:00; We 10:00-17:30",43.3187919,21.8927897
+way,1190463976,AIK banka,bank,Ниш,Обреновићева,33,18000,+381800101015,,https://www.aikbank.rs,office@eurobank-direktna.rs,https://www.facebook.com/AikBankSrbija,https://www.instagram.com/aikbank.srbija,Mo-Fr 08:30-16:00,43.3178817,21.8948456
+node,9163647323,AikBank,bank,,,,,+381800101015,,https://www.aikbank.rs,,https://www.facebook.com/AikBankSrbija,https://www.instagram.com/aikbank.srbija,Mo-Fr 09:00-16:30,43.3292201,21.9121833
+node,12343345682,AikBank,bank,,,,,+381800101015,+381800101172,https://www.aikbank.rs,,,,"Mo-We,Fr 09:00-16:30; Th 10:00-17:30",43.3191032,21.9075938
+node,12399612706,AikBank,bank,,,,,+381800101015,,https://www.aikbank.rs,,https://www.facebook.com/AikBankSrbija,https://www.instagram.com/aikbank.srbija,"Mo-Tu,Th-Fr 09:00-16:30; We 10:30-18:00",43.3183402,21.8974927
+node,6807406189,Alta banka,bank,,Вожда Карађорђа,2,,+381112205500,,https://altabanka.rs/,info@altabanka.rs,,,Mo-Fr 08:00-20:00; Sa 08:00-17:00,43.3207919,21.896455
+node,12126262959,Banca Intesa,bank,,,,,+381113108888,,https://www.bancaintesa.rs,kontaktcc@bancaintesa.rs,https://www.facebook.com/bancaintesa.rs/,https://www.instagram.com/bancaintesa/,Mo-Fr 08:30-18:00,43.3194124,21.8989902
+node,12126262961,Banca Intesa,bank,,,,,+381113108888,,https://www.bancaintesa.rs,kontaktcc@bancaintesa.rs,https://www.facebook.com/bancaintesa.rs/,https://www.instagram.com/bancaintesa/,Mo-Fr 08:30-18:00,43.3207369,21.8947269
+node,12126262963,Banca Intesa,bank,,,,,+381113108888,,https://www.bancaintesa.rs,kontaktcc@bancaintesa.rs,https://www.facebook.com/bancaintesa.rs/,https://www.instagram.com/bancaintesa/,Mo-Fr 09:00-16:30,43.3219129,21.9128187
+node,12126262966,Banca Intesa,bank,,,,,+381113108888,,https://www.bancaintesa.rs,kontaktcc@bancaintesa.rs,https://www.facebook.com/bancaintesa.rs/,https://www.instagram.com/bancaintesa/,Mo-Fr 08:30-18:00,43.3239693,21.9305429
+node,13574450484,Banca Intesa,bank,,Обреновићева,82a,,+381113108888,,https://www.bancaintesa.rs,kontaktcc@bancaintesa.rs,https://www.facebook.com/bancaintesa.rs/,https://www.instagram.com/bancaintesa/,Mo-Fr 08:30-16:00,43.3172057,21.8942355
+node,8219554631,Erste Bank,bank,,,,,+381604848000,+381800201201,https://www.erstebank.rs/,info@erstebank.rs,https://www.facebook.com/erstebankasrbija,https://www.instagram.com/erste_banka_srbija,Mo-Fr 09:00-16:30,43.3160491,21.8915648
+node,8219554641,Erste Bank,bank,,,,,+381604848000,+381800201201,https://www.erstebank.rs/,info@erstebank.rs,https://www.facebook.com/erstebankasrbija,https://www.instagram.com/erste_banka_srbija/,Mo-Fr 08:30-16:30,43.319,21.899094
+node,11837414955,Erste Bank,bank,,,,,+381604848000,+381800201201,https://www.erstebank.rs,info@erstebank.rs,https://www.facebook.com/erstebankasrbija,https://www.instagram.com/erste_banka_srbija,Mo-Fr 08:30-16:00,43.3232537,21.9013658
+node,6808075886,OTP banka,bank,,,,,+381113011555,,https://www.otpbanka.rs/,,,,Mo-Fr 08:00-15:30,43.318103,21.8899123
+node,6808078296,OTP banka,bank,,,,,+381113011555,,https://www.otpbanka.rs/,,,,Mo-Fr 08:00-15:30,43.3177217,21.9119213
+node,6812666788,OTP banka,bank,Ниш,Николе Пашића,28a,18000,+381113011555,,https://www.otpbanka.rs/,,,,Mo-Fr 09:00-16:30,43.3183181,21.8960382
+node,12648172838,OTP banka,bank,,,,,+381113011555,,https://www.otpbanka.rs/,,,,Mo-Fr 09:00-16:30,43.3217439,21.8961021
+node,12648172840,OTP banka,bank,,,,,+381113011555,,https://www.otpbanka.rs/,,,,Mo-Fr 09:00-16:30,43.3188737,21.9211858
+node,4831183821,ProCredit banka,bank,,Николе Пашића,32b,18000,+381112057000,+381700700000,https://www.procreditbank.rs/,kontakt@procreditbank.rs,https://www.facebook.com/procreditsrbija,https://instagram.com/procreditbank_srbija,Mo-Fr 08:00-17:00,43.3185813,21.8941484
+node,10862098336,ProCredit banka,bank,,,,,+381112057000,+381700700000,https://www.procreditbank.rs/,,https://www.facebook.com/procreditsrbija,https://instagram.com/procreditbank_srbija,Mo-Fr 08:00-16:00,43.3229337,21.9258892
+node,13511716302,Raiffeisen bank,bank,,,,,+3811113202100,,https://raiffeisenbank.rs/,branch_nis_bulevar_nemanjica_30@raiffeisenbank.rs,,,Mo-Fr 08:30-16:00,43.3219538,21.9127428
+node,8628426269,UniCredit,bank,,,,,+381113777888,,https://www.unicreditbank.rs/,kontakt@unicreditbank.rs,,,Mo-Fr 08:00-16:00,43.3214911,21.8961144
+node,8628426277,UniCredit,bank,,Булевар др Зорана Ђинђића,15,,+381113777888,,https://www.unicreditbank.rs/,kontakt@unicreditbank.rs,,,Mo-Fr 08:00-16:00,43.3195449,21.9078139
+node,6806509687,UniCredit Bank,bank,,Николе Пашића,63,,+381113777888,,https://www.unicreditbank.rs/,kontakt@unicreditbank.rs,,,Mo-Fr 08:00-16:00,43.3185437,21.8926777
+node,8628426264,UniCredit Bank,bank,,Византијски булевар,80,,+381113777888,,https://www.unicreditbank.rs/,kontakt@unicreditbank.rs,,,Mo-Fr 08:00-16:00,43.3234655,21.9307347
+node,11897747624,НЛБ Комерцијална банка,bank,,,,,+381112018600,,https://www.nlbkb.rs/,kontakt.centar@nlbkb.rs,,,Mo-Fr 08:00-15:00,43.3180867,21.8898283
+node,12188084526,НЛБ Комерцијална банка,bank,,Николе Пашића,41,,+381112018600,,https://www.nlbkb.rs/,kontakt.centar@nlbkb.rs,,,Mo-Fr 09:00-18:00,43.3181003,21.8956287
+node,12526993562,НЛБ Комерцијална банка,bank,,Наде Томић,14,,+381112018600,,https://www.nlbkb.rs,kontakt.centar@nlbkb.rs,,,Mo-Fr 08:00-15:00,43.3194019,21.8965596
+node,12526993563,НЛБ Комерцијална банка,bank,,Епископска,32,,+381112018600,,https://www.nlbkb.rs,kontakt.centar@nlbkb.rs,,,Mo-Fr 09:00-16:00,43.3136713,21.8972379
+node,4308633817,Поштанска штедионица,bank,,,,,+38118258485,,https://www.posted.co.rs/,,,,Mo-Fr 08:00-19:30; Sa 08:00-13:00,43.3208855,21.8942714
+node,12677368788,Поштанска штедионица,bank,,Булевар др Зорана Ђинђића,15v,,+38118203053,,https://www.posted.co.rs/,,,,Mo-Fr 08:00-18:00; Sa 08:00-13:00,43.3195254,21.9076309
+node,12677368789,Поштанска штедионица,bank,,,,,+381184297000,,https://www.posted.co.rs/,,,,Mo-Fr 08:00-17:00; Sa 08:00-13:00,43.3245346,21.9071194
+node,12677368790,Поштанска штедионица,bank,,,,,+38118201092,,https://www.posted.co.rs/,,,,Mo-Fr 08:00-17:00; Sa 08:00-13:00,43.3293542,21.9264626
+node,12677368794,Поштанска штедионица,bank,,,,,+381184150244,,https://www.posted.co.rs/,,,,Mo-Fr 08:00-16:00,43.3186104,21.8943634
+node,6919028485,Gastro Dućan,bar,,,,,+381640443343,,,,,,Mo-Sa 15:00-22:00,43.3202312,21.9020055
+node,10062280899,Aqua Casa,bathroom_furnishing,,,,,+38118524017,,https://aquacasa.rs/,webshop@aquacasa.rs,https://www.facebook.com/aquacasasrbija,https://www.instagram.com/aquacasa_srbija/,Mo-Fr 08:00-20:00; Sa 08:00-15:00,43.3279678,21.888593
+node,4193349506,METALCOOP Keramika,bathroom_furnishing,City of Niš,Булевар Светог цара Константина,76,18103,0184561780,,https://metalcoopnis.rs/,prodaja@metalcoopnis.rs,,,Mo-Fr 08:00-19:00; Sa 08:00-15:00; Su off; PH off,43.3099893,21.9358885
+way,1175022395,Golub,bbq,,Косовке Девојке,18,,+381184287010,,,,,,,43.3307384,21.9077985
+node,11067334741,Blumen Beauty & Hair Studio,beauty,Niš,Византијски булевар,80a,,+381637313132,,,,,,Mo-Su 10:00-20:00,43.323456,21.9308383
+node,13958590358,Danesa,beauty,,,,,+381646626340,,,,,,"Mo,Tu.Th,Fr 13:00-19:00",43.3188873,21.9215664
+node,13683836310,Gloss,beauty,Ниш,Рајићева,2,18000,+38118593595,,,,,,Mo-Sa 09:00-19:00; Su 10:00-15:00,43.3163449,21.8983441
+way,767407996,Lavju,beauty,,,,,+381652550562,,,lavju.beautyroom@gmail.com,https://www.facebook.com/lavju.beautyroom/,@tamara_lav,,43.3058109,21.939945
+way,1068024442,Nail design,beauty,Ниш,Марије Бурсаћ,8,18106,+38118526133,,,,,,,43.3133065,21.8964593
+node,9509108536,Соња плус,beauty,Ниш,Обреновићева,21/1,18000,+38118257060,,,,https://www.facebook.com/Sonjaplus/,https://www.instagram.com/kozmeticki_salon_sp/?hl=en,,43.3188962,21.8951884
+way,1190275878,Smoothie Bar,beverages,,Николе Пашића,23b,,0611779419,,,,,,,43.3179964,21.898387
+node,13036273101,Capriolo,bicycle,,Николе Пашића,26,,,,http://capriolo.com,,,,,43.3183783,21.8960511
+node,9532234718,AdmiralBet,bookmaker,,,,,+38162272458,,https://admiralbet.rs,,,https://www.instagram.com/admiralbet.rs,Mo-Su 09:00-01:00,43.3204294,21.8952625
+node,11174761705,AdmiralBet,bookmaker,,,,,+381605504716,,https://admiralbet.rs,,,https://www.instagram.com/admiralbet.rs,Mo-Su 09:00-24:00,43.3245864,21.9051229
+node,12095502960,AdmiralBet,bookmaker,,Топличина,4,,+38162272458,,https://admiralbet.rs,,,https://www.instagram.com/admiralbet.rs,Mo-Su 09:00-23:00,43.3173389,21.8900045
+node,13508773665,AdmiralBet,bookmaker,,,,,+381605504726,,https://admiralbet.rs,,,https://www.instagram.com/admiralbet.rs,Mo-Su 09:00-24:00,43.3203775,21.936256
+node,13508773666,AdmiralBet,bookmaker,,,,,+381605504719,,https://admiralbet.rs,,,https://www.instagram.com/admiralbet.rs,Mo-Su 09:00-24:00,43.3150597,21.8945235
+node,13508773668,AdmiralBet,bookmaker,,,,,+381605504717,,https://admiralbet.rs,,,https://www.instagram.com/admiralbet.rs,Mo-Su 08:00-23:00,43.3240869,21.8923885
+node,13508773669,AdmiralBet,bookmaker,,,,,+381605504729,,https://admiralbet.rs,,,https://www.instagram.com/admiralbet.rs,Mo-Su 09:00-24:00,43.3125909,21.9274289
+node,13508773670,AdmiralBet,bookmaker,,,,,+381605504714,,https://admiralbet.rs,,,https://www.instagram.com/admiralbet.rs,Mo-Su 09:00-24:00,43.3166463,21.8921685
+node,8014804612,Balkan Bet,bookmaker,Ниш,,,,+381648036680,,https://www.balkanbet.rs,,,,Mo-Su 09:00-01:00,43.3111975,21.9375804
+node,6806523537,Maršal,bookmaker,Ниш,Николе Пашића,28,18105,+38163581321,,,,,,Mo-Su 08:00-02:00,43.3183914,21.8955704
+node,11981028845,Meridianbet,bookmaker,,,,,0800333440,,https://meridianbet.com,info@meridianbet.com,,,Mo-Su 09:00-21:00,43.3119393,21.9273827
+node,11981036809,Meridianbet,bookmaker,,,,,0800333440,,https://meridianbet.com,info@meridianbet.com,,,Mo-Su 09:00-23:00,43.3201654,21.9202998
+node,12017395816,Meridianbet,bookmaker,,,,,0800333440,,https://meridianbet.com,info@meridianbet.com,,,Mo-Su 09:00-23:00,43.3155093,21.8762112
+node,12017399628,Meridianbet,bookmaker,,,,,0800333440,,https://meridianbet.com,info@meridianbet.com,,,Mo-Su 09:00-23:00,43.3178985,21.8948483
+node,6808078393,Mozzart,bookmaker,,,,,+381800800899,,https://www.mozzartbet.com,help@mozzartbet.com,,,Mo-Su 09:00-01:00,43.3114108,21.9276139
+node,6808078795,Mozzart,bookmaker,,,,,+381800800899,,https://www.mozzartbet.com,help@mozzartbet.com,,,Mo-Su 09:00-03:00,43.318094,21.9110614
+node,9509981942,Mozzart,bookmaker,Ниш,Епископска,10,18000,+381800800899,,https://www.mozzartbet.com,help@mozzartbet.com,,,Mo-Su 09:00-01:00,43.314181,21.8960343
+node,12536405356,Mozzart,bookmaker,,,,,+381800800899,,https://www.mozzartbet.com,help@mozzartbet.com,,,Mo-Su 09:00-24:00,43.3173568,21.8918532
+node,12536405361,Mozzart,bookmaker,,,,,+381800800899,,https://www.mozzartbet.com,help@mozzartbet.com,,,Mo-Su 09:00-03:00,43.317657,21.9072025
+node,12536408624,Mozzart,bookmaker,,,,,+381800800899,,https://www.mozzartbet.com,help@mozzartbet.com,,,Mo-Su 09:00-01:00,43.3184924,21.9351965
+node,12536408627,Mozzart,bookmaker,,,,,+381800800899,,https://www.mozzartbet.com,help@mozzartbet.com,,,Mo-Su 09:00-01:00,43.3187324,21.9214717
+node,12536408629,Mozzart,bookmaker,,,,,+381800800899,,https://www.mozzartbet.com,help@mozzartbet.com,,,Mo-Su 09:00-24:00,43.3115761,21.8759787
+node,12536408632,Mozzart,bookmaker,,,,,+381800800899,,https://www.mozzartbet.com,help@mozzartbet.com,,,Mo-Su 09:00-24:00,43.3293629,21.9266698
+way,762657648,Mozzart,bookmaker,,Књажевачка,209,,+381800800899,,https://www.mozzartbet.com,help@mozzartbet.com,,,Mo-Su 09:00-01:00,43.3299828,21.9381306
+way,1028527311,Mozzart,bookmaker,Ниш,Мокрањчева,40a,18000,+381800800899,,https://www.mozzartbet.com,help@mozzartbet.com,,,Mo-Su 09:00-24:00,43.3070805,21.9091593
+node,12506638891,Креативни центар,books,,,,,+381602440655,,https://kreativnicentar.rs,klubknjizaranis@kreativnicentar.rs,,,Mo-Fr 08:00-20:00; Sa 09:00-15:00,43.3192635,21.8999154
+node,5939862072,Лагуна,books,Ниш,,,,+381184522332,,https://www.laguna.rs/,,,,Mo-Su 10:00-22:00,43.311263,21.9371993
+node,9713356984,Свети цар Константин,books,,,,,+38118200015,,,,,,Mo-Fr 08:00-21:00; Sa 08:00-15:00,43.3155798,21.8945092
+node,13683836324,Хијероглиф,books,Ниш,Рајићева,36,18000,+38118245888,,http://www.hijeroglif.com/,,,,Mo-Fr 07:30-21:00; Sa 09:00-15:00,43.3220169,21.8952865
+way,1059590016,Deniko kids,bureau_de_change,Ниш,Обреновићева,80a,18000,+38118526244,,,,,,Mo-Sa 08:00-21:00; Su 08:00-15:00,43.3172947,21.8943137
+way,1189531837,Euro 5,bureau_de_change,Ниш,Обреновићева,3,18000,,,https://www.euro5.rs/,,,,,43.3203526,21.895539
+node,9713356986,Monacos,bureau_de_change,,,,,+38169717721,,,,,,,43.3156781,21.8944744
+node,13136508700,Yuhor,butcher,Ниш,Др Миленка Хаџића,1,18108,,,https://www.yuhor.rs/,,,,Mo-Fr 07:00-20:00; Sa 07:00-16:00; Su 07:00-14:00,43.3124193,21.928047
+node,6809646085,Даком,butcher,,,,,+38118250630,,https://dakom.rs/,,,,,43.3158751,21.8944778
+node,13136511601,Даком,butcher,Ниш,Др Миленка Хаџића,1,18108,+38118553314,,https://www.dakom.rs/,,,,Mo-Sa 07:00-20:00; Su 07:00-14:00,43.3122116,21.9281738
+way,1028732097,Мак,butcher,Ниш,Епископска,54,18000,+38163417674,,https://mak.rs/,,,,,43.3129565,21.8985271
+node,6807369388,Матијевић,butcher,,,,,,,https://matijevic.rs/,,,,"Mo-Sa 07:00-20:00, Su 07:00-13:00",43.3242814,21.8909995
+node,13683836338,Мића - Шеци,butcher,Ниш,Рентгенова,4j,18000,+38118533488,,,,,,Mo-Fr 07:00-19:00; Sa 07:00-15:00; Su 07:00-12:00,43.3184939,21.9138639
+node,3752284139,Перутнина Птуј,butcher,Niš,Епископска,67,18000,+38118593616,,,,,,,43.3125637,21.899828
+node,11897048291,Anticafe Nis,cafe,Ниш,Ивана Гундулића,2,18000,+381637501291,,https://anticafe.info/,,,https://www.instagram.com/anticafe_nis/,Su-Th 11:00-23:00; Fr-Sa 11:00-24:00,43.3144188,21.899725
+way,1066063477,Chairski,cafe,Ниш,Ратка Вукичевића,5a,18000,+381603369369,,https://chairski.rs/,,https://www.facebook.com/chairski/,,Mo-Su 07:30-24:00,43.3155321,21.9023274
+node,13683836344,Coffee Diem,cafe,Ниш,Краља Стефана Првовенчаног,2a,18000,+381665409583,,https://biznisnik.com/menu-coffeediem/,,,,Mo-Fr 09:00-18:00; Sa 10:00-16:00,43.3218397,21.901455
+way,1189728099,Klub igara Goblin,cafe,,Кеј Кола српских сестара,35,,+381694374423,,,goblinklub.nis@gmail.com,,,Fr 17:00-23:00; Sa-Su 16:00-23:00,43.3207569,21.8898131
+node,5939862491,Na ćošku,cafe,,,,,+381184520521,,https://www.facebook.com/pages/Na-Ćošku,,,,Mo-Su 09:00-22:30,43.311105,21.9373209
+node,13683836341,Pastel Dreams,cafe,Ниш,Наде Томић,5,18000,+381637563783,,,,,,Mo-Su 08:00-23:00,43.3204427,21.8963717
+node,13683836315,River,cafe,Ниш,Рајићева,34,18000,+381628606942,,https://rivercaffe.rs/,,,,Mo-Su 08:00-23:00,43.3143832,21.8975151
+node,12506638893,Saloon 1995,cafe,,,,,+381644866882,,,,,,,43.3193327,21.8999553
+node,13036286501,Vespa Bar,cafe,,Трг републике,1,,+38118305067,,http://www.vespabar.com,caffe@vespabar.com,,,,43.3178013,21.8972287
+node,2700311766,Vinyl Cafe,cafe,,,,,+381183334545,,https://www.vinylcafe.rs/,,https://www.facebook.com/vinylcafenis,https://www.instagram.com/vinylcafenis/,,43.3179412,21.8949038
+node,9982332954,Zapis,cafe,,,,,,,https://cafezapis.com/,,,,,43.3216139,21.9004087
+node,13958590354,Čarli,cafe,,,,,+381692990471,,,,,,Mo-Fr 09:00-00:00; Sa 09:00-01:00,43.318798,21.9213822
+node,4581682042,Биро кафетерија,cafe,,,,,+381646419412,,,n.spasic83@gmail.com,https://www.facebook.com/birokafeterijanis/,https://www.instagram.com/biro_kafeterija_nis/,Mo-Sa 08:00-23:00; Su 10:00-23:00,43.317671,21.8977549
+node,13395542604,Бистро Куће од Ораха,cafe,,,,,+381641666362,,,,,https://www.instagram.com/bistrokuceodoraha/,Tu-Su 14:00-23:00,43.3235787,21.9024592
+node,12188084523,Кафетерија,cafe,,,,,,,https://www.kafeterija.com/,,,,,43.3180479,21.8954858
+node,2700311779,Трамвај,cafe,Ниш,Обреновићева,20,18000,+381638452574,,,nistramvaj@yahoo.com,https://www.facebook.com/caffetramvajnish/,https://www.instagram.com/tramvaj_nis/?hl=en,Mo-Th 08:00-24:00; Fr-Sa 08:00-01:00; Su 08:00-24:00,43.3199929,21.8951404
+way,357170565,Auto Čačak,car,Ниш,Византијски булевар,,18000,+38118514448,,http://www.autocacak.co.rs/,,,,Mo-Fr 08:00-19:00; Sa 08:00-14:00,43.3243569,21.9271488
+node,13260065014,BMW Mitić,car,,,,,+381184519519,,https://bmwmitic.rs/,office@bmw-mitic.rs,,,Mo-Fr 09:00-17:00; Sa 09:00-14:00,43.3159985,21.8491858
+way,382955111,Bros Auto,car,Ниш,Димитрија Туцовића,185,18250,+381184566800,,https://www.brosauto.rs/,office@brosauto.rs,,,Mo-Fr 08:00-18:00; Sa 08:00-15:00,43.3165938,21.8428645
+node,12033108267,Ауто мото плац Фигаро,car,,,,,+381606027777,,,,,,,43.336789,21.9371719
+node,6806509486,Gazelakomerc,car_parts,,,,,+38118523317,+38118522924;+38118520102,https://gazela.rs/,nis@gazela.rs,https://www.facebook.com/gazelakomerc,https://www.instagram.com/gazelakomerc/,Mo-Fr 08:00-17:00; Sa 08:00-14:00,43.3225144,21.8904394
+node,14006237307,Inter Cars,car_parts,,,,,+381184262008,,,nis.sales@intercars.eu,https://www.facebook.com/intercarssrbija,,Mo-Fr 08:00-18:00; Sa 08:00-14:00,43.321225,21.8691883
+node,12006049607,KIT Commerce Niš,car_parts,,Обилићев венац,90,,0184590630,0184590631,https://kitcommerce.rs/,,,,Mo-Fr 08:00-17:00; Sa 08:00-14:00,43.3158818,21.8859178
+node,11997191144,WINT Niš,car_parts,,Гоце Делчева,2,,0184601044,,https://wint.rs/,,,,Mo-Fr 08:00-19:00; Sa 08:00-14:00,43.3149964,21.8740077
+node,13564421848,Ауто Рус,car_parts,,,,,0184561578,,,,,,Mo-Fr 08:00-17:00; Sa 08:00-14:00,43.315903,21.8863782
+node,12369565515,Bugi Design,carpenter,,,,,+381655251017,,,bugi.design.nis@gmail.com,,,,43.3092902,21.9044564
+node,5939862069,dm,chemist,Ниш,,,,+381112062900,,https://www.dm.rs/,info@dm.rs,,,Mo-Su 09:00-22:00,43.3113763,21.9359865
+node,6812666786,dm,chemist,Ниш,Николе Пашића,29,18000,+38118240316,,https://www.dm.rs/,info@dm.rs,,,Mo-Fr 08:00-21:00; Sa 09:00-21:00; Su 09:00-15:00,43.3179608,21.8963823
+node,13479253221,dm,chemist,Ниш,Трг краља Милана,11,18000,+381184151088,,https://www.dm.rs/,,,,Mo-Sa 09:00-21:00; Su 10:00-16:00,43.3215409,21.895336
+node,13852417292,dm,chemist,Ниш,,,,+381112062900,,https://www.dm.rs/,info@dm.rs,,,Mo-Su 09:00-22:00,43.3229295,21.9255672
+node,5939862074,Lilly,chemist,Ниш,,,,,,https://www.lilly.rs/,,,,Mo-Su 09:00-22:00,43.3112081,21.9355934
+way,949808400,Villy,chemist,,,,,+38118525026,,https://villyshop.wordpress.com/,,,,Mo-Fr 08:00-21:00; Sa 08:00-18:00,43.313289,21.8986587
+node,5939862067,Cineplexx,cinema,Ниш,,,,+38118300340,,https://www.cineplexx.rs/,,,,Mo-Fr 14:00-24:00; Sa-Su 12:00-24:00,43.3112479,21.9372965
+node,6852481386,Вилин град,cinema,Ниш,Обреновићева,19,18000,+38118251520,,,vilingrad.nis@vilingrad.rs,https://www.facebook.com/VilinGradNis,https://www.instagram.com/vilingradnis,Mo-Fr 14:00-01:00; Sa-Su 12:00-01:00,43.3189983,21.8951606
+node,12484565785,O3&O2 Agencija za čišćenje u Nišu,cleaning,Ниш,Рудничка,14,18106,+381611139198,,http://o3o2.ru/,,,,24/7,43.3110911,21.8866871
+node,13515499703,Poliklinika Human,clinic,,Војводе Танкосића,9,18000,+381018300615,+3810602302055,https://www.poliklinikahuman.rs/,humanmed@poliklinikahuman.rs,poliklinikahuman.rs,,Mo-Fr 07:00-20:00; Sa 08:00-15:00,43.3232235,21.9068283
+way,286188953,Дом здравља Ниш,clinic,Ниш,Војводе Танкосића,13,18000,+38118503503,,https://www.domzdravljanis.co.rs/,,,,,43.3227805,21.9079674
+way,474385722,Завод за здравствену заштиту студената Ниш,clinic,Ниш,Катићева,21,18000,+381184234155,,,,,,,43.3142346,21.8931081
+way,290406172,Завод за ургентну медицину Ниш,clinic,,Др Миодрага Лазића,21,,+38118529001,,https://hitnanis.org/,office@hitnanis.org,,,,43.3132575,21.9160845
+way,1157965035,Bonatti,clothes,,,,,,,https://deltaplanetnis.rs/zakupac/bonatti/,,,,Mo-Su 10:00-22:00,43.3251675,21.9106242
+node,13683836346,Dušan Stil,clothes,Ниш,Цара Душана,35,18000Mo-Fr 09:00-21:00,+38118517242,,,,,,Mo-Fr 09:00-21:00; Sa 09:00-16:00,43.3174361,21.8976198
+node,13683836347,Dušan Stil,clothes,Ниш,Цара Душана,50,18000Mo-Fr 09:00-21:00,+38118517242,,,,,,Mo-Fr 09:00-21:00; Sa 09:00-16:00,43.317222,21.8976945
+node,5939862489,Extreme Intimo,clothes,Ниш,,,,+381608275159,,https://www.extremeintimo.com/,,,,Mo-Su 10:00-22:00,43.3112938,21.9370012
+node,9713436476,Family,clothes,Ниш,Обреновићева,,18000,,,https://maloprodaja.polovna-garderoba.com/,,,,Mo-Fr 08:00-21:00; Sa 08:00-17:00,43.316548,21.8944105
+node,5939862496,Feedback,clothes,,,,,+38131893233,,https://feedback.rs/,,,,Mo-Su 10:00-22:00,43.3106349,21.9364502
+node,12826177923,Hunter,clothes,Ниш,Обреновићева,82/2,18000,+38163308688,,https://hunter.rs/,online@hunter.rs,,,Mo-Sa 09:00-21:00; Su 10:00-17:00,43.3171419,21.8942425
+node,5939862080,Katrin,clothes,Ниш,,,,+38118200900,,https://www.katrin.rs/,,,,Mo-Su 10:00-22:00,43.3106201,21.9365512
+node,5939862076,LC Waikiki,clothes,Ниш,,,,,,https://www.lcwaikiki.com/,,,,Mo-Su 10:00-22:00,43.3105591,21.936968
+node,5939862495,Legend,clothes,Ниш,,,,+381184240546,,https://www.legend.rs,,,,Mo-Su 10:00-22:00,43.3107565,21.9372098
+node,5939862078,N Sport,clothes,Ниш,,,,+381600800835,,http://www.n-sport.net,,,,Mo-Su 10:00-22:00,43.3105866,21.9367799
+node,5939862079,Pepco,clothes,,,,,,,https://pepco.rs,,https://www.facebook.com/PEPCOrs,https://www.instagram.com/pepcors/,Mo-Su 10:00-22:00,43.3106543,21.9363173
+node,11640250198,Pepco,clothes,,,,,,,https://pepco.rs,,https://www.facebook.com/PEPCOrs,https://www.instagram.com/pepcors/,Mo-Su 10:00-22:00,43.3190105,21.8945932
+node,11640250199,Pepco,clothes,,,,,,,https://pepco.rs,,https://www.facebook.com/PEPCOrs,https://www.instagram.com/pepcors/,Mo-Su 09:00-21:00,43.3234866,21.9255817
+node,13468372187,Pepco,clothes,,,,,,,https://pepco.rs,,https://www.facebook.com/PEPCOrs,https://www.instagram.com/pepcors/,Mo-Su 10:00-22:00,43.3374702,21.8795945
+way,1457745640,Pepco,clothes,,,,,,,https://pepco.rs/,klijent.rs@pepco.eu,https://www.facebook.com/PEPCOrs,https://www.instagram.com/pepcors/,Mo-Su 10:00-22:00,43.3253707,21.9109446
+node,5939862490,PS Fashion,clothes,,,,,,,https://www.ps.rs,,,,Mo-Su 10:00-22:00,43.3112804,21.9370871
+node,9713356987,Ready,clothes,,,,,+38162775263,,http://ready.rs/,,,,Mo-Fr 08:30-21:00; Sa 08:30-15:00; Su 09:00-15:00,43.315978,21.894474
+node,9525685270,Santos & Santorini,clothes,,,,,+38118514276,,https://santos.rs/,santos.pobedina@gmail.com,https://www.facebook.com/santos.srbija/,https://www.instagram.com/santos.santorini/?hl=en,Mo-Fr 09:00-21:00; Sa 09:00-20:00; Su 09:00-17:00,43.3197217,21.8953961
+node,5939862488,Takko Fashion,clothes,Ниш,,,,,,https://www.takko.com/,,,,Mo-Su 10:00-22:00,43.3113708,21.9365062
+node,9540290964,Tiffany,clothes,,,,,+381604890759,,https://www.tiffanyproduction.com/,,,,,43.3200319,21.8951469
+node,9468967060,Tudors,clothes,Ниш,Обреновићева,38,18000,+38162633664,,https://tudors.rs/,,,,Mo-Sa 09:00-22:00; Su 10:00-17:00,43.3190969,21.8948945
+node,9528434887,Елипса,clothes,Ниш,Обреновићева,3,18000,+38163696814,,https://www.elipsa.rs/,info@elipsa.rs,,,Mo-Fr 08:00-20:00; Sa 08:00-15:00,43.3204361,21.895551
+node,9509108533,Мартини Весто,clothes,Ниш,Обреновићева,21,18000,,,http://www.martini-vesto.com/,,,,Mo-Fr 09:00-21:00; Sa 09:00-18:00,43.3188536,21.8951311
+node,9467880858,Пронто,clothes,Ниш,Обреновићева,36,18000,+38163271362,,,,https://www.facebook.com/pronto.nis,https://www.instagram.com/fashion.studio.pronto/,Mo-Fr 09:00-21:00; Sa 09:00-17:00,43.3192418,21.8949348
+relation,19415027,Електронски факултет,college,Ниш,Александра Медведева,14,18000,+38118529105,,https://www.elfak.ni.ac.rs,efinfo@elfak.ni.ac.rs,,,Mo-Fr 08:00-15:00; PH off,43.3315767,21.8922823
+way,525185799,Машински факултет,college,Ниш,Александра Медведева,14,18000,38118588233,,https://www.masfak.ni.ac.rs/,info@masfak.ni.ac.rs,,,,43.3305187,21.8918603
+way,348587164,Филозофски факултет,college,,,,,,,https://upis.filfak.ni.ac.rs/,,,,,43.3214844,21.9022074
+node,12122804594,AKC Fuzz,community_centre,,,,,,,https://www.facebook.com/akcfuzznis/,,,,,43.31862,21.8778997
+node,9535723231,Амерички кутак,community_centre,Ниш,Обреновићева,20,18000,+38118524583,,https://www.americancorners.rs/about-ac/en/Nis/,nis@americancorners.rs,https://www.facebook.com/AmericanCornerNis/,,Mo-Fr 07:30-19:00,43.3199707,21.8951083
+way,687309626,Дечији културни центар,community_centre,Ниш,9. бригаде,8,18000,+38118514748,,https://www.decijicentarnis.org.rs/,decijicentarucairu@gmail.com,https://www.facebook.com/decijicentarnis,https://www.instagram.com/decijikulturnicentarnis/,Mo-Fr 08:00-20:00,43.3159792,21.9055678
+node,9535723232,Француски институт,community_centre,Ниш,Обреновићева,20,18000,+38118524578,,https://www.institutfrancais.rs/category/agenda-sr/nis-sr/,ifs.nis@institutfrancais.rs,,,"Mo-Fr 09:00-12:30, 13:00-17:00; Sa 10:30-14:30",43.3199543,21.8951035
+node,12992890501,Accordia Group LLC,company,,Учитељ Тасина,38,,,,https://accordia-group.com/,,,,Mo-Fr 09:00-17:00,43.315739,21.898067
+node,11003300162,Acibadem,company,,,,,+381603399315,,https://acibadem.rs/,serbia@acibadem.com,https://www.facebook.com/adzibadem,,Mo-Fr 09:00-17:00,43.3157092,21.898161
+way,506789026,Aluris,company,,Булевар Светог цара Константина 4. прилаз,40,,+38118540094,,https://aluris.rs/,al@linijatip.rs,,,,43.3059341,21.9463126
+node,13256532383,Aura,company,,Грује А. Костадиновића,4v,,+38118589020,+38118589021,https://rs.auramakeup.eu,online.rs@auramakeup.eu,https://www.facebook.com/Kozmetika-AURA-168374086535879/,https://www.instagram.com/auramakeup.eu/,Mo-Fr 08:00-15:30,43.3446315,21.8604483
+node,13256532384,AWT international,company,,Булевар 12. фебруар,161,,,,https://www.awt.rs,awtbgd@awt.rs,,,Mo-Fr 07:00-15:00,43.3466227,21.862252
+way,422217105,Benlian Foods,company,,,,,+38118550520,,https://benlianfoods.com/,,https://www.facebook.com/benlianfood/,https://www.instagram.com/benlianfood/,,43.3065009,21.9432477
+node,13256532376,Ecotrade BG,company,,,,,,,https://www.ecotradebg.rs/,office@ecotradebg.rs,,,Mo-Fr 08:00-16:00,43.3443518,21.8587626
+node,13256532377,Ecotrade BG,company,,,,,+38118522144,+38118520691;+38118257014;+38118258473;+38118523594,https://www.ecotradebg.rs/,office@ecotradebg.rs,,,Mo-Fr 08:00-16:00,43.3218075,21.8975009
+node,13256065726,Jugo impex,company,,Ваздухопловаца,2,,+381184583833,+381184583832;+381184583593,https://jugo-impex.com,info@jugo-impex.com,,,Mo-Sa 07:00-15:00,43.343134,21.8653922
+node,13082317193,Komet,company,,,,,+381605291741,,https://www.kometva.co.rs,aleksandra@kometva.co.rs,,,Mo-Fr 08:00-16:00,43.3069748,21.944463
+node,13258066238,MD International,company,,Булевар 12. фебруар,161,,+38118584014,+38118584015,https://www.mdi.rs,nioffice@mdi.rs,,,,43.3468065,21.8625308
+node,13257959686,Nimaco,company,,,,,,,https://www.nimaco.rs,,https://www.facebook.com/officenimaco,https://www.instagram.com/office_nimaco,Mo-Fr 08:00-16:00,43.3128669,21.9233187
+node,13078614685,NiTechnoClima,company,,,,,+38118512076,,https://nitechnoclima.com/,,,,,43.3072483,21.9453527
+node,13078614683,SanRock,company,,,,,+381611554806,,https://sanrock.rs/,office.rs@sanrock.com,https://www.facebook.com/profile.php?id=100075854901605,,,43.3070883,21.9460223
+way,761478939,Silbo,company,,Булевар Светог цара Константина 4. прилаз,48b,,,,https://silbo.rs,office@silbo.rs,,,,43.3080287,21.9419001
+node,13256532372,Takzo,company,,Грује А. Костадиновића,6,,+381184585110,,https://takzo.net/,takzo@mts.rs,,,Mo-Fr 07:30-15:30,43.3439585,21.8600363
+node,13256532378,Tehno i oprema,company,,Грује А. Костадиновића,4b,,+38118243807,,https://tehnoioprema.com,info@tehnoioprema.com,https://www.facebook.com/tehnoioprema/,https://www.instagram.com/tehnoioprema_ing/,Mo-Fr 08:00-16:00,43.3442003,21.8610592
+way,637557219,BRM-BIP Servis Racunara,computer,,Бубањски хероји,64,18106,0659309303,,,,,,Mo-Sa 09:00-22:00,43.3122119,21.8593403
+node,13076382032,Gamebox,computer,Ниш,Цара Душана,47,18101,+38118514666,,https://www.gamebox.rs,office@gamebox.co.rs,,,"Mo-Fr 09:00-20:00, Sa 10:00-15:00",43.317624,21.8992091
+node,5953184100,Вип Виртиком,computer,Ниш,Војводе Вука,13,18000,+38118526044,,http://www.virtikom.com/,,,,Mo-Fr 09:00-16:00; Sa 10:00-14:00,43.31925,21.9013462
+node,9706067066,Ad astra decor,confectionery,Ниш,Епископска,26/6,18000,+381642219911,,,,,,Mo-Fr 09:00-20:00; Sa 09:00-16:00,43.313869,21.8967614
+node,9471000041,L'amour,confectionery,,,,,+381638246167,,,lamourfrancuskaposlasticara@gmail.com,,,,43.3185622,21.8950845
+node,13112172769,Слатка кућа,confectionery,Ниш,Булевар 12. фебруар,40,18104,+381631020901,,https://swisslion-takovo.com/,,,,Mo-Fr 08:00-20:00; Sa 08:00-18:00; Su 08:00-14:00,43.3242136,21.8903758
+node,13112282946,Слатка кућа,confectionery,Ниш,Књажевачка,118ž,18103,+38163427054,,https://swisslion-takovo.com/,,,,Mo-Fr 08:00-20:00; Sa 08:00-14:00,43.3293277,21.9275512
+node,13132963926,Idea,convenience,Ниш,Булевар др Зорана Ђинђића,44b,18000,+381800101202,,,,,,Mo-Sa 07:00-22:00; Su 08:00-15:00,43.3182063,21.9097131
+way,473732364,IDEA,convenience,Ниш,Обилићев венац,52,18000,+381800101202,,https://www.idea.rs/,,,,Mo-Sa 07:00-22:00; Su 08:00-15:00,43.3161013,21.8890279
+way,473732370,IDEA,convenience,Ниш,Јована Ристића,29,18000,+381800101202,,https://www.idea.rs/,,,,Mo-Sa 07:00-22:00; Su 08:00-15:00,43.3172219,21.8870106
+node,11341631951,Maxi,convenience,Ниш,Романијска,13,18108,,,https://www.maxi.rs/,,,,Mo-Sa 07:00-21:00; Su 08:00-14:00,43.3195378,21.9236885
+way,839893196,OMV,convenience,Ниш,,,18000,+38118214532,,https://www.omv.co.rs/sr-rs,info.serbia@omv.com,https://www.facebook.com/OMV,https://www.instagram.com/omv/,24/7,43.3241889,21.9256503
+node,10949235023,Златан Траг ДТЛ,convenience,Ниш,Булевар др Зорана Ђинђића,89,18000,,,https://zlatantrag.rs/,,,,Mo-Su 07:00-22:00,43.3145484,21.9189013
+node,11987109623,Златан Траг ДТЛ,convenience,Ниш,Генерала Милојка Лешјанина,51,18000,,,https://zlatantrag.rs/,,,,Mo-Su 07:00-22:00,43.3194197,21.8883753
+node,11987109624,Златан Траг ДТЛ,convenience,Ниш,Зетска,36a,18109,,,https://zlatantrag.rs/,,,,Mo-Su 07:00-22:00,43.3090696,21.911146
+node,12498912196,Златан Траг ДТЛ,convenience,Ниш,Булевар Светог Пантелејмона,83,18000,,,https://zlatantrag.rs/,,,,Mo-Su 07:00-22:00,43.3356967,21.9230013
+node,4946187722,Леон ДТЛ,convenience,Ниш,Драгише Цветковића,93,18000,,,https://dtl.rs/,,,,Mo-Su 07:00-22:00,43.3187419,21.918783
+node,11341673596,Леон ДТЛ,convenience,Ниш,Византијски булевар,,18000,,,https://dtl.rs/,,,,Mo-Su 07:00-22:00,43.323472,21.9277396
+node,11987109618,Леон ДТЛ,convenience,Ниш,Димитрија Туцовића,63,18000,,,https://dtl.rs/,,,,Mo-Su 07:00-22:00,43.3150258,21.8661754
+node,11987109620,Леон ДТЛ,convenience,Ниш,Чарнојевића,10Б,18000,,,https://dtl.rs/,,,,Mo-Su 07:00-22:00,43.3116521,21.8880362
+way,406950707,Леон ДТЛ,convenience,Ниш,Његошева,21,18106,,,https://dtl.rs/,,,,Mo-Su 07:00-22:00,43.3101895,21.8931686
+node,11341631950,Текијанка ДТЛ,convenience,Ниш,Романијска,13,18108,,,https://www.tekijanka.com/,,,,Mo-Sa 07:00-21:00; Su 08:00-14:00,43.3195288,21.9240911
+node,12498912195,Текијанка ДТЛ,convenience,Ниш,Милована Крстића,2,18103,,,https://www.tekijanka.com/,,,,Mo-Sa 07:00-21:00; Su 08:00-14:00,43.3372562,21.9220151
+node,9749183629,Хорна,convenience,Ниш,Станоја Главаша,19,18000,+38118590276,,,,,,,43.3076783,21.9048628
+node,11047502889,Чичо Ричо,convenience,Ниш,Епископска,50,18000,+381604291286,,https://cicorico.rs/,,,,Mo-Sa 07:30-21:30; Su 08:00-17:00,43.3133656,21.8978243
+node,12498912197,Чичо Ричо,convenience,Ниш,Булевар Светог Пантелејмона,89,18000,,,https://cicorico.rs/,,,,Mo-Sa 07:30-21:30; Su 09:00-17:00,43.3357398,21.9245358
+node,13120184480,Чичо Ричо,convenience,Ниш,Сремска,5a,18000,,,https://cicorico.rs/,,,,Mo-Sa 07:30-21:30; Su 09:00-17:00,43.316319,21.9172647
+node,13132963928,Чичо Ричо,convenience,Ниш,Булевар др Зорана Ђинђића,27,18000,+381604291284,,https://cicorico.rs/,,,,Mo-Sa 07:30-21:30; Su 09:00-17:00,43.3182112,21.9107558
+node,13683836339,Чичо Ричо,convenience,,,,,+381604291250,,https://cicorico.rs/,,,,Mo-Sa 07:30-21:30; Su 08:00-17:00,43.3196089,21.9074793
+node,14113639285,Чичо Ричо,convenience,Ниш,Бранка Миљковића,22,18000,,,https://cicorico.rs/,,,,Mo-Sa 07:30-21:30; Su 09:00-17:00,43.3152143,21.928565
+node,14113639292,Чичо Ричо,convenience,Ниш,Радних бригада,6,18000,,,https://cicorico.rs/,,,,Mo-Sa 07:30-21:30; Su 09:00-17:00,43.313377,21.9231942
+node,13523123307,Copy House,copyshop,Ниш,Ћирила и Методија,3,18000,,,https://www.ricohserbia.com/,office@ricohserbia.com,,,Mo-Fr 07:30-21:00; Sa 09:00-17:00,43.3216668,21.9018823
+node,9471783147,Alexandar cosmetics,cosmetics,,,,,+381607009592,,https://www.alexandar-cosmetics.com/distributeri/srbija/nis/fashion-club-d-m-kazandzijsko,,,,Mo-Fr 08:30-21:30; Sa 09:00-17:00,43.31795,21.8952996
+node,4352361206,Unitech hair & beauty,cosmetics,,,,,+38118510560,,https://www.unitech.rs/,,,,Mo-Fr 08:00-20:00; Sa 08:00-15:00,43.3187123,21.8930375
+way,1190463899,Јасмин,cosmetics,,,,,+38118240350,,https://www.jasmin.rs/,,,,Mo-Fr 08:00-21:00; Sa 08:00-16:00,43.3194145,21.8953038
+way,530901192,Апелациони суд у Нишу,courthouse,,Војводе Путника,1,,018506801,,http://www.ni.ap.sud.rs,uprava@ni.ap.sud.rs,,,,43.3153088,21.8834888
+way,348587183,Основни суд,courthouse,Ниш,Вожда Карађорђа,23,18000,+38118522400,,,,,,Mo-Fr 07:00-14:00; PH off,43.320744,21.9012524
+node,12276875010,Centrala Hub,coworking,Ниш,Краљевића Марка,23,18106,+381616869404,,https://centralahub.rs/,halo@centralahub.rs,,,Mo-Fr 08:00-20:00,43.3139902,21.8871338
+node,13683836304,Space Station Hub,coworking,Ниш,Учитељ Тасина,20,18000,,,https://spacestation.rs/,,,,24/7,43.3157365,21.8970686
+node,12995643801,Козмик,craft,Ниш,Првомајска,37,18000,+38118259009,,,,,,Mo-Fr 08:00-19:00; Sa 09:00-15:00,43.3198783,21.9030621
+node,10009204816,Dental studio Milošević,dentist,,,,,+38163661162,,https://www.studiomilosevic.rs/,studiomilosevic@gmail.com,,,,43.3212405,21.8919828
+node,13257959687,Dental trio,dentist,,,,,+381641882849,,,,,https://www.instagram.com/dental_trio/,,43.3129012,21.9231336
+node,13523123303,Denticija,dentist,Ниш,Ћирила и Методија,33,18000,+3811641755051,+381693075020,,,,,Mo-Fr 10:00-20:00,43.322871,21.9051449
+way,473343946,OrthoSmile,dentist,Ниш,Драгише Цветковића,25,18000,+381638563388,,,majastosic101@gmail.com,,,Mo-Fr 10:00-19:00; Sa 10:00-13:00,43.3195798,21.910415
+node,13958590355,Petrović dent,dentist,,,,,+38118533119,,http://www.petrovicdent.com/,ordinacija@petrovicdent.com,,,Mo-Fr 09:00-20:00; Sa 09:00-15:00,43.3190127,21.9211721
+node,11289051935,Vera Dent,dentist,,,,,+381603346860,,,,,,Mo-Fr 09:00-20:00,43.3161348,21.8972467
+node,9470147975,Тридент,dentist,,,,,+381631138373,,https://trident.rs/,ordinacija@trident.rs,https://www.facebook.com/Trident-Stomatolo%C5%A1ka-Ordinacija-118504988495069/,https://www.instagram.com/trident_ordinacija/,"Mo-Fr 09:00-13:00,15:00-19:00",43.3186148,21.8950957
+node,13408298271,Фелкер дентал,dentist,,,,,+381692704230,,https://felkerdental.com/,info@felkerdental.com,,,"Mo-Fr 10:00-14:00,17:00-19:00; Sa 10:00-14:00",43.3223604,21.9269997
+way,1189251885,Генерални конзулат Републике Бугарске,diplomatic,,Лоле Рибара,19,,+38118516800,,https://www.mfa.bg/en/embassies/serbiagc,Consulate.Nish@mfa.bg,,,,43.3233678,21.898845
+node,11254211355,Почасни конзулат Пољске,diplomatic,Ниш,Војводе Танкосића,9,18000,+38118300615,+38118300616,https://www.gov.pl/web/srbija/poasni-konzulati,,,,"Mo,We,Fr 10:00-13:00",43.3232854,21.9067672
+way,280889726,Здравствена станица Дуваниште,doctor,Ниш,Мајаковског,20g,18108,+38118553444,,https://www.domzdravljanis.co.rs/,,,,Mo-Fr 07:00-20:00,43.3156522,21.9349079
+way,406950737,Здравствена станица Расадник,doctor,Ниш,Старца Вујадина,1,18106,+38118240199,,https://www.domzdravljanis.co.rs/,,,,Mo-Fr 07:00-20:00,43.3101493,21.8934207
+node,9789864333,Равена,doctor,,,,,+38118301604,,https://ravena.rs/,info@ravena.rs,,,Mo-Fr 08:00-20:00; Sa 08:00-15:00,43.3174038,21.9041305
+node,13606547606,Auto škola Reli,driver_training,Ниш,Bulevar Nemanjića,25,18000,+38118574757,,https://autoskolareli.rs/,,,,,43.321809,21.9147714
+node,12506638888,Corolla,driving_school,,,,,+38118522551,,https://autoskolacorolla.co.rs/,autoskolacorolla@gmail.com,,,,43.3190325,21.8997974
+way,1191297254,American Corner Niš,educational_institution,Ниш,Обреновићева,22,18000,+381034208887,,https://bit.ly/4fnlqlh,nis@americancorners.rs,,,Mo-Fr 07:00-19:00,43.3200431,21.895085
+node,13683836311,Tinker Labs,educational_institution,Ниш,Рајићева,13,18000,+38163656924,,https://www.tinkerlabs.rs/,,,,,43.3154469,21.8983741
+node,13256532374,Eltom,electronics,,,,,+381184555666,,https://eltom.rs,eltomnis@gmail.com,,,Mo-Sa 08:00-15:00,43.3441109,21.8592389
+node,13256532375,Eltom,electronics,,,,,+38118531300,,https://eltom.rs,eltomnis@gmail.com,,,Mo-Fr 08:00-20:00; Sa 08:00-15:00,43.3166667,21.8924859
+node,8014804614,Gigatron,electronics,Ниш,,,,+381184100511,,https://www.gigatron.rs/,,,,Mo-Su 10:00-22:00,43.3106049,21.9366551
+node,13036274901,Gigatron,electronics,,,,,,,https://gigatron.rs/,,,,,43.3189328,21.8943727
+node,13468372200,Gigatron,electronics,,,,,,,https://www.gigatron.rs/,,,,Mo-Su 10:00-22:00,43.3370517,21.8794662
+way,474585780,Home Centar Vera,electronics,,Обреновићева,124v,,+381648033928,,,,,,Mo-Sa 10:00-18:00,43.3155368,21.8944665
+node,5939862497,Tehnomedia,electronics,Ниш,,,,,,http://www.tehnomediacentar.com,,,,Mo-Su 10:00-22:00,43.310422,21.9362437
+node,13507558303,Техноманија,electronics,Ниш,Николе Пашића,28,18000,+381113713713,,https://tehnomanija.rs/,,,,,43.3183751,21.8961279
+way,280889724,Техноманија,electronics,Ниш,Булевар Медијана,36,,,,https://www.tehnomanija.rs/,,,,Mo-Fr 08:30-20:00,43.313698,21.9346818
+node,9487101308,ТВ сервис Бане,electronics_repair,Ниш,Трг учитеља Тасе,10,18000,+38118515982,,http://tvservisnis.com/,,,,,43.3146584,21.8990939
+node,13523123312,Agencija za prodaju nekretnina Proagent,estate_agent,Ниш,Вожда Карађорђа,24,18000,+381066410100,+381066401100,https://proagent.rs/,info@proagent.rs,https://www.facebook.com/proagentnekretnine/,https://www.instagram.com/proagent_nekretnine/,,43.3204655,21.899513
+way,1211293187,Принц,events_venue,Ниш,Ивана Милутиновића,28,18000,+38118231481,,https://princ.rs/,,,,,43.3210843,21.8783637
+node,9789864332,Штоф шоп,fabric,Ниш,Војводе Мишића,7,18000,+381643501449,,,,https://www.facebook.com/Stof-Sop-174844279724841/,,,43.3175797,21.9042487
+node,9528434886,Mantica,fashion_accessories,Ниш,Обреновићева,7,18000,+38118511574,,,,https://sr-rs.facebook.com/ManticaTorbe,https://www.instagram.com/nakit_i_torbe_mantica/?hl=en,,43.3199103,21.8954244
+node,12188084527,Gyros Heroes,fast_food,Ниш,Николе Пашића,39,18000,+381637389890,,https://gyrosheroes.rs/,gyrosheroesfood@gmail.com,,,,43.3180721,21.8957504
+node,11802818844,Kluzzo,fast_food,Ниш,Николе Пашића,bb,18000,+381693450330,,https://www.kluzzo.com/,,,,Mo-Su 09:00-24:00,43.3177797,21.900019
+way,1457745604,La casa del Burrito,fast_food,,,,,+38118309294,,https://burrito.rs/,,,,Mo-Su 10:00-22:00,43.3247149,21.9116665
+node,13371507127,Pastara,fast_food,Ниш,Цара Душана,47,,,,http://www.pastara.rs/,,,,"Mo-Th 09:00-00:00, Fr 09:00-01:00, Sa 12:00-01:00, Su 14:00-22:00",43.3176272,21.8993708
+node,13683836318,Prva Liga,fast_food,Ниш,Обреновићева,,18000,+381693342348,,,,,,Mo-Su 07:00-23:00,43.3151173,21.8947594
+node,13371507126,Red Wings Niš,fast_food,Ниш,Цара Душана,47b,,+381605511624,,https://www.redwings.rs/,,,,Mo-Su 10:00-01:00,43.3176559,21.8994678
+node,12188084524,Richard Gyros,fast_food,Ниш,Николе Пашића,37,18000,,,https://richardgyros.rs/,,,,Mo-Th 08:30-23:00; Fr-Sa 08:30-01:00; Su 10:00-11:00,43.3180462,21.8958196
+way,1028732095,Royal food,fast_food,Ниш,Епископска,56,18000,+381654242499,,,,,,,43.3128991,21.898683
+node,12498984801,Smash House,fast_food,Ниш,Николе Пашића,30,18105,,,https://brzahranatron.com/,,,smashhousenis,Mo-Su 12:00-01:00,43.3183961,21.8953653
+node,12826265843,Tostojevski,fast_food,Ниш,Обреновићева,46,18000,+38118250210,,,,,https://www.instagram.com/tostojevski.nis/?hl=en,Mo-Sa 09:00-24:00; Su 15:00-24:00,43.3173777,21.8945035
+node,12368057877,Tuti Fruti Bar,fast_food,,,,,+381693301231,,https://tutifruti.rs/,,,https://www.instagram.com/tutifrutibar/,Mo-Fr 08:00-23:00; Sa 10:00-21:00,43.3194513,21.9000246
+node,13683836332,Uncle G,fast_food,Ниш,Казанџијско сокаче,23,18000,+38169661592,,,,,,Mo-Th 08:00-24:00; Fr-Sa 08:00-01:00; Su 08:00-24:00,43.3180046,21.8949861
+node,13683836331,XO Pizza,fast_food,Ниш,Караџићева,12,18000,+38163424333,,https://xopizza.rs/,,,,Mo-Sa 09:00-01:00; Su 12:00-22:00,43.3185561,21.8954841
+node,13112282947,Брука,fast_food,Ниш,Књажевачка,116,18103,+381646429710,,,,,,Mo-Tu 08:00-22:00; Th-Su 08:00-22:00,43.3293616,21.9269791
+node,13132963925,Брука,fast_food,Ниш,Булевар др Зорана Ђинђића,46b,18000,+381646429711,,,,,,Mo-Su 07:00-23:00,43.3180148,21.9102261
+node,12506638886,Два пута два,fast_food,,,,,+38169721737,,https://dvaputadva.com/,,,,,43.3188856,21.8996988
+node,4946198223,Домаћин јуниор,fast_food,Ниш,Сремска,14a,18000,+381621878679,,,,,,Mo-Sа 07:00-23:00; Su 07:00-22:00,43.316959,21.9183032
+node,9516524014,Ечка,fast_food,Ниш,Епископска,50,18000,+38162512231,,https://eckafish.rs/,,,,Mo-Fr 09:00-18:00; Sa 09:00-17:00,43.3133007,21.8979338
+way,1066897501,Жабац,fast_food,Ниш,Драгише Цветковића,24a,18000,+381183501255,,,,https://www.facebook.com/tortiljabarzabac/,,Mo-Fr 09:00-00:00; Sa 10:00-00:00,43.319264,21.9093338
+node,13130497053,Златни Змај,fast_food,,Вожда Карађорђа,68,,+38162262718,,,,,,Mo-Fr 09:00-23:30; Sa 10:00-23:30,43.3202685,21.9019268
+node,13112172770,Калинка,fast_food,Ниш,Булевар 12. фебруар,23,18104,+38162239169,,,,,,Mo-Su 07:00-22:00,43.3239654,21.8899684
+node,4381805590,Код Лафа,fast_food,Ниш,Вожда Карађорђа,,18000,+381694154155,,,,,,Mo-Su 07:00-05:00,43.3202976,21.9016315
+node,13145880343,Супероштиљ Топ,fast_food,Ниш,Вожда Карађорђа,70,18000,+381616526588,,,,,,Mo-Sa 10:00-22:30,43.3202611,21.9020034
+node,6053546259,Трон,fast_food,Ниш,Трг краља Александра Ујединитеља,1A,18105,,,https://brzahranatron.com/,,,,Mo-Th 08:00-23:30; Fr-Sa 08:00-00:30; Su 12:00-23:30,43.3184697,21.8918955
+node,12498912199,Трон,fast_food,Ниш,Трг Светог Саве,21B,18108,,,https://brzahranatron.com/,,,,Mo-Th 08:00-23:30; Fr-Sa 08:00-00:30; Su 12:00-23:30,43.3200633,21.9202241
+node,12498912200,Трон,fast_food,Ниш,Булевар Светог Пантелејмона,79,18103,,,https://brzahranatron.com/,,,,Mo-Th 08:00-23:30; Fr-Sa 08:00-00:30; Su 12:00-23:30,43.3356603,21.9225169
+node,6808078386,Царица,fast_food,Ниш,Булевар др Зорана Ђинђића,54v,18000,+38118204141,,,,,,Mo-Sа 08:00-23:00; Su 09:00-22:00,43.3152947,21.916185
+node,453435274,Ватрогасни дом,fire_station,Ниш,Војводе Мишића,56,,+38118527656,,,,,,,43.3223286,21.9092351
+node,13256532373,Priti Ju,fireplace,,,,,+381631087299,,https://prity.rs/,kamincentarprity@gmail.com,https://www.facebook.com/pritysrbija,https://www.instagram.com/kamincentarprity/?hl=en,Mo-Fr 08:30-16:00,43.3439287,21.8598089
+node,13612756529,Galerija podova,flooring,,Војводе Мишића,34,,+38118527556,,https://galerijapodova.com,gp.33@galerijapodova.com,https://www.facebook.com/GalerijaPodova,https://www.instagram.com/galerija_podova/,Mo-Fr 09:00-20:00; Sa 08:00-15:00,43.3192553,21.9060848
+node,13612756530,Galerija podova,flooring,,,,,+381184576060,,https://galerijapodova.com,gp.87@galerijapodova.com,https://www.facebook.com/GalerijaPodova,https://www.instagram.com/galerija_podova/,Mo-Fr 09:00-18:00; Sa 08:00-15:00,43.3343572,21.8801615
+node,9509981945,Lolly pop,florist,Ниш,Епископска,10,18000,+381643837584,,,marijalollypop@gmail.com,https://www.facebook.com/lollypopnis/,https://www.instagram.com/cvecara_lolly_pop/?hl=en,Mo-Sa 09:00-21:00; Su 09:00-16:00,43.3141432,21.8961846
+node,13658777581,Nišlijka,florist,,,,,+3810603220585,,,,,,Mo-Fr 12:00-20:00; Sa-Su 10:00-20:00,43.323154,21.9253915
+node,12794467025,Миранис,florist,,,,,+38163430014,,https://www.cvecaramiranis.rs/,cvecara.miranis@gmail.com,,https://www.instagram.com/cvecara_miranis/,Mo-Fr 10:00-20:00; Sa 10:00-21:00; Su 10:00-16:00,43.3193201,21.9299712
+node,5064106901,ButanGas,fuel,,,,,,,https://www.butangas.rs,bs.nis2@butangas.rs,,,24/7,43.316548,21.8490889
+node,12809825335,ButanGas,fuel,,Матејевачки пут,,,+38118574904,,https://www.butangas.rs,bs.nis@butangas.rs,,,24/7,43.3370729,21.937437
+node,1614409877,Lukoil,fuel,,Драгише Цветковића,63a,,+381112220200,,https://lukoil.rs,office@lukoil.rs,https://www.facebook.com/LUKOILSRBIJA/,https://www.instagram.com/lukoilsrbija/,24/7,43.3191937,21.9143986
+node,6806509485,Lukoil,fuel,,Булевар 12. фебруар,80a,,+381112220200,,https://lukoil.rs,office@lukoil.rs,https://www.facebook.com/LUKOILSRBIJA/,https://www.instagram.com/lukoilsrbija/,24/7,43.3375275,21.8774457
+node,12772864668,Lukoil,fuel,,Јована Ристића,66,,+381112220200,,https://lukoil.rs,office@lukoil.rs,https://www.facebook.com/LUKOILSRBIJA/,https://www.instagram.com/lukoilsrbija/,24/7,43.3165947,21.8839069
+node,12772864669,Lukoil,fuel,,Булевар Светог цара Константина,74,,+381112220200,,https://lukoil.rs,office@lukoil.rs,https://www.facebook.com/LUKOILSRBIJA/,https://www.instagram.com/lukoilsrbija/,24/7,43.3098232,21.9367729
+way,1097283101,MOL,fuel,Ниш,Булевар 12. фебруар,87,18000,+381631097458,,https://molserbia.rs/,customer.care@molserbia.rs,https://www.facebook.com/mol.srbija,https://www.instagram.com/mol_serbia/,Mo-Su 06:00-22:00,43.3333226,21.8813089
+node,3334249119,OMV,fuel,Ниш,,,18000,+381184562411,,https://www.omv.co.rs/sr-rs,info.serbia@omv.com,https://www.facebook.com/OMV,https://www.instagram.com/omv/,24/7,43.3166038,21.8502967
+node,13926656986,OMV,fuel,Ниш,,,18000,+38118583620,,https://www.omv.co.rs/sr-rs,info.serbia@omv.com,https://www.facebook.com/OMV,https://www.instagram.com/omv/,24/7,43.3391093,21.8752515
+node,11799522897,Shell,fuel,,Обилићев венац,,,+381184500105,,https://www.coralenergy.rs/,,,,24/7,43.3158946,21.8843408
+way,1083996785,Газпром,fuel,Ниш,Булевар Николе Тесле,,18000,0800008888,,https://www.nisgazprom.rs/,office@nis.rs,https://www.facebook.com/SaNamaNaPutuSrbija/,https://www.instagram.com/sanamanaputu/,06:00-22:00,43.3293911,21.8976307
+way,1083999835,Газпром,fuel,Ниш,Војводе Мишића,,18000,0800008888,,https://www.nisgazprom.rs/,office@nis.rs,https://www.facebook.com/SaNamaNaPutuSrbija/,https://www.instagram.com/sanamanaputu/,24/7,43.3248273,21.9093463
+way,1084012710,Газпром,fuel,Ниш,Византијски булевар,,18000,0800008888,,https://www.nisgazprom.rs/,office@nis.rs,https://www.facebook.com/SaNamaNaPutuSrbija/,https://www.instagram.com/sanamanaputu/,24/7,43.3242491,21.9264468
+node,12791486213,ЕКО Петрол,fuel,,Димитрија Туцовића,183,,+381112061500,,https://www.ekoserbia.com/,customerservice@hellenic-petroleum.rs,https://www.facebook.com/EkoSerbia,,24/7,43.3166941,21.8437926
+node,12791486214,ЕКО Петрол,fuel,,Булевар Николе Тесле,40,,+381112061500,,https://www.ekoserbia.com/,customerservice@hellenic-petroleum.rs,https://www.facebook.com/EkoSerbia,,24/7,43.338504,21.8886139
+node,12791486215,ЕКО Петрол,fuel,,,,,+381112061500,,https://www.ekoserbia.com/,customerservice@hellenic-petroleum.rs,https://www.facebook.com/EkoSerbia,,24/7,43.3415429,21.9277923
+node,7694770030,Кнез Петрол,fuel,,,,,+38118260980,,https://knezpetrol.com,nis1@knezpetrol.com,,,24/7,43.3157431,21.8713059
+node,6053538209,НИС Петрол,fuel,Ниш,Трг Павла Стојковића,,18000,0800008888,,https://www.nisgazprom.rs/,office@nis.rs,https://www.facebook.com/SaNamaNaPutuSrbija/,https://www.instagram.com/sanamanaputu/,Mo-Su 06:00-20:00,43.3168478,21.8930421
+way,442839202,НИС Петрол,fuel,Ниш,Булевар Светог цара Константина,,18000,0800008888,,https://www.nisgazprom.rs/,office@nis.rs,https://www.facebook.com/SaNamaNaPutuSrbija/,https://www.instagram.com/sanamanaputu/,Mo-Su 6:00-22:00,43.3111489,21.9318913
+way,762111774,НИС Петрол,fuel,Ниш,,,18000,0800008888,,https://www.nisgazprom.rs/,office@nis.rs,https://www.facebook.com/SaNamaNaPutuSrbija/,https://www.instagram.com/sanamanaputu/,Mo-Su 6:00-22:00,43.3296434,21.9415762
+way,1076851608,НИС Петрол,fuel,Ниш,Булевар Светог цара Константина,72,18000,0800008888,,https://www.nisgazprom.rs/,office@nis.rs,https://www.facebook.com/SaNamaNaPutuSrbija/,https://www.instagram.com/sanamanaputu/,24/7,43.3100716,21.9352005
+way,1083993451,НИС Петрол,fuel,Ниш,Булевар 12. фебруар,150,18000,0800008888,,https://www.nisgazprom.rs/,office@nis.rs,https://www.facebook.com/SaNamaNaPutuSrbija/,https://www.instagram.com/sanamanaputu/,24/7,43.346948,21.8652407
+way,1084023188,НИС Петрол,fuel,Ниш,Димитрија Туцовића,,18000,0800008888,,https://www.nisgazprom.rs/,office@nis.rs,https://www.facebook.com/SaNamaNaPutuSrbija/,https://www.instagram.com/sanamanaputu/,24/7,43.3155086,21.8647306
+node,13256532371,4M,furniture,,Грује А. Костадиновића,4,,+381184150809,,,,https://www.facebook.com/bigcentar.apostolovic.9,https://www.instagram.com/namestaj4m/,Mo-Fr 08:00-20:00; Sa 08:00-15:00,43.3437182,21.8602716
+way,823648513,JYSK,furniture,Ниш,Булевар Медијана,36,18000,+381628818434,,https://jysk.rs/,,,,,43.31261,21.9348184
+node,13618356443,Matis,furniture,,,,,+38118289539,,https://matis.rs/,nis@matis.rs,https://www.facebook.com/namestajmatis,https://www.instagram.com/matis.rs/,Mo-Sa 09:00-21:00,43.3134747,21.9349808
+node,13689976401,Salon namestaja Gross,furniture,,Обилићев венац,,,0666002505,,https://www.instagram.com/tresnjevtopnamestaj?igsi=anl6a2JlNzhiOGxv,,,,,43.3160896,21.8900079
+node,9931190349,Vitorog,furniture,,,,,+381628046282,,https://vitorogpromet.rs/,nis@vitorogpromet.rs,https://www.facebook.com/vitorogpromet/,https://www.instagram.com/vitorogpromet_official/,Mo-Fr 09:00-21:00; Sa 10:00-18:00,43.3060857,21.9499951
+node,13256532370,Форма идеале,furniture,,,,,+381184589901,,,salon.nis@formaideale.rs,,,Mo-Fr 09:00-21:00; Sa 09:00-20:00,43.3424359,21.859914
+way,1189513662,Галерија Синагога,gallery,,Давидова,2b,,,,http://narodnimuzejnis.rs/o-muzeju/objekti/galerija-sinagoga/,,,,,43.3212937,21.8946313
+way,759242277,Staklo Dedy,glaziery,Niš,Епископска,79,18000,+38118592370,,,,,,,43.3120719,21.9006981
+node,13683836330,Скупштина града Ниша,government,Ниш,Николе Пашића,24,18000,,,https://www.ni.rs/,,,,,43.3182034,21.8971262
+way,1188647400,Иван-Оки Пром,greengrocer,Ниш,Обреновићева,122,18000,+381184511280,,,,,,Mo-Sa 07:00-22:00; Su 09:00-18:00,43.3161246,21.8942802
+node,13265295487,Agromarket,groundskeeping,,Булевар 12. фебруар,161,,+38118514364,,https://www.agromarketsrbija.rs,,https://www.facebook.com/Agrosvet,,,43.3470105,21.862805
+way,941933059,Laguna Green,guest_house,,Цвијићева,18b,,+381693067737,,,,,,,43.3239174,21.9047291
+node,9706067067,Factory,hairdresser,Ниш,Епископска,5,18000,+381642467257,,,lnristic@gmail.com,,,,43.3144708,21.8964146
+node,10009204815,Fine time,hairdresser,,,,,+381643893033,,,sincejedince@gmail.com,,,,43.3212068,21.8918728
+node,9706067068,Happy team IM,hairdresser,Ниш,Епископска,5,18000,+38118245600,,,,,,Mo-Fr 08:00-19:00; Sa 08:00-15:00,43.3144533,21.8964659
+node,6806518141,Only in,hairdresser,,,,,+381692790401,,,,,,Mo-Fr 09:30-20:00; Sa 09:00-16:00,43.3166496,21.893942
+way,473730103,Peki i Miša,hairdresser,,Вардарска,15,,0642350576,,,,,,Mo-Fr 08:00-20:00; Sa 08:00-17:00,43.3169575,21.8866424
+way,761081015,Studio Shisharka,hairdresser,,,,,+381692404624,,,,https://www.facebook.com/Studio.Shisharka/,https://www.instagram.com/studio_shisharka/?hl=en,Mo 11:00-18:00; Tu-Fr 09:00-18:00; Sa-Su 10:00-16:00,43.3086477,21.9301759
+node,9487101309,Ирена Стил,hairdresser,Ниш,Трг учитеља Тасе,10,18000,+38118278788,,,,,,,43.3146938,21.8991133
+way,1068024431,ММ,hairdresser,Ниш,Марије Бурсаћ,3,18106,+38118519565,,,,,,,43.3134161,21.8969182
+node,9491822451,Шик фриз,hairdresser,Ниш,Трг учитеља Тасе,10,18000,+38118515253,,,,,,,43.3147518,21.8989335
+node,13078614679,Darex,hardware,,,,,+38118208100,,https://darex.rs/,prodaja@darex.rs,,,Mo-Fr 08:30-16:30,43.3066144,21.942088
+node,9764721103,Woby Haus,hardware,,,,,+38118293331,,https://www.wobyhaus.co.rs/,nis2@wobyhaus.co.rs,https://www.facebook.com/WobyHausAlati,https://www.instagram.com/woby.haus,Mo-Su 09:00-21:00,43.319936,21.9375163
+node,13256065728,Woby haus,hardware,,Булевар 12. фебруар,149,,+381648018056,,https://www.wobyhaus.co.rs/,nis@wobyhaus.co.rs,https://www.facebook.com/WobyHausAlati,https://www.instagram.com/woby.haus,Mo-Sa 07:00-20:00; Su 07:00-14:00,43.3447514,21.8669359
+node,13260064346,Woby Haus,hardware,,,,,+38162509277,,https://www.wobyhaus.co.rs/,nis3@wobyhaus.co.rs,https://www.facebook.com/WobyHausAlati,https://www.instagram.com/woby.haus,Mo-Sa 07:00-20:00; Su 07:00-14:00,43.3156844,21.8539334
+way,371668484,Имбус,hardware,Ниш,Епископска,51,18000,+381642752270,,,imbusnis@gmail.com,,https://www.instagram.com/imbus_nis/?hl=en,Mo-Fr 08:00-16:00; Sa 08:00-14:00,43.3127523,21.8994518
+node,3752284155,Оков Наис,hardware,,,,,+381616439474,,,,,,Mo-Sa 08:00-16:00; Su 08:00-14:00,43.3126942,21.8995936
+node,9516541125,Magic food,health_food,Ниш,Епископска,52,18000,+38118244328,,https://magicfood.rs/,,,,,43.3132477,21.8980474
+way,293236499,Војна болница Ниш,hospital,,,,,+38118508841,,http://www.vbnis.mod.gov.rs/,info@mod.gov.rs,,,,43.3126592,21.9215132
+way,609561091,Завод за плућне болести и туберкулозу Ниш,hospital,Ниш,Булевар др Зорана Ђинђића,83,18000,+38118233355,,https://zavodtb.org.rs/,,,,,43.3153036,21.9173723
+relation,14333615,Универзитетски клинички центар Ниш,hospital,,,,,018506906,,https://www.kcnis.rs/,cnissrb@gmail.com,,,,43.3157809,21.9129788
+way,473726138,Aurora,hostel,Nis,Др Петра Вучинића,18,,+38118214642,,https://www.aurorahostel.rs,info@aurorahostel.rs,,,,43.3187678,21.8883515
+node,12625917801,Bloom Inn,hostel,,Цара Душана,73,18000,+38166333218,,https://www.bloom-inn.com/,,,,,43.3181144,21.9024031
+way,1180456688,Day 'n' Night,hostel,Niš,Божидарчева,9,18000,+381644815869,,https://daynnighthostel.com/,,,,,43.3123566,21.8980663
+way,288275202,Majesty,hostel,Ниш,Цвијићева,27,18000,,,https://www.majestyapartments.com/,,,,,43.3240031,21.905059
+node,2150604053,Космополит,hostel,,Анастаса Јовановића,15,,+38163472705,,https://www.hostelkosmopolit.com/,,,,,43.3097004,21.8625138
+node,1923617191,Ниш,hostel,,,,,+38118513703,,http://www.hostelnis.rs/,hostelnis@sezampro.rs,,,,43.3230905,21.8923843
+way,438517020,Crystal light,hotel,,Димитрија Туцовића,186,,+381184150666,,https://crystallight.co.rs,office@crystallight.co.rs,https://www.facebook.com/restorancrystallight/?locale=sr_RS,https://www.instagram.com/crystallightnis/,,43.3167654,21.8485397
+way,473759091,King Bo,hotel,Ниш,Обилићев венац,18,,,,https://en.kingbo.rs/,,,,,43.3165638,21.892034
+node,1923617181,My Place,hotel,,,,,+38118293600,,https://www.hotelmyplace.com/,hotel@hotelmyplace.com,,,,43.32519,21.9016677
+way,1189250090,Rile Men,hotel,Niš,Војводе Мишића,109,18000,,,http://www.rilemen.com/,,,,,43.3215888,21.9077965
+way,453855655,Čair,hotel,,,,,,,http://prenocistecair.com/,prenociste@sccair.rs,,,,43.3163067,21.9072775
+way,421999864,Амбасадор,hotel,Ниш,Трг краља Милана,4,18000,+38118505018,,https://ambasadorhotel.com/,hotel@ambasadorhotel.com,https://www.facebook.com/pages/Ambasador%20Hotel/726378231092446/,https://www.instagram.com/ambasador.hotel.nis/,,43.3211168,21.8966122
+node,9477178801,Етер,hotel,Ниш,Николе Пашића,29,18000,+381605557777,,https://eterhotel.rs/,info@eterhotel.rs,www.facebook.com/pages/Eter/920287784660941,,,43.3177995,21.8963361
+node,1923617189,Нишки цвет,hotel,,,,,+38118297700,,http://www.niskicvet.com/,office@niskicvet.com,,,,43.3240417,21.8987789
+way,1180538922,Панорама лукс,hotel,Ниш,Светолика Ранковића,51b,18000,+38118561214,,https://www.panoramalux.co.rs,info@panoramalux.co.rs,,,,43.303489,21.8905024
+node,2703824727,Преноћиште Етно конак Ташана,hotel,,,,,+381642023200,,http://prenocistetasana.freshcreator.com/,,,,,43.3196021,21.896894
+node,9735191559,Палета,household_linen,,,,,+381631050005,,https://paletatextil.com/,,,,Mo-Fr 09:00-20:00; Sa 09:00-15:00,43.3154143,21.8945176
+way,474585781,Палета,household_linen,Ниш,Обреновићева,124d,18000,+381631050005,,https://paletatextil.com/,,,,Mo-Fr 09:00-20:00; Sa 09:00-15:00,43.315275,21.8944812
+node,13507563976,DDOR osiguranje,insurance,,Генерала Милојка Лешјанина,1a,,+38118255274,,https://www.ddor.rs/,ddor@ddor.rs,https://www.facebook.com/ddorns/?locale=sr_RS,https://www.instagram.com/ddor_osiguranje/?hl=en,Mo-Fr 08:30-16:30,43.3207475,21.8948484
+node,13507563977,DDOR osiguranje,insurance,,,,,+38118296800,+38118296801;+38118244096;+38118295996,https://www.ddor.rs/,ddor@ddor.rs,https://www.facebook.com/ddorns/?locale=sr_RS,https://www.instagram.com/ddor_osiguranje/?hl=en,Mo-Fr 08:30-16:30,43.3178446,21.9025199
+way,1189413578,DDOR osiguranje,insurance,Ниш,Драгише Цветковића,2,18000,+38118296900,,https://www.ddor.rs/,ddor@ddor.rs,https://www.facebook.com/ddorns/?locale=sr_RS,https://www.instagram.com/ddor_osiguranje/?hl=en,Mo-Fr 08:30-16:30,43.3202185,21.9074867
+node,13484118376,Generali,insurance,,,,,+38118535605,,https://www.generali.rs,kontakt@generali.rs,https://www.facebook.com/generali.srbija/,https://www.instagram.com/generalisrbija/,Mo-Fr 08:30-16:30,43.3187157,21.893295
+node,13522444253,Globos osiguranje,insurance,,,,,+381184150125,+381184150124,https://globos.rs,office.nis@globos.rs,https://www.facebook.com/globososiguranje/,https://www.instagram.com/globos_osiguranje/,Mo-Fr 08:00-16:00,43.322376,21.898616
+node,13517099083,Grawe,insurance,,,,,+38118240115,+38118240114,https://www.grawe.rs/,prodaja.nis@grawe.rs,https://www.facebook.com/GRAWE-Srbija-382748185582863/,https://www.instagram.com/grawesrbija/,,43.3184122,21.8953166
+node,13482274784,Milenijum osiguranje,insurance,,Трг Павла Стојковића,5,,+38118530640,,https://mios.rs,filijala.nis@milenijum-osiguranje.rs,https://www.facebook.com/mios.rs/,https://www.instagram.com/milenijumosiguranje/,Mo-Sa 08:00-16:00,43.3176753,21.8923171
+node,13510411019,Sava osiguranje,insurance,,Трг Павла Стојковића,7a,,+38118250088,,https://www.sava-osiguranje.rs,info@sava-osiguranje.rs,http://www.facebook.com/sava.osiguranje.srbija,https://www.instagram.com/sava_osiguranje_srbija/,Mo-Fr 08:30-16:30,43.3171963,21.893349
+node,13483474300,Triglav,insurance,,,,,+381184150471,,https://www.triglav.rs/,office@triglav.rs,https://www.facebook.com/TOSrbija,https://www.instagram.com/triglav.osiguranje.srbija,Mo-Fr 08:30-16:30,43.3206575,21.8944753
+way,941874677,Triglav,insurance,Ниш,7. јули,25a,18000,+38118244001,,,,,,,43.3239388,21.9022164
+node,13520135367,Uniqa,insurance,,Цара Душана,54,,+38118520172,,https://www.uniqa.rs,info@uniqa.rs,https://www.facebook.com/UNIQA.Srbija/,https://www.instagram.com/uniqa_srbija/,Mo-Fr 08:00-16:00; Sa 09:00-14:00,43.3173325,21.8984134
+node,13520135368,Uniqa,insurance,,,,,+38118530510,,https://www.uniqa.rs,info@uniqa.rs,https://www.facebook.com/UNIQA.Srbija/,https://www.instagram.com/uniqa_srbija/,Mo-Fr 08:00-16:00; Sa 09:00-14:00,43.3217185,21.9148818
+node,13520135369,Uniqa,insurance,,Књажевачка,118,,+38118577104,,https://www.uniqa.rs,info@uniqa.rs,https://www.facebook.com/UNIQA.Srbija/,https://www.instagram.com/uniqa_srbija/,Mo-Fr 08:00-16:00; Sa 09:00-14:00,43.3293794,21.9271203
+node,13527132729,Wiener Städtische,insurance,,,,,+38118296500,+38118296501,https://www.wiener.co.rs,wso.nis@wiener.co.rs,https://www.facebook.com/WienerStadtischeOsiguranjeSrbija,https://www.instagram.com/wienerstadtische/,Mo-Fr 08:00-16:00,43.3187848,21.8927193
+node,13508602324,Дунав осигурање,insurance,,,,,+38118248733,,https://www.dunav.com,info@dunav.com,https://www.facebook.com/dunavosiguranjesrbija/,https://www.instagram.com/dunavosiguranje,Mo-Fr 07:30-16:00; Sa 07:30-14:00,43.3185815,21.8945904
+node,13683836329,Better Collective,it,Ниш,Трг краља Милана,2,18000,+38166246444,,https://bettercollective.com/,,,,Mo-Fr 09:00-17:00,43.3206217,21.8958103
+node,13076354868,Droxic,it,Ниш,Младих,4,18000,+381605704704,,https://www.droxic.com,,,,Mo-Fr 09:00-17:00,43.3228089,21.8983743
+node,8119704062,Quantox,it,,,,,,,https://quantox.com/,,,,,43.3195886,21.9019541
+way,1157969870,Berić satovi i nakit,jewelry,,,,,,,https://deltaplanetnis.rs/zakupac/beric-satovi-i-nakit/,,,,Mo-Su 10:00-22:00,43.3250255,21.9108577
+way,1157965036,Bomar,jewelry,,,,,,,https://deltaplanetnis.rs/zakupac/bomar/,,,,Mo-Su 10:00-22:00,43.3251232,21.9106935
+node,9509108535,Silver shop,jewelry,Ниш,Обреновићева,19,18000,+38118250332,,https://silvershop.rs/,,,,,43.3189664,21.8951541
+node,6806523536,Zlatarna Celje,jewelry,,,,,+38118520173,,https://store.zlatarnacelje.si/index.asp?lang=rs,,,,Mo-Fr 09:00-21:00; Sa 09:00-15:00,43.3179543,21.8952573
+way,759863399,Menssana Kids&Juniors,kindergarten,Ниш,Ђердапска,27,18000,+381603068405,,https://www.menssana.rs/,office@menssana.rs,https://www.facebook.com/MenssanaKidsAndJuniors,,Mo-Fr 09:00-15:00,43.3193268,21.9283634
+node,9737602680,Бамбини,kindergarten,Ниш,Епископска,10,18000,+38118241766,,https://www.bambini.rs/,office@bambini.rs,https://www.facebook.com/vrtic.bambini/,,Mo-Fr 07:00-17:00,43.3141503,21.8959987
+node,9737602679,Бамбини 2,kindergarten,Ниш,Рајићева,30a,18000,+38118240095,,https://www.bambini.rs/bambini2.aspx,,,,,43.3145492,21.8971596
+node,13515499702,Health Lab,laboratory,,Војводе Мишића,48b,18000,+3810183505599,+3810603505579,,office@healthlab.rs,,healthlab.nis,Mo-Fr 07:00-20:00; Sa 08:00-15:00,43.320881,21.9075365
+way,1189748378,MediLab,laboratory,Ниш,Војводе Мишића,3,18000,+381183230429,,https://www.medigroup.rs/medilab,,,,Mo-Fr 07:00-20:00; Sa 08:00-15:00,43.3174162,21.9039238
+node,13523123301,Andreja institut za strane jezike,language_school,Ниш,Ћирила и Методија,35,18000,+381067724397,+3810184535391;+38163410032,https://www.andrejainstitute.com/,office@andrejainstitute.com,,,Mo-Fr 18:00-22:00,43.322899,21.905282
+node,13371507128,Samouslužna perionica veša - Laundromat Speed Clean,laundry,Ниш,Краља Стефана Првовенчаног,14,,+381631290426,,,,,,Mo-Su 08:00-23:00,43.3223684,21.9017432
+node,13523123310,Advokatska kancelarija Bzenić,lawyer,Ниш,Синђелићев трг,6,18000,+381069713366,+3810628741301,,,,,,43.3208228,21.8998515
+node,13523123313,Advokatska kancelarija Jelena Cakić,lawyer,Ниш,Синђелићев трг,10,18000,+381018527785,+3810644678090,,,,,,43.3201928,21.8993764
+node,13523123315,Čavara,lawyer,Ниш,Генерала Транијеа,3,18000,+3810611125666,+3810642134235,,,,,,43.3194612,21.8981166
+node,13511716301,Адвокатска канцеларија Поповић,lawyer,,Хајдук Станка,17,18000,+38163603931,,http://akpopovic.rs,predrag.popovic@akpopovic.com,akpopovic,akpopovic,,43.3218741,21.9104008
+node,13523123302,Адвокатска канцеларија Стојановић,lawyer,Ниш,Ћирила и Методија,33,18000,+381018209122,+3810184101777;+3810637769129,https://www.advokatbstojanovic.com/,bata@advokatbata.co.rs,,,Mo-Fr 09:00-16:00,43.3229174,21.9051234
+node,9535723229,Мона,leather,,,,,+38118514504,,https://www.monaonline.com/,nisava@mona.rs,,,Mo-Fr 09:00-22:00; Sa 09:00-21:00,43.3202588,21.8952174
+node,13145999900,Дечија библиотека,library,Ниш,Синђелићев трг,2,18000,,,http://www.nbss.rs/odeljenje-knjige-za-decu/,,,,Mo-Fr 07:30-20:00; Sa 08:00-13:00,43.3212348,21.9000361
+way,1036644985,Егло расвета,lighting,Ниш,Булевар Светог цара Константина,78g,18000,+381183280200,,https://www.eglo.rs/,nis2@eglo.com,,,Mo-Fr 09:00-20:00; Sa 09:00-16:00,43.3085961,21.9442918
+node,12335148387,Електро нега,lighting,Ниш,Хајдук Вељкова,49,18000,+38118550654,,,,,,,43.3139025,21.8990309
+way,945407761,Делта планет,mall,Ниш,Булевар Немањића,11b,18000,+381112012600,,https://www.deltaplanetnis.rs/,info@deltaplanetnis.rs,,,Mo-Su 10:00-22:00,43.3247396,21.911106
+way,1351005672,Пијаца Пантелеј,marketplace,Ниш,Булевар Светог Пантелејмона,,18103,,,https://trznicanis.rs/,,,,Mo-Su 05:30-17:00,43.3333813,21.917034
+way,758246564,Пијаца Ћеле Кула,marketplace,Ниш,Др Миленка Хаџића,,18108,,,https://trznicanis.rs/,pijaca.cele_kula@trznicanis.rs,,,Mo-Su 05:30-17:00,43.3126093,21.9281933
+way,371668470,Пијаца „Палилула”,marketplace,Niš,Божидарчева,1,18000,+38118592272,,https://trznicanis.rs/objects/4,pijaca.palilula@trznicanis.rs,,,,43.3128007,21.8983174
+node,13523123306,Studio za masažu Viktorija,massage,Ниш,Ћирила и Методија,21,18000,+3810628498333,,https://www.studioviktorija.com/,info@studioviktorija.com,https://www.facebook.com/studiozamasazuviktorija/,,Mo-Fr 08:00-22:00; Sa-Su 09:00-20:00,43.3225249,21.9041049
+way,1059863607,Нова ортопедија,medical_supply,Ниш,Рајићева,30a,18000,+38118248980,,https://www.bambini.rs/bambini2.aspx,,,,Mo-Fr 08:00-15:00,43.314603,21.8970871
+node,5939862075,Galaxy Code,mobile_phone,Ниш,,,,+381605560982,,http://www.facebook.com/GalaxyCode.rs/,,,,Mo-Su 10:00-22:00,43.3111808,21.9357575
+node,12826265841,Maske.rs,mobile_phone,,,,,,,https://maske.rs/,info@maske.rs,,,,43.3172912,21.8944249
+node,9543878701,Phone store No 1,mobile_phone,Ниш,Обреновићева,,18000,+381183230655,,,,,https://www.instagram.com/phone_store_no1/?hl=en,,43.3201099,21.8951648
+node,14094758668,Strata Digital - Laptop & Mobile Servis,mobile_phone,Niš,Булевар Немањића,25a,18000,+38163555844,,,,,,Mo-Sat 09:00-17:00,43.3217151,21.9154071
+node,5939862084,Western Union,money_transfer,,,,,+38118510901,,https://www.exc.rs/,,,,Mo-Su 10:00-22:00,43.3111715,21.9358181
+node,1848006626,Imper I.M.D. prenoćište,motel,,,,,,,https://prenociste-nis.rs/,,,,,43.3231894,21.9011132
+way,178005350,Меморијални комплекс „12. фебруар”,museum,,,,,+38118588889,,https://www.narodnimuzejnis.rs,,,,Tu-Fr 10:00-16:00; Sa-Su 10:00-15:00,43.3305924,21.8887054
+way,474585794,Народни музеј,museum,,Николе Пашића,59,18000,,,http://www.narodnimuzejnis.rs,,,,Th-Fr 10:00-19:00; Sa-Su 10:00-15:00,43.31834,21.8932991
+way,292209353,Ћеле-кула,museum,Ниш,Булевар др Зорана Ђинђића,,18000,,,https://narodnimuzejnis.rs/o-muzeju/objekti/cele-kula/?lang=RS,,,,Tu-Su 09:00-19:00,43.31211,21.9241104
+node,12385216396,Vinyl Cafe,music,,,,,+381183334578,,https://www.vinylcafe.rs/,vinylcafenis@gmail.com,https://www.facebook.com/vinylcafenis,https://www.instagram.com/vinylcafenis/,Mo-Sa 08:00-23:00; Su 08:30-14:00,43.3179633,21.8948298
+node,2072210521,Народне новине - Ниш,newspaper,,,,,,,http://www.narodne.com/,,,,,43.3195343,21.9024851
+node,10174580317,Optika Miletic,optician,,Војводе Мишића,48b,,069623566,,,mileticoptika@gmail.com,,,Mo-Fr 09:00-20:00; Sa 09:00-14:00,43.3211149,21.9076674
+node,4314411693,Sani optik,optician,,,,,+38118247664,,https://www.sanioptik.rs,,https://www.facebook.com/sanioptik,https://www.instagram.com/sanioptik/,Mo-Fr 08:00-20:00; Sa 08:00-15:00,43.3219114,21.8953264
+way,1157965034,Sani optik,optician,,,,,+381184150061,,https://www.sanioptik.rs,,https://www.facebook.com/sanioptik,https://www.instagram.com/sanioptik/,Mo-Su 10:00-22:00,43.325123,21.9105353
+node,7849822350,Torus,optician,,,,,+38118524170,,https://torus.rs,,,,Mo-Fr 10:00-17:00; Sa 10:00-14:00,43.3200948,21.8950855
+node,4409304189,TrendOptik,optician,,,,,018255220,,,,,,Mo-Fr 08:00-20:00; Sa 08:00-15:00,43.3175092,21.8945495
+node,6806518145,Диопта,optician,,,,,+38118290303,,https://diopta.rs/,,,,Mo-Fr 09:00-21:00; Sa 09:00-17:00,43.3179571,21.8951576
+node,8766005054,SaNi,paint,,,,,+38118592024,,,,,,,43.3127005,21.8994909
+node,9885905489,DExpress,parcel_locker,,,,,+381113313333,,https://www.dexpress.rs/,office@dexpress.rs,,,,43.3099136,21.935303
+node,9914704981,DExpress,parcel_locker,,,,,+381113313333,,https://www.dexpress.rs/,office@dexpress.rs,,,,43.3168305,21.8930478
+node,9933506961,DExpress,parcel_locker,,,,,+381113313333,,https://www.dexpress.rs/,office@dexpress.rs,,,,43.3471393,21.865078
+node,9933595701,DExpress,parcel_locker,,,,,+381113313333,,https://www.dexpress.rs/,office@dexpress.rs,,,,43.3292571,21.8977218
+node,9933606890,DExpress,parcel_locker,,,,,+381113313333,,https://www.dexpress.rs/,office@dexpress.rs,,,,43.3249721,21.9092865
+node,9933677798,DExpress,parcel_locker,,,,,+381113313333,,https://www.dexpress.rs/,office@dexpress.rs,,,,43.3295963,21.9415093
+node,9933734848,DExpress,parcel_locker,,,,,+381113313333,,https://www.dexpress.rs/,office@dexpress.rs,,,,43.3241865,21.9265327
+node,9933772984,DExpress,parcel_locker,,,,,+381113313333,,https://www.dexpress.rs/,office@dexpress.rs,,,,43.3154011,21.8644877
+node,9713356985,Pelivan Gold,pastry,,,,,+381184103067,,,,,,Mo-Sa 09:00-22:00; Su 10:00-22:00,43.3156476,21.8945006
+node,13915202623,Slatko srce,pastry,,Трг краља Александра ујединитеља,2a,,+381695691020,,https://slatkosrce.rs/,,https://www.facebook.com/profile.php?id=100067578321998&locale=sr_RS#,https://www.instagram.com/slatkosrcetorteikolaci/,Mo-Sa 08:00-2a:00; Su 09:00-17:00,43.3183384,21.8898982
+node,5296580039,Липа,pastry,Ниш,Зетска,2,18000,+381184232050,,,,,,Mo-Sa 08:00-22:00,43.3176851,21.9108533
+node,3752284162,Посластичара „Крем”,pastry,Niš,Епископска,66,18000,+38162221407,,,,,,,43.3126675,21.8991899
+node,9509981943,ТИМ,pawnbroker,Ниш,Епископска,10,18000,+38118254271,,https://www.zalagaonicatim.com,office@zalagaonicatim.com,https://www.facebook.com/zalagaonicatim/,,Mo-Fr 10:00-17:00; Sa 10:00-15:00,43.3141564,21.8960869
+way,759863354,3D Magic Exclusive,perfumery,Ниш,Булевар Светог цара Константина,78,18000,,,https://magicparfume.com/,3dmagic@magicparfume.com,,,,43.3088819,21.9430725
+way,832737701,Pet centar,pet,Ниш,Булевар Медијана,36,,+38118302266,,https://www.pet-centar.rs/Stranica.aspx?ctrl=Stores/PetCentarNis,info@pet-centar.rs,,,Mo-Su 09:00-21:00,43.3136168,21.9352061
+node,12787618001,14. октобар,pharmacy,,Обреновићева,57b,18000,018512352,,https://www.apotekanis.co.rs/,,,,Mo-Fr 07:00-20:00; Sa 08:00-15:00,43.316254,21.8947347
+node,3546845582,Benu,pharmacy,,,,,+38118510970,,https://benu.rs/,nis12februara211@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Fr 07:30-20:00; Sa 08:00-21:00; Su 08:00-15:00,43.3220628,21.9074814
+node,5939862494,Benu,pharmacy,,,,,+381648411608,,https://benu.rs/,nisbulevarmedijana354@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Su 09:00-22:00,43.3108377,21.9372357
+node,6806518138,Benu,pharmacy,,,,,+381648441831,,https://benu.rs/,niscaradusana352@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Su 08:00-00:00,43.3170242,21.8946338
+node,6807376587,Benu,pharmacy,,,,,+38118243568,,https://benu.rs/,nis12februara211@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Fr 07:30-20:00; Sa 07:30-18:00; Su 07:30-15:30,43.3243751,21.8903339
+node,6808078297,Benu,pharmacy,,,,,+381184200064,,https://benu.rs/,drzoranadjindjica426@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Su 08:00-22:00,43.3179519,21.9113885
+node,9532234721,Benu,pharmacy,,,,,,,https://benu.rs/,nisobrenoviceva434@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Sa 08:00-22:00; Su 10:00-18:00,43.320326,21.8952382
+node,9764721102,Benu,pharmacy,,,,,+38118277140,,https://benu.rs/,disnis@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Su 08:00-21:00,43.3202878,21.9376229
+node,12093814057,Benu,pharmacy,,,,,+38118247592,,https://benu.rs/,niscentar255@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Sa 08:00-22:00; Su 09:00-16:00,43.3210701,21.8951351
+node,13468372186,Benu,pharmacy,,,,,+38118580011,,https://benu.rs/,temponis@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Su 08:00-21:00,43.337583,21.8797769
+node,13650654606,Benu,pharmacy,,,,,,,https://benu.rs/,nisbulnemanjica436@benu.rs,strata019@gmail.com,https://www.instagram.com/benuapoteka/,Mo-Sa 08:00-21:00; Sa 08:00-15:00,43.3215671,21.9152402
+node,13658777574,Benu,pharmacy,,,,,+38118203077,,https://benu.rs/,rodanis@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,24/7,43.3232267,21.9257646
+node,13958590330,Benu,pharmacy,,Булевар Светог Пантелејмона,70,,+381648312484,,https://benu.rs/,nispantelej492@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Sa 08:00-21:00; Su 08:00-15:00,43.3350441,21.9217347
+node,13958590331,Benu,pharmacy,,Војводе Гојка,48a,,+381648441723,,https://benu.rs/,nispalilula511@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Sa 08:00-21:00; Su 08:00-15:00,43.3122017,21.8903577
+node,13958590346,Benu,pharmacy,,,,,+381648411661,,https://benu.rs/,,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Fr 07:30-20:00; Sa 07:30-16:00; Su 07:30-14:30,43.3239787,21.8931994
+node,13958590351,Benu,pharmacy,,Булевар др Зорана Ђинђића,10,,+381648441739,,https://benu.rs/,cair538@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Fr 08:00-21:00; Sa 08:00-16:00; Su 08:00-15:00,43.3188669,21.9080189
+node,13958590352,Benu,pharmacy,,,,,+38118233341,,https://benu.rs/,niszona229@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Sa 08:00-21:00; Su 08:00-15:00,43.3188303,21.9212929
+node,13958590360,Benu,pharmacy,,Књажевачка,118a,,+38164844185,,https://benu.rs/,nisdurlan230@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Fr 07:30-21:00; Sa 08:00-20:00; Su 08:00-15:00,43.3292947,21.9271714
+node,13958590361,Benu,pharmacy,,Матејевачки пут,2c,,+38118572444,,https://benu.rs/,nismatejevacki279@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Sa 08:00-21:00; Sa 08:00-15:00,43.3300192,21.9375458
+node,13958590362,Benu,pharmacy,,Књажевачка,118c,,+381648441777,,https://benu.rs/,nisdurlan2-281@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Fr 07:30-21:00; Sa 08:00-15:00,43.3289976,21.9272185
+node,13958590363,Benu,pharmacy,,,,,+38118260878,,https://benu.rs/,niszeleznicka282@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Sa 07:30-20:00; Sa 07:30-14:00,43.3158865,21.8813646
+way,1457622916,Benu,pharmacy,,,,,,,https://benu.rs/,deltaplanetnis448@benu.rs,https://www.facebook.com/benuapoteka,https://www.instagram.com/benuapoteka/,Mo-Su 10:00-22:00,43.325099,21.911353
+node,6809645989,Gracia,pharmacy,,,,,+38118526404,,,,,,,43.3153013,21.8945211
+node,13395542610,Maelia,pharmacy,,,,,+381800444555,,https://maelia.rs,,https://www.facebook.com/apotekamaelia,https://www.instagram.com/apotekamaelia,Mo-Su 08:00-22:00,43.3193368,21.8949543
+node,13761148646,Maelia,pharmacy,,,,,+381800444555,,https://maelia.rs,,https://www.facebook.com/apotekamaelia,https://www.instagram.com/apotekamaelia,Mo-Su 08:00-22:00,43.318269,21.9106642
+way,1033472810,Remedia sunce,pharmacy,Ниш,Хајдук Вељкова,51a,18000,+38118278700,,,,,,Mo-Sa 08:00-21:00; Su 08:00-15:00,43.3137023,21.8988889
+node,6807405985,Tvrđava,pharmacy,,,,,+38118591500,,,,,,Mo-Fr 07:00-20:00; Sa 07:00-18:00; Su 07:00-14:00,43.3241503,21.8919339
+way,786282120,Апотека Ниш,pharmacy,Ниш,Булевар др Зорана Ђинђића,81b,18000,+38118512296,,https://www.apotekanis.co.rs/,,,,,43.3154561,21.9170581
+node,6806518144,Дона,pharmacy,,,,,+38118244568,,,dona2@dona.rs,https://www.facebook.com/DonaFarmNis,https://www.instagram.com/dona_apoteke/,Mo-Fr 08:00-22:00; Sa 09:00-20:00,43.3179744,21.8950046
+node,6807406085,Кршенковић,pharmacy,,,,,+38118595501,,,,,,Mo-Fr 07:00-20:00; Sa 08:00-16:00; Su 08:00-15:00,43.3241336,21.892065
+node,6809644986,Кршенковић,pharmacy,Ниш,Обреновићева,86,18000,+38118511343,,,ogranak51nis@gmail.com,,,Mo-Su 08:00-23:00,43.3163471,21.8944
+node,9658462717,Foto Selma,photo,,,,,,,https://info.fotoselma.com,,,,,43.3178733,21.8941262
+way,1188647384,Црква Узвишења Светог Крижа,place_of_worship,Nis,Југ Богданова,1,18000,,,http://kcn.rs,,,,,43.3168552,21.8917803
+node,13474987952,Ековел центар,podiatrist,,Булевар Немањића,85,,+38118203230,+381605400536,https://ekovel.com/,,,,Mo-Fr 10:00-18:00; Sa 09:00-15:00,43.3175069,21.9248903
+way,286514610,Ватрогасни дом,police,Ниш,Војводе Мишића,56,18000,+38118527767,,,,,,,43.3222584,21.9092621
+way,839910624,Полицијска испостава Црвени Крст,police,Ниш,Булевар дванаести фебруар,89,18000,581689,,,,,,,43.3336446,21.8805369
+node,9477069260,Демократска странка,political_party,,,,,,,https://www.ds.org.rs/podaci-o-odboru/gradski-odbor-nis,,,,,43.3179483,21.8956826
+way,473304238,18101 Ниш,post_office,,Вожда Карађорђа,13a,,+38118518083,,,,,,Mo-Sa 07:00-19:00; Su 08:00-14:00; PH 08:00-15:00,43.320881,21.8986819
+way,302840499,18103 Ниш,post_office,,Књажевачка,103,,+38118518150,,,,,,Mo-Fr 08:00-19:00; Sa 08:00-13:00; PH off,43.3296383,21.9223493
+node,12003376728,18104 Ниш,post_office,Ниш,Булевар 12. фебруар,38,18104,+38118524970,,,,,,Mo-Fr 07:00-19:00; Sa 07:00-13:00; PH off,43.3239456,21.8903088
+node,11174877970,18105 Ниш,post_office,,Трг 14. октобар,6,,+38118518151,,,,,,Mo-Fr 08:00-19:00; Sa 08:00-13:30; PH off,43.3144118,21.8948387
+node,8913377695,18107 Ниш,post_office,,Вожда Карађорђа,23,,+38118522400,,,,,,Mo-Fr 07:00-14:00; PH off,43.3206299,21.9008379
+way,473353482,18108 Ниш,post_office,,Драгише Цветковића,76,,+38118518172,,,,,,Mo-Fr 08:00-19:00; Sa 08:00-13:00; PH off,43.3182794,21.9184398
+node,11215310000,18109 Ниш,post_office,,Бојана Митровића,34a,,+38118513900,,,,,,Mo-Fr 08:00-19:00; Sa 08:00-13:00; PH off,43.3098753,21.9284055
+node,8913377696,18111 Ниш,post_office,,Булевар Немањића,85a,,+38118532767,,,,,,Mo-Fr 08:00-19:00; Sa 08:00-13:00; PH off,43.3177443,21.9238431
+node,3474147616,18112 Ниш,post_office,,Обреновићева,46,,+38118257329,,,,,,Mo-Fr 08:00-19:00; Sa 08:00-14:00; PH off,43.3180116,21.8941226
+node,4946188922,18113 Ниш,post_office,Ниш,Париске комуне,2a,18000,+38118513196,,,,,,Mo-Fr 08:00-15:30; PH off,43.3217394,21.9189504
+way,963865083,18114 Ниш,post_office,,Ратка Јовића,10,,+38118582818,,,,,,Mo-Fr 08:00-19:00; Sa 08:00-13:00; PH off,43.3445937,21.8745544
+node,8915655915,18115 Ниш,post_office,,Александра Медведева,14,,+38118588001,,,,,,Mo-Fr 08:00-15:00; PH off,43.331301,21.8925315
+node,12003376732,18117 Ниш,post_office,Ниш,Византијски булевар,88,18117,+38118206099,,,,,,Mo-Fr 08:00-19:00; Sa 08:00-13:00; PH off,43.322392,21.9324793
+node,11051441051,18119 Ниш,post_office,Ниш,Светлане Велмар Јанковић,4,18119,+38118518097,,,,,,Mo-Fr 08:00-15:30; PH off,43.3139601,21.9168361
+way,966390908,18127 Ниш,post_office,Ниш,Димитрија Туцовића,203,18127,+381184287377,,,,,,Mo-Fr 07:30-14:30; PH off,43.3177981,21.8338132
+node,13103907162,18132 Ниш,post_office,Ниш,Војводе Путника,2b,18132,+38118518092,,,,,,Mo-Fr 07:00-15:00; PH off,43.3149974,21.8811951
+node,13103907161,18133 Ниш,post_office,Ниш,Булевар Светог Пантелејмона,48,18133,+38118518133,,,,,,Mo-Fr 08:00-15:30; PH off,43.3336612,21.9171268
+way,473302938,Ајриш паб,pub,Ниш,Кеј Кола српских сестара,7,18000,+38162780574,,https://irishpubcrazyhorse.com/,info@irishpubcrazyhorse.com,,,,43.3218256,21.8942514
+node,13515500601,Agapi Pizza,restaurant,,Војводе Танкосића,9,18000,+3810611353517,,,,agapi.pizza,agapi.pizza,Mo-Fr 09:00-23:30; Su 14:00-23:30,43.3233012,21.9066681
+node,12734511443,Dumpling Club,restaurant,,Николе Пашића,22,,+381628156766,,,,,,Mo-Sa 11:00-23:00,43.3181696,21.8978036
+node,13683836313,Kašika,restaurant,Ниш,Рајићева,17,18000,+381604818000,,,,,,Mo-Fr 09:00-17:00,43.3146171,21.8978986
+node,9661062617,King Bo,restaurant,,,,,+381183280280,,https://kingbo.rs/,office@kingbo.rs,,,,43.3165071,21.8920084
+node,13959444253,Koi sushi,restaurant,Ниш,7. јули,3,18000,+381654550828,,,,,,"Tu-Sa 14:00-00:00, Su 14:00-22:00",43.3226228,21.898793
+node,9535723230,L'avenue 22,restaurant,Ниш,Обреновићева,22,18000,+3810605405720,,,lavenue22@gmail.com,https://www.facebook.com/lavenue22/,https://www.instagram.com/l_avenue22/?hl=en,,43.3199165,21.895126
+node,12734511444,La casa del Burrito,restaurant,,,,,,,https://burrito.rs/,lcdbnis@gmail.com,,,,43.3177334,21.8995765
+node,13683836325,Maša,restaurant,Ниш,Кеј Кола српских сестара,1a,18000,,,https://www.masabistrobar.com/,,,,Mo-Th 08:00-24:00; Fr-Sa 08:00-01:00; Su 08:00-24:00,43.3219153,21.8951062
+node,12739459200,Nacionalna Klasa,restaurant,,,,,+38162303233,,https://nis.nacionalna-klasa.rs/,,,,Mo-Th 11:00-00:00; Fr 11:00-02:00; Sa 12:00-02:00,43.3315769,21.8941334
+way,1092910696,Naiades,restaurant,Ниш,Кеј Кола српских сестара,27a,,+381183230546,,,,,,Tu-Su 12:00-22:00,43.3209703,21.8912192
+node,13683836323,New Delhi,restaurant,Ниш,Милентијева,2,18000,+381183411002,,https://newdelhi.rs/,,,,Mo-Sa 11:00-24:00,43.3237994,21.8988971
+node,9982311342,Night & Day,restaurant,,,,,,,https://nightandday.rs/,,,,24/7,43.3175792,21.8944778
+node,9610635317,Orca Dish 'n' Fish,restaurant,Ниш,Косте Стаменковића,4,18000,+381184100203,,,,,,,43.3176088,21.8975243
+way,1417971548,Splav „Porto Nuovo”,restaurant,,,,,,,https://portonuovo.rs/,,,,,43.3228251,21.8958978
+node,8867068924,Studentska menza - Linijski restoran II,restaurant,,,,,,,https://scnis.rs/,,,,"Mo-Fr 07:30-09:30,11:30-15:30,17:00-20:00; Sa,Su 07:30-09:30,11:30-14:00",43.3168898,21.8902585
+node,13132475801,Thai by Thai,restaurant,Ниш,Nikole Pasica,10,,+381613336161,,https://thaibythai.rs/,,,,Mo-Sa 08:00-00:00; Su 11:00-23:00,43.3183917,21.899631
+node,12506638883,Tutto Passa,restaurant,Ниш,Синђелићев трг,31,,+381659366075,,,,,,"Mo-Th 08:00-00:00, Fr-Sa 08:00-01:00, Su 11:00-23:00",43.3185017,21.8994812
+way,1182572246,Американац,restaurant,,Кованлучка,10,,+381631922701,,https://www.facebook.com/Amerikanac.restoran/,,,https://www.instagram.com/restoran_amerikanac/,Mo-Th 10:00-24:00; Fr-Sa 10:00-02:00,43.3072344,21.8983054
+node,9931190348,Бољи живот 2,restaurant,,,,,+381184233370,,,,,,Mo-Su 09:00-22:00,43.3061688,21.9496252
+way,1061086089,Вериге,restaurant,Ниш,Станоја Главаша,41,18000,+38118513323,,http://www.kafanaverigenis.rs/,,,,Mo-Su 09:00-24:00,43.3061731,21.9047273
+node,12188084525,Галија,restaurant,,Николе Пашића,35a,,+38162402491,,https://kafanagalija.rs,info@kafanagalija.rs,,https://www.instagram.com/kafanagalijanis/,Mo-Th 10:00-24:00; Fr-Sa 10:00-02:00; Su 11:00-19:00,43.3180573,21.8959026
+node,13112287373,Кафана Бисер,restaurant,Ниш,Косте Стаменковића,1,18000,+38118248205,,,,,,Mo-Fr 07:00-00:00; Sa-Su 07:00-02:00,43.3177686,21.8976941
+node,6764043985,Кафана Мезе,restaurant,Ниш,Косте Стаменковића,3,18000,+381652280333,,https://www.kafanamezenis.com/,,,,Mo-Th 08:00-00:00; Fr-Sa 08:00-01:00; Su 12:00-00:00,43.3176398,21.8979845
+node,453435281,Код Рајка,restaurant,,,,,+381649001113,,,,,,Mo-Sa 10:00-24:00; Su 10:00-23:00,43.3178792,21.896058
+node,10010876488,Крилца и пивце башта,restaurant,,,,,+381659431500,,,,,,Mo-Sa 09:00-23:00,43.3212435,21.8920319
+way,769773332,Мали одмор 018,restaurant,,Дарданијска,7,,+381654405500,,,velizarmarkovic1@gmail.com,,,Mo-Su 11:00-23:00,43.2950371,21.9185382
+way,474337591,Под сач,restaurant,Ниш,Његошева,23,,+381668555530,,,,,,,43.3097567,21.8929351
+way,1071851916,Стари Јастребац,restaurant,Ниш,Зетска,14,18000,+38166221430,,https://urstari-jastrebac.business.site/,,,,,43.3131015,21.910812
+way,333699321,Гимназија Бора Станковић,school,,Вожда Карађорђа,27,,+38118527621,,,,,,,43.3209519,21.9024197
+way,524349302,Грађевинска техничка школа „Неимар”,school,Ниш,Александра Медведева,18,18000,018292093,,https://www.gtsneimar.edu.rs,gtsneimar@gmail.com,,,,43.3294389,21.8896164
+way,839975668,Електротехничка школа „Никола Тесла”,school,Ниш,Александра Медведева,16,18000,018588583,,https://www.etstesla.ni.ac.rs/,info@etstesla.ni.ac.rs,,,,43.329968,21.8901258
+node,12511356062,Музичка школа Ниш,school,Ниш,Првомајска,6,18000,,,https://muzickanis.org/,,,,,43.3192426,21.9034199
+way,252183539,Основна школа „Бубањски хероји”,school,,,,,018562919,0184100267,https://bubanjskiheroji.edu.rs,bheroji@gmail.com,,,,43.3141636,21.8636473
+way,405399773,Основна школа „Вук Караџић”,school,,,,,018252976,,https://sites.google.com/site/osvukkaradzicnis,osvuknis@open.telekom.rs,,,,43.3263618,21.8911723
+way,251561925,ОШ „Иво Андрић”,school,,,,,,,https://osivoandric1.wordpress.com/,,,,,43.3486585,21.8951093
+node,13470365273,Прва нишка гимназија Стеван Сремац,school,,Вожда Карађорђа,27,,+38118527622,,https://sremac.edu.rs/,,,,,43.3206136,21.9022983
+node,2700358133,Уметничка школа Ниш,school,Ниш,Првомајска,6,18000,,,https://www.umetnickaskolanis.edu.rs/,,,,,43.3188049,21.903259
+way,825788178,Школа за основно и средње образовање „Царица Јелена”,school,,,,,018560848,,https://www.caricajelena.edu.rs,skolacaricajelena@gmail.com,,,,43.3136384,21.8736205
+node,14111870003,BIM Guard - video nadzor i alarmi na jednom mestu,security,Niš,Branka Miljkovića,28,18000,0611328332,,http://www.bimguard.rs,,,,Mo-Fr 09-16,43.3159363,21.9286268
+way,473571046,Старвис.М Тим,security,Ниш,Мокрањчева,36,18000,+381183280079,,https://www.starvism.rs/,,,,,43.3074921,21.9081908
+node,5057645723,Miljković,shoemaker,,,,,+381604475144,,,,,,"Mo-Fr 09:00-13:00, 17:00-20:00; Sa 09:00-12:00",43.318929,21.9210748
+node,10991302607,Shoe Repair,shoemaker,,,,,0604475144,,,,,,Su-Th 09:00-13:00,43.31939,21.922615
+node,5939862486,CCC,shoes,,,,,+38162330654,,https://ccc.eu/,,,,Mo-Su 10:00-22:00,43.3112618,21.9359466
+node,5939862070,Deichmann,shoes,Ниш,,,,,,https://www.deichmann.com/RS,,,,Mo-Su 10:00-22:00,43.31135,21.9366401
+node,9502595991,Lumi Line,shoes,Ниш,Обреновићева,59,18000,+381184103026,,https://www.lumiline.rs/,,,,Mo-Fr 08:00-20:00; Sa 08:00-16:00,43.315539,21.8948197
+node,6807406192,Office Shoes,shoes,,,,,38118511560,,https://www.officeshoes.rs/prodavnica_obuce-office-shoes-obrenoviceva/286,off.nis@officeshoes.rs,,,Mo-Sa 09:00-21:00; Su 09:00-16:00,43.3196427,21.8953774
+node,9470147974,Opposite,shoes,,,,,+381668239990,,https://www.opposite-fashion.com/,,,,Mo-Sa 09:00-21:00; Su 10:00-18:00,43.3186396,21.8950726
+way,1157965038,Opposite Shoes & Bags,shoes,,,,,,,https://deltaplanetnis.rs/zakupac/opposite-shoes/,,,,Mo-Su 10:00-22:00,43.3249715,21.9105669
+node,5939862071,Planika,shoes,Ниш,,,,,,https://www.planika.rs/,,,,Mo-Su 10:00-22:00,43.3113097,21.9368987
+way,1188647398,Алпина,shoes,,,,,+38118241350,,https://www.alpinashop.rs/,tr6003@alpina.si,,,Mo-Fr 08:00-20:00; Sa 08:00-16:00,43.316406,21.8943485
+node,9470147973,Обућа Метро,shoes,,,,,+38162278437,,https://www.obucametro.rs/radnje/99-nis-novi,nisnovi@obucametro.rs,,,Mo-Sa 08:00-21:00; Su 09:00-15:00,43.3185321,21.8950523
+node,9509423787,Стефано,shoes,,,,,,,https://stefanoobuca.rs/,,,,,43.3179204,21.8948771
+node,6807406091,Цицибан,shoes,Ниш,Обреновићева,19,18000,+38118511296,,https://www.ciciban.info/sr/,,,,Mo-Fr 12:00-20:00; Sa 09:00-17:00,43.3184362,21.8950786
+way,473332649,Legea shop,sports,,9. бригаде,53,18000,018539283,,https://www.italsportserbia.rs,udine@italsportserbia.rs,,,Mo-Fr 10:00-18:00; Sa 10:00-15:00,43.3177307,21.9088799
+node,5939862493,Planeta Sport,sports,,,,,+3810800001001,,https://planetasport.rs,,,,Mo-Su 10:00-22:00,43.3109271,21.9372642
+node,9468415859,Planeta Sport,sports,,,,,,,https://planetasport.rs,,,,Mo-Fr 09:00-22:00; Sa 09:00-21:00; Su 10:00-19:00,43.3191755,21.8951783
+node,9501535166,Planeta Sport,sports,,,,,,,https://planetasport.rs,,,,,43.3172858,21.8947408
+node,5939862082,Proteini.si Shop,sports,,,,,+381184232022,,https://www.proteini.si/rs,,,,Mo-Su 10:00-18:00,43.3111918,21.9356913
+node,5939862492,Sport Vision,sports,,,,,+3810800003004,,https://www.sportvision.rs/,,,,Mo-Su 10:00-22:00,43.3110019,21.937288
+node,13078614687,Thema sport,sports,,,,,+38118530100,,https://www.themasport.com/,thema-sport@ninet.rs,,,Mo-Fr 12:00-20:00,43.3234382,21.9294062
+node,9509108532,Треф спорт,sports,Ниш,Обреновићева,23,,+38118511637,,https://www.trefsport.com/,,,,Mo-Fr 08:30-20:00; Sa 09:00-20:00,43.3187988,21.8951203
+way,1184339199,Радио Ниш,studio,Ниш,Лоле Рибара,7a,,,,https://www.rts.rs/,,,,,43.3219157,21.8996646
+node,13146041948,Радио-телевизија Србије - Дописништво у Нишу,studio,Ниш,Лоле Рибара,7a,18000,+38118513324,,https://www.rts.rs/,,,,,43.3219721,21.8996644
+node,5939862068,IDEA Super,supermarket,Ниш,,,,,,https://www.idea.rs,,,,Mo-Su 08:00-22:00,43.3114077,21.9362694
+node,7477220498,Lidl,supermarket,,,,,+381800300199,,https://www.lidl.rs/,,,,Mo-Sa 07:30-22:00; Su 08:00-22:00,43.3218098,21.9361004
+node,9195886618,Lidl,supermarket,Ниш,Благоја Паровића,,18000,+381800300199,,https://www.lidl.rs/,,,,Mo-Sa 07:30-22:00; Su 08:00-22:00,43.3239167,21.9126339
+way,1335803035,Lidl,supermarket,,Булевар Светог Пантелејмона,93b,,+381800300199,,https://www.lidl.rs/,,,,Mo-Sa 07:30-22:00; Su 08:00-22:00,43.3362478,21.9299052
+node,9709639117,Maxi,supermarket,,Генерала Милојка Лешјанина,2,,,,https://www.maxi.rs/,,,,Mo-Su 06:00-00:00,43.3211106,21.8953294
+node,9814560117,Maxi,supermarket,,,,,,,https://www.maxi.rs/,,,,Mo-Su 06:00-24:00,43.319291,21.908984
+node,13468372181,Mega Maxi,supermarket,,,,,+38118507201,,https://www.maxi.rs/mega-maxi,,,,06:00-00:00,43.3378161,21.8803859
+way,280889720,ДИС,supermarket,Ниш,Булевар Медијана,15,18000,+381800101101,,http://www.dismarket.rs/,,,,Mo-Su 07:00-22:00,43.3200312,21.9380467
+node,9487101307,Вица,tailor,Ниш,Трг учитеља Тасе,10,18000,+38162598693,,,,,,,43.3146292,21.8990749
+node,8478216227,A1,telecommunication,,,,,+381601234000,,https://www.a1.rs/,KorisnickiServis@a1.rs,,,Mo-Su 09:00-22:00,43.322852,21.925675
+node,9468415860,A1,telecommunication,Ниш,Обреновићева,17,18000,,,https://a1.rs/,,,,Mo-Fr 08:00-21:00; Sa 09:00-17:00,43.3190921,21.8951648
+way,473302926,SBB,telecommunication,Ниш,Кеј Кола српских сестара,13,18000,,,https://sbb.rs/,,,,Mo-Fr 08:00-20:00; Sa 08:00-16:00,43.3217089,21.8935462
+node,4314443091,Yettel,telecommunication,,Трг краља Милана,15,,+381639000,,https://www.yettel.rs,,https://www.facebook.com/YettelSrbija/,https://www.instagram.com/yettelsrbija/,Mo-Fr 08:00-21:00; Sa 08:00-16:00,43.3218462,21.8953325
+node,8014804613,Yettel,telecommunication,Ниш,,,,,,https://www.telenor.rs/,,,,Mo-Su 10:00-22:00,43.3111621,21.9358701
+node,12826239696,Yettel,telecommunication,,Обреновићева,50,,+381639000,,https://www.yettel.rs,,https://www.facebook.com/YettelSrbija/,https://www.instagram.com/yettelsrbija/,Mo-Fr 08:00-21:00; Sa 08:00-20:00,43.3182013,21.8945467
+node,13054889254,Yettel,telecommunication,,Византијски булевар,1,,+381639000,,https://www.yettel.rs,,https://www.facebook.com/YettelSrbija/,https://www.instagram.com/yettelsrbija/,Mo-Su 09:00-22:00,43.3227721,21.9254448
+way,1157969865,Yettel,telecommunication,,,,,+381639000,,https://www.yettel.rs,,https://www.facebook.com/YettelSrbija/,https://www.instagram.com/yettelsrbija/,Mo-Su 10:00-22:00,43.3243769,21.9113879
+node,8478158713,А1,telecommunication,,,,,+381601234000,,https://www.a1.rs/,KorisnickiServis@a1.rs,,,Mo-Fr 08:00-21:00;Sa 08:00-16:00,43.321475,21.8963528
+way,473327607,Позориште лутака Ниш,theatre,,Булевар др Зорана Ђинђића,17b,,,,https://www.nispuppets.org.rs/sr-rs/,,,,,43.3195792,21.9083684
+way,1188647399,G-Store,tobacco,,,,,+38169696238,,,,,,24/7,43.316264,21.8943603
+way,473304237,Град Ниш,townhall,Ниш,7. јули,2,18000,+38118504411,,https://www.ni.rs/,info@ni.rs,,,,43.3219416,21.8963325
+way,416946200,Градска општина Медијана,townhall,Ниш,Париске комуне,2a,18000,018532992,,https://medijana.rs/,omedijana@medijana.rs,,,Mo-Fr 08:00-15:30; PH off,43.3218088,21.9188761
+way,570100686,Градска општина Палилула,townhall,Ниш,Бранка Радичевића,2ž,18106,018290600,018290601,https://palilula.eu/,info@palilula.eu,,,Mo-Fr 08:00-15:00,43.3128715,21.8858567
+way,839711979,Градска општина Пантелеј,townhall,Ниш,Гутенбергова,4a,18000,+38118201280,,https://www.pantelej.org.rs/,pantelej@gmail.com,,,,43.3282337,21.9280386
+way,839910623,Градска општина Црвени Крст,townhall,Ниш,Булевар 12. фебруар,89,18000,+38118583700,,http://gocrvenikrst.rs,info@gocrvenikrst.rs,,,Mo-Fr 07:30-15:30,43.3339219,21.8809934
+node,5939862073,Pertini Toys,toys,Ниш,,,,,,https://www.pertinitoys.com/,,,,Mo-Su 10:00-22:00,43.3113308,21.9367633
+node,11816628748,Gastro oprema,trade,,,,,+38118204000,,https://shop.gastrooprema.rs/contact,prodajanis@gastrooprema.rs,,,Mo-Fr 08:00-18:00,43.3307183,21.8960602
+way,759863359,Југосистем,trade,,Булевар Светог цара Константина,82,,+38118550911,,https://jugosistem.rs/,info@jugosistem.rs,,,,43.3070895,21.9520326
+node,13507573301,For You putovanja,travel_agency,,,,,018560000,018560001,https://foryou.rs/,,ForYouPutovanjaAgencija,for_you_putovanja,,43.3182491,21.8982482
+node,12506638887,Мпс Тренд,travel_agency,,,,,+38118527322,,https://www.mpstrend.rs/,mpstrend018@gmail.com,,,,43.3189285,21.8997189
+node,12411561832,Skuba,truck,,,,,+381184151145,+381695154145;+381695154146,https://www.skuba.rs/,,,,Mo-Fr 08:00-16:00; Sa 08:00-14:00,43.3065269,21.9569573
+way,422217103,Silex,tyres,,,,,+38163401851,,https://teretnegume.rs/,prodaja@silexnis.rs,https://www.facebook.com/silexnis/,,Mo-Fr 08:00-15:00,43.3069529,21.9422367
+node,12369580646,Влада-Влајче,tyres,,,,,+381649403057,,,,,,,43.3115205,21.9181759
+node,9554101940,Висока школа струковних студија за криминалистику и безбедност Ниш,university,,,,,+38118297222,,http://kib.edu.rs/,inform.kib@gmail.com,https://www.facebook.com/KiB.Nis,,,43.3069002,21.9439852
+way,525185798,Грађевинско-архитектонски Факултет,university,Ниш,Александра Медведева,14,18000,+38118588200,,https://gaf.ni.ac.rs/,gaf@gaf.ni.ac.rs,,,,43.3304044,21.8914014
+node,9554101939,Правни факултет за привреду и правосуђе,university,,,,,+381648894444,,https://www.pfnis.edu.rs/,info@pfnis.edu.rs,,,,43.306997,21.9440176
+node,13683836321,Универзитет Сингидунум Центар Ниш,university,Ниш,Николе Пашића,28,18000,,,https://nis.singidunum.ac.rs/,,,,,43.3185026,21.8961034
+node,12511356063,Факултет уметности (департман за ликовне уметности),university,Ниш,Првомајска,6,18000,,,https://www.artf.ni.ac.rs/,,,,,43.3190564,21.9032683
+node,5939862487,Top Shop,variety_store,,,,,+381184520516,,https://www.top-shop.rs/,,,,Mo-Su 10:00-22:00,43.3113887,21.9363915
+way,1007123415,Мере Ниш,variety_store,,,,,,,https://www.meremarketi.rs/,,,,Mo-Su 09:00-21:00,43.3186054,21.8778362
+node,11816640284,Мере Ниш 2,variety_store,,,,,,,https://www.meremarketi.rs/,,,,Mo-Su 09:00-21:00,43.3305992,21.8961699
+way,473547069,Мере Ниш 3,variety_store,Ниш,Игманска,2a,18000,,,https://www.meremarketi.rs/,,,,Mo-Su 09:00-21:00,43.3097102,21.9121947
+node,13958590350,Tačka,vehicle_inspection,,,,,+38118252382,,,,,,Mo-Fr 08:00-17:00,43.3242416,21.8896932
+way,473572704,Богдановић ВДМ,vehicle_inspection,Ниш,Мокрањчева,36v,18000,+38118591221,,,gagibogdanovic@gmail.com,,,,43.307255,21.9080866
+way,762657673,Гага комерц,vehicle_inspection,,Матејевачки пут,116,,+38118570444,,https://gagakomerc.rs/,gagakomerc@gmail.com,,,,43.3369023,21.9374533
+way,403228912,DrPetGood,veterinary,,Византијски булевар,84,18000,018551551,,,drpetgood@gmail.com,,,24/7,43.3228568,21.9317345
+node,13260065015,Veterinarski specijalistički institut,veterinary,,Димитрија Туцовића,175,,+381184263301,,https://vsinis.rs/,vsinis@vsinis.rs,,,,43.3163192,21.8465097
+node,9467880857,B:PM,watches,Ниш,Обреновићева,36,18000,+381648580287,,https://www.bpmsatovi.com/radnje/12-nis-nis,bpmnis@bpmsatovi.rs,,,Mo-Fr 09:00-21:00; Sa 09:00-17:00,43.319292,21.8949426
+node,8898727287,Moment 23,watches,Ниш,Обреновићева,80б,18000,+381645807652,,https://www.momentsatovi.com/,info@momentsatovi.com,,,Mo-Fr 09:00-21:00,43.3172839,21.8943744
+way,1189531836,TGroup,watches,Ниш,Обреновићева,5,18000,+38118208006,,,,,,,43.3201189,21.8955125
+node,9528434885,Поклон дућан,watches,Ниш,Обреновићева,7,18000,+381692143578,,https://poklonducan.rs/,,,,Mo-Sa 09:00-21:00,43.3197797,21.8954063
+node,13078614681,Antenika,wholesale,,,,,+381612313700,,https://antenika.rs/,info@antenika.rs,https://www.facebook.com/Antenika,https://www.instagram.com/antenika_,Mo-Fr 08:00-16:00,43.3067233,21.9444112
+way,422217106,Bigz Office Group,wholesale,,,,,+38118253562,,https://bigzoffice.co.rs/,bigz.nis@bigzoffice.rs,,,Mo-Fr 07:00-15:00; Sa 09:00-13:00,43.3071237,21.9454675
+node,9759201345,Farmalogist,wholesale,,,,,+381183100070,,https://www.farmalogist.rs/,office.ni@farmalogist.rs,,,,43.3043243,21.955441
+node,13078614682,Medico domus,wholesale,,,,,,,https://www.medicodomus.com/,,https://www.facebook.com/medicodomus,https://www.instagram.com/medicodomus/,,43.3058434,21.9448974
+way,254747691,Metro,wholesale,Ниш,Димитрија Туцовића,210,18000,+381800222022,,https://www.metro.rs/,,,,24/7,43.3184358,21.8424121
+node,13078614680,Ortokon,wholesale,,,,,+38118550610,,https://ortokon.rs,info@ortokon.rs,,,,43.3071725,21.9428803
+node,6276497685,PB nitom,wholesale,,Грује А. Костадиновића,15a,,+381184151501,,https://www.nitom.rs/,webprodaja@nitom.rs,,,Mo-Fr 08:00-16:00,43.3438232,21.8588223
+node,13078614684,Thema sport,wholesale,,,,,+38118207372,,https://www.themasport.com/,thema-sport@ninet.rs,,,Mo-Fr 09:00-16:00,43.3072129,21.9456723
+way,422218281,Trag press,wholesale,,,,,+38118512750,,http://www.tragpress.rs/,nis@tragpress.rs,,,,43.3064345,21.946013
+way,422211448,Yumis,wholesale,,,,,+381183100070,,https://www.farmalogist.rs/,office.ni@farmalogist.rs,,,,43.3036549,21.9555445
+node,13658777586,Detailing store,yes,,,,,+38166318880,,https://detailingstore.rs,,,,Mo-Sa 10:00-21:00,43.3231061,21.925676
+way,280889727,Emmezeta,yes,Ниш,Булевар Медијана,36,18000,+381184150250,,http://www.aman.co.rs/,,,,Mo-Sa 07:30-21:30; Su 09:00-19:00,43.3127351,21.9342236
+node,12768233901,Арт Петрол,yes,,Трг Синђелића,,,+381113574261,,https://www.artpetrol.rs/,office@artpetrol.rs,,,Mo-Su 07:00-19:00,43.3211493,21.9004693
+node,9587990983,Завод за здравствену заштиту радника Ниш,yes,,,,,+38118232801,+38118224878;+38118537560,https://medradanis.rs/,info@medradanis.rs,,,,43.3133842,21.9162187
+node,2307009415,Здравствена станица Делијски вис,yes,Ниш,Бојана Митровића,34а,18000,+38118274444,,https://www.domzdravljanis.co.rs/,,,,,43.3097758,21.9284652
+way,707082201,Научно технолошки парк Ниш,yes,,Александра Медведева,2a,,,,https://ntp.rs,,,,,43.3316603,21.8942154
+way,371668486,Урбан ентер,yes,Niš,Епископска,77,18000,,,https://urbanenter.rs/,,,,,43.3121211,21.900606
