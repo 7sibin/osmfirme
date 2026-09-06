@@ -85,3 +85,100 @@ def test_root_serves_the_page(client):
     response = client.get("/")
     assert response.status_code == 200
     assert "text/html" in response.headers["content-type"]
+
+
+# --- jobs -------------------------------------------------------------------
+
+from webapp.cache import ResultCache  # noqa: E402
+from webapp.jobs import JobRegistry  # noqa: E402
+from webapp.main import get_cache, get_overpass_factory, get_registry  # noqa: E402
+
+ELEMENTS = [
+    {"type": "node", "id": 1, "lat": 43.32, "lon": 21.9,
+     "tags": {"name": "Pekara", "shop": "bakery", "phone": "+38118111222"}},
+    {"type": "node", "id": 2, "lat": 43.33, "lon": 21.91,
+     "tags": {"name": "Kafic", "amenity": "cafe"}},
+]
+
+
+class StubOverpass:
+    def __init__(self, elements):
+        self.elements = elements
+
+    def fetch(self, query):
+        return self.elements
+
+
+@pytest.fixture
+def registry():
+    """One registry for the whole test, so the test can inspect the jobs it created."""
+    return JobRegistry()
+
+
+@pytest.fixture
+def wired(tmp_path, registry):
+    """A client with a fresh registry, a temp cache and a stubbed Overpass."""
+    app.dependency_overrides[get_registry] = lambda: registry
+    app.dependency_overrides[get_cache] = lambda: ResultCache(tmp_path)
+    app.dependency_overrides[get_overpass_factory] = lambda: (lambda: StubOverpass(ELEMENTS))
+    with TestClient(app) as test_client:
+        yield test_client
+    app.dependency_overrides.clear()
+
+
+def post_job(client, **overrides):
+    body = {"area": {"kind": "area", "area_id": 3611538321, "label": "Nis"},
+            "categories": ["shop", "amenity"]}
+    body.update(overrides)
+    return client.post("/api/jobs", json=body)
+
+
+def wait_for_job(client, job_id, tries=100):
+    for _ in range(tries):
+        body = client.get(f"/api/jobs/{job_id}").json()
+        if body["status"] in {"done", "error", "cancelled"}:
+            return body
+    raise AssertionError(f"job {job_id} never finished")
+
+
+def test_post_jobs_returns_a_job_id(wired):
+    body = post_job(wired).json()
+    assert body["job_id"]
+    assert body["cached"] is False
+
+
+def test_job_runs_to_done_and_reports_counts(wired):
+    job_id = post_job(wired).json()["job_id"]
+    body = wait_for_job(wired, job_id)
+    assert body["status"] == "done"
+    assert body["elements_found"] == 2
+    assert body["rows"] == 2
+
+
+def test_a_second_identical_job_is_served_from_the_cache(wired):
+    wait_for_job(wired, post_job(wired).json()["job_id"])
+    second = post_job(wired).json()
+    assert second["cached"] is True
+
+
+def test_invalid_area_is_422(wired):
+    assert post_job(wired, area={"kind": "bbox", "bbox": [1, 2]}).status_code == 422
+
+
+def test_unknown_category_is_422(wired):
+    assert post_job(wired, categories=["nonsense"]).status_code == 422
+
+
+def test_status_of_an_unknown_job_is_404(wired):
+    assert wired.get("/api/jobs/nope").status_code == 404
+
+
+def test_delete_cancels_a_running_job(wired):
+    job_id = post_job(wired).json()["job_id"]
+    wired.delete(f"/api/jobs/{job_id}")
+    body = wired.get(f"/api/jobs/{job_id}").json()
+    assert body["status"] in {"cancelled", "done"}  # a stub can finish before the cancel lands
+
+
+def test_delete_of_an_unknown_job_is_404(wired):
+    assert wired.delete("/api/jobs/nope").status_code == 404

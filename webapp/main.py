@@ -12,20 +12,23 @@ from functools import lru_cache
 from pathlib import Path
 
 import requests
-from fastapi import Depends, FastAPI, HTTPException, Query
+from fastapi import Body, Depends, FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from geo import NominatimClient, RateLimiter
 from osm_businesses import USER_AGENT, OverpassClient
 
-from webapp.cache import ResultCache, default_cache_dir
-from webapp.jobs import JobRegistry
+from webapp.cache import ResultCache, cache_key, default_cache_dir
+from webapp.jobs import Job, JobRegistry
+from webapp.models import JobRequest
 from webapp.nominatim import GeometryClient
+from webapp.runner import run_job
 
 logger = logging.getLogger(__name__)
 
 STATIC_DIR = Path(__file__).parent / "static"
+MAX_TRACKED_JOBS = 20
 
 app = FastAPI(title="OSM firme")
 
@@ -118,6 +121,43 @@ def place_geometry(
     if result is None:
         raise HTTPException(status_code=404, detail="Za ovu oblast nema granice na mapi.")
     return result
+
+
+@app.post("/api/jobs")
+async def create_job(
+    request: JobRequest = Body(),
+    registry: JobRegistry = Depends(get_registry),
+    cache: ResultCache = Depends(get_cache),
+    overpass_factory: Callable[[], OverpassClient] = Depends(get_overpass_factory),
+) -> dict:
+    registry.prune(MAX_TRACKED_JOBS)
+    cached = cache.load(cache_key(request.area.cache_payload(), request.categories)) is not None
+
+    job = registry.create(request.area.display_label())
+    registry.start(
+        job,
+        lambda running: run_job(running, request, cache=cache, client_factory=overpass_factory),
+    )
+    return {"job_id": job.job_id, "cached": cached}
+
+
+def _require_job(registry: JobRegistry, job_id: str) -> Job:
+    job = registry.get(job_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail="Taj posao ne postoji ili je istekao.")
+    return job
+
+
+@app.get("/api/jobs/{job_id}")
+def job_status(job_id: str, registry: JobRegistry = Depends(get_registry)) -> dict:
+    return _require_job(registry, job_id).to_status_dict()
+
+
+@app.delete("/api/jobs/{job_id}")
+def cancel_job(job_id: str, registry: JobRegistry = Depends(get_registry)) -> dict:
+    job = _require_job(registry, job_id)
+    registry.cancel(job.job_id)
+    return job.to_status_dict()
 
 
 @app.get("/")
