@@ -1,5 +1,95 @@
 <!doctype html>
-<meta charset="utf-8">
-<title>OSM firme</title>
-<h1>OSM firme</h1>
-<p>Frontend dolazi u zadatku 11.</p>
+<html lang="sr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OSM firme</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.css">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>OSM firme</h1>
+    <p>Izaberi mesto, pregledaj firme, preuzmi Excel.</p>
+  </header>
+
+  <section id="area">
+    <h2>1. Oblast</h2>
+    <input type="search" data-search-input placeholder="Ukucaj naziv mesta, npr. Nis" autocomplete="off">
+    <ul data-search-results hidden></ul>
+
+    <div class="map-tools">
+      <button type="button" data-draw-rect>Nacrtaj pravougaonik</button>
+      <button type="button" data-draw-circle>Nacrtaj krug</button>
+      <button type="button" data-clear-area>Ponisti izbor</button>
+    </div>
+
+    <div data-map></div>
+    <p data-area-summary>Nije izabrana nijedna oblast.</p>
+  </section>
+
+  <section id="query">
+    <h2>2. Sta trazimo</h2>
+    <fieldset data-categories>
+      <legend>Kategorije</legend>
+      <label><input type="checkbox" value="shop" checked> Prodavnice</label>
+      <label><input type="checkbox" value="amenity" checked> Objekti i usluge</label>
+      <label><input type="checkbox" value="office" checked> Kancelarije</label>
+      <label><input type="checkbox" value="craft" checked> Zanati</label>
+      <label><input type="checkbox" value="tourism" checked> Turizam</label>
+      <label><input type="checkbox" value="healthcare" checked> Zdravstvo</label>
+    </fieldset>
+    <button type="button" data-run disabled>Pretrazi</button>
+
+    <div data-progress hidden>
+      <p data-progress-message></p>
+      <p><span data-progress-elapsed></span></p>
+      <button type="button" data-cancel>Otkazi</button>
+    </div>
+  </section>
+
+  <section id="results" data-results hidden>
+    <h2>3. Rezultati</h2>
+    <p data-results-count></p>
+
+    <div class="filters">
+      <input type="search" data-filter-q placeholder="Pretrazi po nazivu ili ulici">
+      <label><input type="checkbox" data-filter-contact> Samo sa kontaktom</label>
+    </div>
+    <div data-facets></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead data-table-head>
+          <tr>
+            <th data-sort="name">Naziv</th>
+            <th data-sort="category">Kategorija</th>
+            <th data-sort="street">Adresa</th>
+            <th data-sort="phone">Telefon</th>
+            <th data-sort="website">Sajt</th>
+            <th data-sort="opening_hours">Radno vreme</th>
+          </tr>
+        </thead>
+        <tbody data-table-body></tbody>
+      </table>
+    </div>
+
+    <div class="pager">
+      <button type="button" data-prev>Prethodna</button>
+      <span data-page-info></span>
+      <button type="button" data-next>Sledeca</button>
+    </div>
+
+    <button type="button" data-download>Preuzmi Excel</button>
+  </section>
+
+  <footer>
+    Podaci &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>, ODbL.
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.min.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>
