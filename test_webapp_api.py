@@ -182,3 +182,76 @@ def test_delete_cancels_a_running_job(wired):
 
 def test_delete_of_an_unknown_job_is_404(wired):
     assert wired.delete("/api/jobs/nope").status_code == 404
+
+
+# --- results and export -----------------------------------------------------
+
+
+def test_results_return_rows_facets_and_total(wired):
+    job_id = post_job(wired).json()["job_id"]
+    wait_for_job(wired, job_id)
+
+    body = wired.get(f"/api/jobs/{job_id}/results").json()
+    assert body["total"] == 2
+    assert {item["value"] for item in body["facets"]} == {"bakery", "cafe"}
+    assert body["rows"][0]["name"] in {"Pekara", "Kafic"}
+
+
+def test_results_apply_the_category_filter(wired):
+    job_id = post_job(wired).json()["job_id"]
+    wait_for_job(wired, job_id)
+
+    body = wired.get(f"/api/jobs/{job_id}/results", params={"categories": "bakery"}).json()
+    assert body["total"] == 1
+    assert body["rows"][0]["name"] == "Pekara"
+
+
+def test_results_apply_require_contact(wired):
+    job_id = post_job(wired).json()["job_id"]
+    wait_for_job(wired, job_id)
+
+    body = wired.get(f"/api/jobs/{job_id}/results", params={"require_contact": "true"}).json()
+    assert body["total"] == 1
+
+
+def test_results_paginate(wired):
+    job_id = post_job(wired).json()["job_id"]
+    wait_for_job(wired, job_id)
+
+    body = wired.get(f"/api/jobs/{job_id}/results", params={"page": 2, "page_size": 1}).json()
+    assert body["page"] == 2
+    assert len(body["rows"]) == 1
+    assert body["total"] == 2
+
+
+def test_results_of_an_unfinished_job_are_409(wired, registry):
+    # A job that was never started stays "pending"; posting one and forcing its
+    # status would race with the background task finishing it.
+    job = registry.create("Nis")
+    assert wired.get(f"/api/jobs/{job.job_id}/results").status_code == 409
+
+
+def test_export_returns_an_xlsx_with_a_filename(wired):
+    job_id = post_job(wired).json()["job_id"]
+    wait_for_job(wired, job_id)
+
+    response = wired.get(f"/api/jobs/{job_id}/export.xlsx")
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith(
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    assert "firme-" in response.headers["content-disposition"]
+    assert response.content[:2] == b"PK"  # xlsx is a zip
+
+
+def test_export_honours_the_same_filters(wired):
+    from io import BytesIO
+
+    from openpyxl import load_workbook
+
+    job_id = post_job(wired).json()["job_id"]
+    wait_for_job(wired, job_id)
+
+    response = wired.get(f"/api/jobs/{job_id}/export.xlsx", params={"categories": "bakery"})
+    sheet = load_workbook(BytesIO(response.content))["Firme"]
+    assert sheet.max_row == 2  # header + one row

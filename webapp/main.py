@@ -10,25 +10,37 @@ import logging
 from collections.abc import Callable
 from functools import lru_cache
 from pathlib import Path
+from urllib.parse import quote
 
 import requests
 from fastapi import Body, Depends, FastAPI, HTTPException, Query
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 from geo import NominatimClient, RateLimiter
 from osm_businesses import USER_AGENT, OverpassClient
 
 from webapp.cache import ResultCache, cache_key, default_cache_dir
+from webapp.export import build_workbook, export_filename
 from webapp.jobs import Job, JobRegistry
 from webapp.models import JobRequest
 from webapp.nominatim import GeometryClient
+from webapp.results import (
+    DEFAULT_PAGE_SIZE,
+    MAX_PAGE_SIZE,
+    ResultFilters,
+    facets,
+    filter_rows,
+    paginate,
+    sort_filtered,
+)
 from webapp.runner import run_job
 
 logger = logging.getLogger(__name__)
 
 STATIC_DIR = Path(__file__).parent / "static"
 MAX_TRACKED_JOBS = 20
+XLSX_MEDIA_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
 app = FastAPI(title="OSM firme")
 
@@ -158,6 +170,63 @@ def cancel_job(job_id: str, registry: JobRegistry = Depends(get_registry)) -> di
     job = _require_job(registry, job_id)
     registry.cancel(job.job_id)
     return job.to_status_dict()
+
+
+def _filters(
+    categories: list[str] = Query(default=[]),
+    require_contact: bool = Query(default=False),
+    q: str = Query(default=""),
+    sort: str = Query(default="name"),
+    order: str = Query(default="asc"),
+) -> ResultFilters:
+    return ResultFilters(
+        categories=categories, require_contact=require_contact, q=q, sort=sort, order=order,
+    )
+
+
+def _finished_job(registry: JobRegistry, job_id: str) -> Job:
+    job = _require_job(registry, job_id)
+    if job.status != "done":
+        raise HTTPException(status_code=409, detail="Posao jos nije zavrsen.")
+    return job
+
+
+@app.get("/api/jobs/{job_id}/results")
+def job_results(
+    job_id: str,
+    page: int = Query(default=1, ge=1),
+    page_size: int = Query(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
+    filters: ResultFilters = Depends(_filters),
+    registry: JobRegistry = Depends(get_registry),
+) -> dict:
+    job = _finished_job(registry, job_id)
+    kept = sort_filtered(filter_rows(job.rows, filters), filters.sort, filters.order)
+    window, total = paginate(kept, page, page_size)
+    return {
+        "rows": [row.as_output_dict() for row in window],
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "facets": facets(job.rows, filters),
+        "area_label": job.area_label,
+    }
+
+
+@app.get("/api/jobs/{job_id}/export.xlsx")
+def job_export(
+    job_id: str,
+    filters: ResultFilters = Depends(_filters),
+    registry: JobRegistry = Depends(get_registry),
+) -> StreamingResponse:
+    job = _finished_job(registry, job_id)
+    kept = sort_filtered(filter_rows(job.rows, filters), filters.sort, filters.order)
+    buffer = build_workbook(kept, area_label=job.area_label, filters=filters)
+    filename = export_filename(job.area_label)
+    return StreamingResponse(
+        buffer,
+        media_type=XLSX_MEDIA_TYPE,
+        headers={"Content-Disposition": f"attachment; filename*=UTF-8''{quote(filename)}"},
+    )
 
 
 @app.get("/")
