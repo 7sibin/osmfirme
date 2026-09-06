@@ -8,11 +8,91 @@ OSM only. No Google Maps fallback, no HTML scraping of map sites.
 ## Install
 
 ```bash
-pip install -r requirements.txt      # requests, pytest
+pip install -r requirements.txt
 python osm_businesses.py --help
 ```
 
-Python 3.11+. Standard library plus `requests`; `pytest` for the tests.
+Python 3.11+. The CLI needs only the standard library plus `requests`; the web
+app adds `fastapi`, `uvicorn` and `openpyxl`; `pytest` runs the tests.
+
+## Web app
+
+Everything the CLI does, in a browser — with a map, a preview table and an
+Excel download instead of flags and a CSV file.
+
+```bash
+uvicorn webapp.main:app --reload      # then open http://127.0.0.1:8000
+```
+
+The page has three sections:
+
+1. **Oblast** — type a place name to get the same Nominatim candidates
+   `--list-areas` prints; picking one draws its boundary on the map. Or draw a
+   rectangle or a circle directly on the map, which is the `--bbox` and
+   `--center`/`--radius` selection by other means. Exactly one area is active
+   at a time: drawing replaces a searched area and vice versa.
+2. **Sta trazimo** — tick the top-level keys to query (`shop`, `amenity`,
+   `office`, `craft`, `tourism`, `healthcare`). This narrows the Overpass query
+   itself, so fewer ticks also means a cheaper request.
+3. **Rezultati** — the rows in a sortable, paginated table, with a text search,
+   a "samo sa kontaktom" toggle, and a checkbox per concrete category actually
+   found (`bakery`, `cafe`, `dentist`, …). "Preuzmi Excel" downloads exactly
+   what the filters currently show.
+
+The interface is in Serbian; the code is not.
+
+### Jobs and caching
+
+A city-sized query takes minutes, so a search runs as a background job. The
+page polls `/api/jobs/{id}` once a second and shows the phase, the elapsed
+time, and a cancel button.
+
+Finished results are cached for 30 days in `~/.cache/osm_businesses/web`,
+keyed by the area and the chosen categories — so asking for the same place
+twice is instant. Delete that directory to force a fresh query. (Resolved area
+names use `~/.cache/osm_businesses/areas.json`, shared with the CLI.)
+
+Jobs themselves live in memory. Restarting the server loses any job still
+running, but finished results survive in the cache. Cancelling is cooperative:
+it stops the page from waiting and marks the job cancelled, but an HTTP request
+already in flight is abandoned rather than killed, so its thread may run on to
+its own timeout in the background.
+
+### API
+
+| Route | What it does |
+|---|---|
+| `GET /api/places?q=…&country=RS` | Nominatim candidates, each with its Overpass `area_id` |
+| `GET /api/places/{osm_type}/{osm_id}/geometry` | the area's boundary as GeoJSON, for the map |
+| `POST /api/jobs` | start a job; body is `{area, categories}` |
+| `GET /api/jobs/{id}` | job status: `pending`/`running`/`done`/`error`/`cancelled` |
+| `DELETE /api/jobs/{id}` | cancel |
+| `GET /api/jobs/{id}/results` | filtered rows, paginated, plus per-category counts |
+| `GET /api/jobs/{id}/export.xlsx` | the same filtered rows as a workbook |
+
+The area in `POST /api/jobs` is one of:
+
+```json
+{"kind": "area",   "area_id": 3611538321, "label": "Nis"}
+{"kind": "bbox",   "bbox": [43.28, 21.85, 43.36, 21.96]}
+{"kind": "circle", "center": [43.32, 21.90], "radius_m": 3000}
+```
+
+An unusable area is a `422` with a readable message, not a traceback. No
+traceback ever reaches the browser: the server log gets the exception, the
+user gets a sentence.
+
+### The workbook
+
+Two sheets. **Firme** holds the same columns as the CSV, with Serbian headers,
+a frozen header row, an autofilter, clickable website and email cells, and
+phone numbers stored as text so Excel keeps the leading `+`. **Info** records
+the area, the date, the row count, the filters applied and the ODbL
+attribution.
+
+That attribution is not decoration. Anything you publish from these
+spreadsheets carries the same obligation as the CLI's CSVs — see
+[Attribution](#attribution) at the end of this file.
 
 ## Area selection
 
@@ -193,11 +273,24 @@ rows survived parsing and filters, and how many carry a phone or a website.
 python -m pytest -q
 ```
 
-73 tests, no network anywhere — the HTTP layer is mocked and every fixture is
-hand-built. `test_parse.py` covers the pure `parse_elements` function
+162 tests, no network anywhere — the HTTP layer is mocked and every fixture is
+hand-built.
+
+The CLI's 73: `test_parse.py` covers the pure `parse_elements` function
 (coordinates, name fallbacks, furniture exclusion, dedupe, phone and website
 normalization); `test_geo.py` covers area resolution (candidate filtering, the
 area-id arithmetic, `--pick`, the cache, and the rate limiter).
+
+The web app's 89: `test_webapp_models.py` (area validation and the translation
+into `AreaSpec`), `test_webapp_cache.py` (the key, the round trip, and every
+way an entry can be rejected), `test_webapp_jobs.py` (the job state machine and
+cancellation), `test_webapp_runner.py` (cache hit, query shape, Overpass
+failure), `test_webapp_results.py` (filters, facets, sorting, pagination),
+`test_webapp_export.py` (the workbook, read back with `openpyxl`),
+`test_webapp_nominatim.py` (the `/lookup` client) and `test_webapp_api.py`
+(every route, through `TestClient`, with Nominatim and Overpass stubbed).
+
+The frontend has no automated tests; it is checked by hand.
 
 ## Attribution
 
