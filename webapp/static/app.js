@@ -57,7 +57,7 @@ async function runSearch(query) {
     list.hidden = false;
     list.innerHTML = "";
     const item = document.createElement("li");
-    item.textContent = error.message;
+    item.textContent = humanError(error);
     list.appendChild(item);
   }
 }
@@ -150,6 +150,14 @@ async function messageOf(response) {
   }
 }
 
+const OFFLINE_MESSAGE = "Server ne odgovara. Proveri da li je pokrenut, pa pokusaj ponovo.";
+
+/** fetch() rejects with "Failed to fetch" when the server is down - not a sentence
+ *  anyone wants to read, and in the wrong language. Everything else is already ours. */
+function humanError(error) {
+  return error instanceof TypeError ? OFFLINE_MESSAGE : error.message;
+}
+
 // --- running a job --------------------------------------------------------
 
 const POLL_INTERVAL_MS = 1000;
@@ -216,7 +224,7 @@ async function startJob() {
     state.jobId = job_id;
     pollJob();
   } catch (error) {
-    showProgress(error.message);
+    showProgress(humanError(error));
     refreshRunButton();
   }
 }
@@ -235,7 +243,7 @@ function pollJob() {
         onJobFinished(job);
       }
     } catch (error) {
-      showProgress(error.message);
+      showProgress(humanError(error));
       refreshRunButton();
     }
   }, POLL_INTERVAL_MS);
