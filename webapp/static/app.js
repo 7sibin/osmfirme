@@ -490,13 +490,32 @@ function setStep3(note, active) {
   $("data-step3").classList.toggle("is-idle", !active);
 }
 
+/** Show or hide the results zone without throwing the results away. Closing it
+ *  is a view choice — the rows stay rendered and the map keeps its markers, so
+ *  reopening is instant. Step 3 grows a way back in while it is closed. */
+function setPanelOpen(open) {
+  $("data-panel").hidden = !open;
+  app.classList.toggle("has-panel", open);
+  $("data-show-panel").hidden = open || !state.results;
+  relayoutMap();
+}
+
+/** The user closed the panel. On a phone tab 3 is the panel, so step back to
+ *  the input tabs — otherwise the screen would be empty. */
+function closePanel() {
+  if (app.dataset.tab === "3") selectTab("1");
+  setPanelOpen(false);
+}
+
+$("data-panel-close").addEventListener("click", closePanel);
+$("data-show-panel").addEventListener("click", () => setPanelOpen(true));
+
+/** A new run wipes the zone: no results left to come back to. */
 function hidePanel() {
-  $("data-panel").hidden = true;
-  app.classList.remove("has-panel");
+  setPanelOpen(false);
   $("data-tabs").querySelector('[data-tab-to="3"]').disabled = true;
   pointLayer.clearLayers();
   lastPoints = [];
-  relayoutMap();
 }
 
 function resetResultsView() {
@@ -631,13 +650,9 @@ async function loadResults() {
   view.facets = body.facets;
 
   const wasHidden = $("data-panel").hidden;
-  $("data-panel").hidden = false;
-  app.classList.add("has-panel");
+  setPanelOpen(true);
   $("data-tabs").querySelector('[data-tab-to="3"]').disabled = false;
-  if (wasHidden) {
-    selectTab("3");
-    relayoutMap();
-  }
+  if (wasHidden) selectTab("3");
 
   renderHead(body);
   renderFilterNote();
@@ -976,6 +991,8 @@ $("data-download").addEventListener("click", () => {
 // --- mobile: tabs and the map drawer ----------------------------------------
 
 function selectTab(name) {
+  // Tab 3 is the results zone; picking it reopens a panel the user had closed.
+  if (name === "3" && state.results && $("data-panel").hidden) setPanelOpen(true);
   app.dataset.tab = name;
   for (const button of $("data-tabs").querySelectorAll("[data-tab-to]")) {
     button.setAttribute("aria-selected", String(button.dataset.tabTo === name));

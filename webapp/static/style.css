@@ -455,7 +455,31 @@ input[type="checkbox"] { accent-color: var(--ink); margin: 0; }
   flex-direction: column;
 }
 
-.panel-head { flex: none; padding: 13px 14px 12px; border-bottom: 1px solid var(--rule); }
+.panel-head {
+  flex: none;
+  position: relative;
+  /* room on the right for the close button, so the count line never runs under it */
+  padding: 13px 46px 12px 14px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.panel-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border-color: var(--rule);
+  color: var(--ink-soft);
+  font-size: 17px;
+  line-height: 1;
+}
+.panel-close:hover { color: var(--ink); border-color: var(--ink); }
 
 .cache-stamp { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
 .cache-stamp-tag {
@@ -923,7 +947,8 @@ input[type="checkbox"] { accent-color: var(--ink); margin: 0; }
   .run-bar .btn-primary { height: 48px; padding: 0 22px; font-size: 15px; }
   .run-bar [data-run-hint] { display: none; }
 
-  .panel-head { padding: 11px 12px; }
+  .panel-head { padding: 11px 46px 11px 12px; }
+  .panel-close { width: 34px; height: 34px; top: 8px; right: 8px; font-size: 20px; }
   .count-line { font-size: 17px; line-height: 1.25; }
   .site-band { flex-direction: column; align-items: stretch; gap: 7px; }
   .site-band .spacer { display: none; }
