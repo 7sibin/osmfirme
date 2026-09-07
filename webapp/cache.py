@@ -9,6 +9,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
+import os
+import tempfile
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
@@ -17,12 +20,28 @@ from typing import Any
 
 from osm_businesses import COLUMNS, Row
 
+logger = logging.getLogger(__name__)
+
 CACHE_VERSION = 1
 MAX_AGE_DAYS = 30
 
 
 def default_cache_dir() -> Path:
-    return Path.home() / ".cache" / "osm_businesses" / "web"
+    """Where finished results live between runs.
+
+    `OSM_CACHE_DIR` wins when set: a hosted container is not guaranteed a
+    writable home directory, and on Render only the service's own disk is
+    durable. Where `Path.home()` cannot be resolved at all, the system temp
+    directory is better than refusing to start.
+    """
+    override = os.environ.get("OSM_CACHE_DIR")
+    if override:
+        return Path(override)
+    try:
+        home = Path.home()
+    except RuntimeError:
+        return Path(tempfile.gettempdir()) / "osm_businesses" / "web"
+    return home / ".cache" / "osm_businesses" / "web"
 
 
 def cache_key(area_payload: dict[str, Any], categories: Sequence[str]) -> str:
@@ -104,7 +123,13 @@ class ResultCache:
         return datetime.now(timezone.utc) - written > timedelta(days=MAX_AGE_DAYS)
 
     def save(self, key: str, result: CachedResult) -> None:
-        self.directory.mkdir(parents=True, exist_ok=True)
+        """Write an entry, or give up quietly.
+
+        By the time this runs the rows are already in the job and on their way
+        to the browser, so a read-only or full disk must not turn a finished
+        scrape into an error. A miss next time costs minutes; a failed job
+        costs the user the whole run.
+        """
         payload = {
             "version": CACHE_VERSION,
             "created_at": result.created_at,
@@ -113,6 +138,10 @@ class ResultCache:
             "elements_found": result.elements_found,
             "rows": [_row_to_dict(row) for row in result.rows],
         }
-        temporary = self._path(key).with_suffix(".json.tmp")
-        temporary.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
-        temporary.replace(self._path(key))
+        try:
+            self.directory.mkdir(parents=True, exist_ok=True)
+            temporary = self._path(key).with_suffix(".json.tmp")
+            temporary.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+            temporary.replace(self._path(key))
+        except OSError:
+            logger.warning("could not cache results under %s", self.directory, exc_info=True)

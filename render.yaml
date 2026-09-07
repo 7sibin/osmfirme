@@ -1,0 +1,29 @@
+# Render blueprint: https://render.com/docs/blueprint-spec
+#
+# Zasto Render a ne Vercel: poslovi zive u RAM-u procesa
+# (webapp/main.py -> JobRegistry) i scrape radi kao background asyncio task.
+# To zahteva proces koji ostaje ziv izmedju zahteva. Serverless ga zamrzne
+# cim odgovor izadje, pa scrape nikad ne zavrsi.
+#
+# VAZNO: servis mora ostati na JEDNOJ instanci. Job state nije deljen, pa bi
+# druga instanca vracala 404 na polling zahteve za posao koji je prva napravila.
+# Ako podignes plan, ostavi scaling na 1 instancu.
+
+services:
+  - type: web
+    name: osmfirme
+    runtime: python
+    region: frankfurt
+    plan: free
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn webapp.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12"
+      # Kes ide u /tmp: na Renderu je home pisiv ali nije garantovan, a /tmp je.
+      # Efemeran je - gubi se pri restartu i spin-down-u. Kes je optimizacija,
+      # ne podatak, pa je to prihvatljivo.
+      - key: OSM_CACHE_DIR
+        value: /tmp/osm_businesses

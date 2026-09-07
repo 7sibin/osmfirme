@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import json
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 from osm_businesses import Row
-from webapp.cache import CachedResult, ResultCache, cache_key
+from webapp.cache import CachedResult, ResultCache, cache_key, default_cache_dir
 
 
 def make_row(name: str = "Pekara") -> Row:
@@ -79,3 +80,28 @@ def test_save_creates_the_directory(tmp_path):
     nested = tmp_path / "a" / "b"
     ResultCache(nested).save("k1", CachedResult(area_label="X", categories=[], elements_found=0, rows=[]))
     assert (nested / "k1.json").exists()
+
+
+def test_cache_dir_honours_the_env_override(monkeypatch):
+    monkeypatch.setenv("OSM_CACHE_DIR", "/tmp/somewhere-else")
+    assert default_cache_dir() == Path("/tmp/somewhere-else")
+
+
+def test_cache_dir_defaults_under_home(monkeypatch):
+    monkeypatch.delenv("OSM_CACHE_DIR", raising=False)
+    assert default_cache_dir() == Path.home() / ".cache" / "osm_businesses" / "web"
+
+
+def test_unwritable_directory_gives_up_instead_of_raising(tmp_path):
+    """A hosted container may hand us a read-only path.
+
+    The rows are already in the job by the time save() runs, so losing the
+    cache entry must not lose the scrape.
+    """
+    blocker = tmp_path / "not-a-directory"
+    blocker.write_text("", encoding="utf-8")
+    cache = ResultCache(blocker / "cache")
+
+    cache.save("k1", CachedResult(area_label="X", categories=[], elements_found=0, rows=[make_row()]))
+
+    assert cache.load("k1") is None
