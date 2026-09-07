@@ -94,8 +94,11 @@ from webapp.jobs import JobRegistry  # noqa: E402
 from webapp.main import get_cache, get_overpass_factory, get_registry  # noqa: E402
 
 ELEMENTS = [
+    # Pekara has both a phone and a website, Kafic has neither: one of each for
+    # the require_contact and website filters to bite on.
     {"type": "node", "id": 1, "lat": 43.32, "lon": 21.9,
-     "tags": {"name": "Pekara", "shop": "bakery", "phone": "+38118111222"}},
+     "tags": {"name": "Pekara", "shop": "bakery", "phone": "+38118111222",
+              "website": "https://pekara.example.rs"}},
     {"type": "node", "id": 2, "lat": 43.33, "lon": 21.91,
      "tags": {"name": "Kafic", "amenity": "cafe"}},
 ]
@@ -255,3 +258,27 @@ def test_export_honours_the_same_filters(wired):
     response = wired.get(f"/api/jobs/{job_id}/export.xlsx", params={"categories": "bakery"})
     sheet = load_workbook(BytesIO(response.content))["Firme"]
     assert sheet.max_row == 2  # header + one row
+
+
+def test_results_apply_the_website_filter(wired):
+    job_id = post_job(wired).json()["job_id"]
+    wait_for_job(wired, job_id)
+
+    without = wired.get(f"/api/jobs/{job_id}/results", params={"website": "no"}).json()
+    assert [row["name"] for row in without["rows"]] == ["Kafic"]
+
+    with_site = wired.get(f"/api/jobs/{job_id}/results", params={"website": "yes"}).json()
+    assert [row["name"] for row in with_site["rows"]] == ["Pekara"]
+
+
+def test_results_reject_an_unknown_website_value(wired):
+    job_id = post_job(wired).json()["job_id"]
+    wait_for_job(wired, job_id)
+
+    assert wired.get(f"/api/jobs/{job_id}/results", params={"website": "maybe"}).status_code == 422
+
+
+def test_static_files_must_be_revalidated(client):
+    response = client.get("/static/app.js")
+    assert response.status_code == 200
+    assert response.headers["cache-control"] == "no-cache"

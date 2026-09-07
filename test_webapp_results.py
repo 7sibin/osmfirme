@@ -80,3 +80,32 @@ def test_pagination_past_the_end_is_empty_not_an_error():
     page, total = paginate(ROWS, page=99, page_size=2)
     assert page == []
     assert total == 4
+
+
+def test_website_filter_yes_keeps_only_rows_with_a_site():
+    kept = filter_rows(ROWS, ResultFilters(website="yes"))
+    assert [r.name for r in kept] == ["Kafe Bar"]
+
+
+def test_website_filter_no_keeps_only_rows_without_a_site():
+    kept = filter_rows(ROWS, ResultFilters(website="no"))
+    assert [r.name for r in kept] == ["Pekara Sunce", "Pekara Zvezda", "Zubar Nikolic"]
+
+
+def test_website_filter_any_keeps_everything():
+    assert filter_rows(ROWS, ResultFilters(website="any")) == ROWS
+    assert filter_rows(ROWS, ResultFilters()) == ROWS
+
+
+def test_unknown_website_value_is_treated_as_any():
+    assert filter_rows(ROWS, ResultFilters(website="nonsense")) == ROWS
+
+
+def test_website_filter_combines_with_the_others():
+    kept = filter_rows(ROWS, ResultFilters(website="no", require_contact=True))
+    assert [r.name for r in kept] == ["Pekara Sunce", "Zubar Nikolic"]
+
+
+def test_facets_honour_the_website_filter():
+    result = facets(ROWS, ResultFilters(website="yes"))
+    assert {item["value"]: item["count"] for item in result} == {"cafe": 1}

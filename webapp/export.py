@@ -13,7 +13,7 @@ from openpyxl.utils import get_column_letter
 
 from osm_businesses import COLUMNS, Row
 
-from webapp.results import ResultFilters
+from webapp.results import WEBSITE_NO, WEBSITE_YES, ResultFilters
 
 HEADERS_SR: dict[str, str] = {
     "osm_type": "OSM tip",
@@ -113,6 +113,10 @@ def _write_info_sheet(book: Workbook, *, rows: list[Row], area_label: str, filte
         applied.append("kategorije: " + ", ".join(sorted(filters.categories)))
     if filters.require_contact:
         applied.append("samo sa kontaktom")
+    if filters.website == WEBSITE_YES:
+        applied.append("samo sa sajtom")
+    elif filters.website == WEBSITE_NO:
+        applied.append("samo bez sajta")
     if filters.q.strip():
         applied.append(f"pretraga: {filters.q.strip()}")
 

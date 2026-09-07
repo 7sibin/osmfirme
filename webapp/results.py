@@ -18,10 +18,17 @@ MAX_PAGE_SIZE = 500
 SEARCHABLE = ("name", "street", "place", "category")
 
 
+#: Accepted values for ResultFilters.website. Anything else means "any".
+WEBSITE_YES = "yes"
+WEBSITE_NO = "no"
+
+
 @dataclass
 class ResultFilters:
     categories: list[str] = field(default_factory=list)
     require_contact: bool = False
+    website: str = "any"
+    """"yes" keeps only rows that have a website, "no" only those that don't."""
     q: str = ""
     sort: str = "name"
     order: str = "asc"
@@ -35,6 +42,10 @@ def filter_rows(rows: list[Row], filters: ResultFilters) -> list[Row]:
     kept = rows
     if filters.require_contact:
         kept = [row for row in kept if row.has_contact]
+    if filters.website == WEBSITE_YES:
+        kept = [row for row in kept if row.website]
+    elif filters.website == WEBSITE_NO:
+        kept = [row for row in kept if not row.website]
     needle = filters.q.strip().lower()
     if needle:
         kept = [row for row in kept if _matches_text(row, needle)]
@@ -51,7 +62,10 @@ def facets(rows: list[Row], filters: ResultFilters) -> list[dict[str, Any]]:
     list, the user could never tick a second box.
     """
     without_categories = ResultFilters(
-        categories=[], require_contact=filters.require_contact, q=filters.q,
+        categories=[],
+        require_contact=filters.require_contact,
+        website=filters.website,
+        q=filters.q,
     )
     counts = Counter(row.category for row in filter_rows(rows, without_categories) if row.category)
     return [

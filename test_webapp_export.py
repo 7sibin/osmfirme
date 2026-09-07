@@ -105,3 +105,13 @@ def test_filename_is_slugged_and_dated():
     assert name.startswith("firme-")
     assert name.endswith(".xlsx")
     assert " " not in name
+
+
+def test_info_sheet_reports_the_website_filter():
+    text = "\n".join(
+        str(cell.value)
+        for row in load([make_row()], filters=ResultFilters(website="no"))["Info"].iter_rows()
+        for cell in row
+        if cell.value
+    )
+    assert "bez sajta" in text

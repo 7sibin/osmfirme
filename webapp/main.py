@@ -10,6 +10,7 @@ import logging
 from collections.abc import Callable
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 from urllib.parse import quote
 
 import requests
@@ -175,12 +176,18 @@ def cancel_job(job_id: str, registry: JobRegistry = Depends(get_registry)) -> di
 def _filters(
     categories: list[str] = Query(default=[]),
     require_contact: bool = Query(default=False),
+    website: Literal["any", "yes", "no"] = Query(default="any"),
     q: str = Query(default=""),
     sort: str = Query(default="name"),
     order: str = Query(default="asc"),
 ) -> ResultFilters:
     return ResultFilters(
-        categories=categories, require_contact=require_contact, q=q, sort=sort, order=order,
+        categories=categories,
+        require_contact=require_contact,
+        website=website,
+        q=q,
+        sort=sort,
+        order=order,
     )
 
 
@@ -234,4 +241,18 @@ def index() -> FileResponse:
     return FileResponse(STATIC_DIR / "index.html")
 
 
-app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+class RevalidatingStaticFiles(StaticFiles):
+    """Static files that the browser must revalidate instead of guessing.
+
+    Without this Chrome heuristically caches app.js, and an edit to the frontend
+    does not show up until a hard reload. `no-cache` still allows a 304, so an
+    unchanged file costs one conditional request, not a re-download.
+    """
+
+    def file_response(self, *args, **kwargs):  # type: ignore[override]
+        response = super().file_response(*args, **kwargs)
+        response.headers["Cache-Control"] = "no-cache"
+        return response
+
+
+app.mount("/static", RevalidatingStaticFiles(directory=STATIC_DIR), name="static")

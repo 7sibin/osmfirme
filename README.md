@@ -35,9 +35,14 @@ The page has three sections:
    `office`, `craft`, `tourism`, `healthcare`). This narrows the Overpass query
    itself, so fewer ticks also means a cheaper request.
 3. **Rezultati** — the rows in a sortable, paginated table, with a text search,
-   a "samo sa kontaktom" toggle, and a checkbox per concrete category actually
-   found (`bakery`, `cafe`, `dentist`, …). "Preuzmi Excel" downloads exactly
-   what the filters currently show.
+   a "samo sa kontaktom" toggle, an "ima sajt"/"nema sajt" pair, and a checkbox
+   per concrete category actually found (`bakery`, `cafe`, `dentist`, …).
+   "Preuzmi Excel" downloads exactly what the filters currently show.
+
+   The two website boxes are three states in two checkboxes: tick one to keep
+   only the businesses that have a site or only those that don't; ticking both,
+   or neither, means you don't care. Handy for building an outreach list — the
+   ones without a website are the ones who might want one.
 
 The interface is in Serbian; the code is not.
 
@@ -69,6 +74,9 @@ its own timeout in the background.
 | `DELETE /api/jobs/{id}` | cancel |
 | `GET /api/jobs/{id}/results` | filtered rows, paginated, plus per-category counts |
 | `GET /api/jobs/{id}/export.xlsx` | the same filtered rows as a workbook |
+
+Both filtering routes take the same query parameters: `categories` (repeatable),
+`require_contact`, `website` (`any`, `yes` or `no`), `q`, `sort` and `order`.
 
 The area in `POST /api/jobs` is one of:
 
@@ -273,7 +281,7 @@ rows survived parsing and filters, and how many carry a phone or a website.
 python -m pytest -q
 ```
 
-162 tests, no network anywhere — the HTTP layer is mocked and every fixture is
+172 tests, no network anywhere — the HTTP layer is mocked and every fixture is
 hand-built.
 
 The CLI's 73: `test_parse.py` covers the pure `parse_elements` function
@@ -281,7 +289,7 @@ The CLI's 73: `test_parse.py` covers the pure `parse_elements` function
 normalization); `test_geo.py` covers area resolution (candidate filtering, the
 area-id arithmetic, `--pick`, the cache, and the rate limiter).
 
-The web app's 89: `test_webapp_models.py` (area validation and the translation
+The web app's 99: `test_webapp_models.py` (area validation and the translation
 into `AreaSpec`), `test_webapp_cache.py` (the key, the round trip, and every
 way an entry can be rejected), `test_webapp_jobs.py` (the job state machine and
 cancellation), `test_webapp_runner.py` (cache hit, query shape, Overpass

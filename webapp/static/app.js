@@ -201,6 +201,8 @@ function resetResultsView() {
   view.categories.clear();
   $("data-filter-q").value = "";
   $("data-filter-contact").checked = false;
+  $("data-filter-site-yes").checked = false;
+  $("data-filter-site-no").checked = false;
   $("data-facets").innerHTML = "";
   $("data-table-body").innerHTML = "";
   $("data-results").hidden = true;
@@ -290,10 +292,20 @@ const PAGE_SIZE = 50;
 
 const view = { page: 1, sort: "name", order: "asc", categories: new Set() };
 
+/** Two checkboxes, three states: ticking both (or neither) means "don't care". */
+function websiteFilter() {
+  const yes = $("data-filter-site-yes").checked;
+  const no = $("data-filter-site-no").checked;
+  if (yes === no) return "any";
+  return yes ? "yes" : "no";
+}
+
 function filterParams() {
   const params = new URLSearchParams();
   for (const category of view.categories) params.append("categories", category);
   if ($("data-filter-contact").checked) params.set("require_contact", "true");
+  const website = websiteFilter();
+  if (website !== "any") params.set("website", website);
   const query = $("data-filter-q").value.trim();
   if (query) params.set("q", query);
   params.set("sort", view.sort);
@@ -394,7 +406,9 @@ function renderPager(body) {
 $("data-prev").addEventListener("click", () => { view.page -= 1; loadResults(); });
 $("data-next").addEventListener("click", () => { view.page += 1; loadResults(); });
 
-$("data-filter-contact").addEventListener("change", () => { view.page = 1; loadResults(); });
+for (const attribute of ["data-filter-contact", "data-filter-site-yes", "data-filter-site-no"]) {
+  $(attribute).addEventListener("change", () => { view.page = 1; loadResults(); });
+}
 
 let filterTimer = null;
 $("data-filter-q").addEventListener("input", () => {
