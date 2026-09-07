@@ -35,14 +35,14 @@ The page has three sections:
    `office`, `craft`, `tourism`, `healthcare`). This narrows the Overpass query
    itself, so fewer ticks also means a cheaper request.
 3. **Rezultati** — the rows in a sortable, paginated table, with a text search,
-   a "samo sa kontaktom" toggle, an "ima sajt"/"nema sajt" pair, and a checkbox
-   per concrete category actually found (`bakery`, `cafe`, `dentist`, …).
-   "Preuzmi Excel" downloads exactly what the filters currently show.
+   a "samo sa kontaktom" toggle, a "prikazi i one koje imaju sajt" toggle, and a
+   checkbox per concrete category actually found (`bakery`, `cafe`, `dentist`,
+   …). "Preuzmi Excel" downloads exactly what the filters currently show.
 
-   The two website boxes are three states in two checkboxes: tick one to keep
-   only the businesses that have a site or only those that don't; ticking both,
-   or neither, means you don't care. Handy for building an outreach list — the
-   ones without a website are the ones who might want one.
+   **The website toggle starts off, and off means businesses that already have
+   a website are hidden.** That is deliberate: the default view is the outreach
+   list — whoever is missing a site. Tick the box to see everything. The count
+   line says so whenever rows are being hidden this way.
 
 The interface is in Serbian; the code is not.
 

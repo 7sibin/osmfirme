@@ -201,8 +201,7 @@ function resetResultsView() {
   view.categories.clear();
   $("data-filter-q").value = "";
   $("data-filter-contact").checked = false;
-  $("data-filter-site-yes").checked = false;
-  $("data-filter-site-no").checked = false;
+  $("data-filter-with-site").checked = false;
   $("data-facets").innerHTML = "";
   $("data-table-body").innerHTML = "";
   $("data-results").hidden = true;
@@ -292,12 +291,10 @@ const PAGE_SIZE = 50;
 
 const view = { page: 1, sort: "name", order: "asc", categories: new Set() };
 
-/** Two checkboxes, three states: ticking both (or neither) means "don't care". */
+/** Businesses that already have a website are hidden unless the box is ticked.
+ *  The default is the useful one: whoever is missing a site. */
 function websiteFilter() {
-  const yes = $("data-filter-site-yes").checked;
-  const no = $("data-filter-site-no").checked;
-  if (yes === no) return "any";
-  return yes ? "yes" : "no";
+  return $("data-filter-with-site").checked ? "any" : "no";
 }
 
 function filterParams() {
@@ -332,10 +329,14 @@ async function loadResults() {
 }
 
 function renderCount(body) {
+  // Say so when the default is hiding rows, otherwise the count reads as
+  // "this area has only N businesses" rather than "N of them lack a site".
+  const hidingSites = websiteFilter() === "no";
+  const suffix = hidingSites ? " Prikazane su samo firme bez sajta." : "";
   $("data-results-count").textContent =
     body.total === 0
-      ? "Nijedna firma ne odgovara filterima."
-      : `Pronadjeno: ${body.total} firmi u oblasti ${body.area_label}.`;
+      ? `Nijedna firma ne odgovara filterima.${suffix}`
+      : `Pronadjeno: ${body.total} firmi u oblasti ${body.area_label}.${suffix}`;
 }
 
 function renderFacets(facets) {
@@ -406,7 +407,7 @@ function renderPager(body) {
 $("data-prev").addEventListener("click", () => { view.page -= 1; loadResults(); });
 $("data-next").addEventListener("click", () => { view.page += 1; loadResults(); });
 
-for (const attribute of ["data-filter-contact", "data-filter-site-yes", "data-filter-site-no"]) {
+for (const attribute of ["data-filter-contact", "data-filter-with-site"]) {
   $(attribute).addEventListener("change", () => { view.page = 1; loadResults(); });
 }
 
