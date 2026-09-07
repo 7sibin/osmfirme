@@ -22,7 +22,7 @@ from osm_businesses import COLUMNS, Row
 
 logger = logging.getLogger(__name__)
 
-CACHE_VERSION = 1
+CACHE_VERSION = 2  # bumped when _dedupe changed: v1 entries carry duplicate rows
 MAX_AGE_DAYS = 30
 
 

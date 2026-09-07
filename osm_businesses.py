@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import math
 import random
 import re
 import sys
@@ -95,7 +96,33 @@ _SCHEME_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9+.\-]*://")
 _RADIUS_RE = re.compile(r"^\s*([0-9]*\.?[0-9]+)\s*(km|m)?\s*$", re.IGNORECASE)
 
 OVERPASS_TIMEOUT = 300
-DEDUPE_PRECISION = 5
+
+#: Same name this close together: one POI mapped twice, as a node and as the
+#: building way around it. Building centres sit tens of metres off their node.
+SAME_POI_M = 50.0
+#: Same name, different category: the name alone is weaker evidence — "Tvrdjava"
+#: the bakery and "Tvrdjava" the pharmacy are both real — so the two have to be
+#: practically on top of each other before they count as one double-tagged POI.
+CROSS_CATEGORY_M = 15.0
+METRES_PER_DEGREE = 111_320.0
+
+#: Columns that could tell two same-named rows apart in an export. osm_type,
+#: osm_id, lat and lon are left out on purpose: they always differ, and nobody
+#: calls a business on its OSM id.
+DISTINGUISHING: tuple[str, ...] = (
+    "category",
+    "place",
+    "street",
+    "housenumber",
+    "postcode",
+    "phone",
+    "phone_alt",
+    "website",
+    "email",
+    "facebook",
+    "instagram",
+    "opening_hours",
+)
 
 
 class OverpassError(RuntimeError):
@@ -148,7 +175,7 @@ def parse_elements(elements: list[dict[str, Any]]) -> list[Row]:
     """Turn raw Overpass elements into clean rows.
 
     Drops the unnamed, the uncoordinated and the street furniture, then
-    deduplicates POIs mapped as both a node and a building way.
+    collapses repeats of the same business — see `_dedupe`.
     """
     rows: list[Row] = []
     for element in elements:
@@ -287,18 +314,47 @@ def normalize_website(value: str) -> str:
 
 
 def _dedupe(rows: list[Row]) -> list[Row]:
-    """The same POI is often a node *and* a building way. Keep the richer one."""
-    best: dict[tuple[str, float, float], Row] = {}
-    order: list[tuple[str, float, float]] = []
+    """Collapse the repeats OSM produces for one business, keeping the richest.
+
+    Two shapes of repeat show up in real extracts. The same POI is often mapped
+    twice, as a node *and* as the building way around it: same name, metres
+    apart. And branches of a chain can arrive as rows that differ in nothing
+    anyone could act on — same name, the same missing address, the same central
+    phone. Both are noise in an export. A branch that carries its own address or
+    number differs in a column that matters, so it survives.
+    """
+    kept: list[Row] = []
+    by_name: dict[str, list[int]] = {}
     for row in rows:
-        key = (row.name.lower(), round(row.lat, DEDUPE_PRECISION), round(row.lon, DEDUPE_PRECISION))
-        incumbent = best.get(key)
-        if incumbent is None:
-            best[key] = row
-            order.append(key)
-        elif _is_better(row, incumbent):
-            best[key] = row
-    return [best[key] for key in order]
+        # Only same-named rows can be duplicates, so compare within that bucket:
+        # a whole-list scan would be quadratic on a city-sized extract.
+        group = by_name.setdefault(row.name.casefold(), [])
+        index = _duplicate_of(row, kept, group)
+        if index is None:
+            group.append(len(kept))
+            kept.append(row)
+        elif _is_better(row, kept[index]):
+            kept[index] = row
+    return kept
+
+
+def _duplicate_of(row: Row, kept: list[Row], group: Sequence[int]) -> int | None:
+    """Index in `kept` of the row this one repeats, or None if it is new."""
+    for index in group:
+        other = kept[index]
+        if all(getattr(row, column) == getattr(other, column) for column in DISTINGUISHING):
+            return index
+        limit = SAME_POI_M if row.category == other.category else CROSS_CATEGORY_M
+        if _metres_between(row, other) <= limit:
+            return index
+    return None
+
+
+def _metres_between(a: Row, b: Row) -> float:
+    """Equirectangular approximation: exact enough over the tens of metres here."""
+    north = (a.lat - b.lat) * METRES_PER_DEGREE
+    east = (a.lon - b.lon) * METRES_PER_DEGREE * math.cos(math.radians((a.lat + b.lat) / 2))
+    return math.hypot(north, east)
 
 
 def _is_better(challenger: Row, incumbent: Row) -> bool:

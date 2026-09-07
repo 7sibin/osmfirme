@@ -247,9 +247,22 @@ coordinate, or are street furniture (`bench`, `waste_basket`, `atm`, `parking`,
 the element has no `shop`, `office` or `craft` key, so a bakery that also tags
 `amenity=cafe` survives.
 
-The same POI is frequently mapped as both a node and a building way. Rows are
-deduplicated on `(name.lower(), round(lat,5), round(lon,5))`, keeping whichever
-has more non-empty fields; on a tie the node wins.
+Two shapes of repeat are collapsed, in both cases keeping whichever row has
+more non-empty fields (on a tie, the node wins):
+
+- **One POI mapped twice** — usually a node *and* the building way around it.
+  Same name within 50 m counts as one business; when the two carry different
+  categories (a cafe also tagged `shop=convenience`) the radius tightens to 15 m,
+  because the name alone is weaker evidence: "Tvrdjava" the bakery and
+  "Tvrdjava" the pharmacy 50 m apart are two businesses.
+- **Rows nothing can tell apart** — same name and the same value in every
+  actionable column (category, address, phone, website, hours). Distance is
+  irrelevant here: three `Erste Bank` rows with no address and the same central
+  number are one line in an export. Branches that carry their own address or
+  number differ in a column that matters, so they survive — the nine `Benu`
+  pharmacies in Nis stay nine rows.
+
+On real extracts this removes about 5% of rows.
 
 ## Filtering
 

@@ -164,10 +164,47 @@ def test_dedupe_is_case_insensitive_on_name() -> None:
     assert len(parse_elements([a, b])) == 1
 
 
-def test_different_coordinates_are_not_deduped() -> None:
-    a = node(osm_id=10, lat=43.32, lon=21.895, name="Apoteka", amenity="pharmacy")
-    b = node(osm_id=11, lat=43.44, lon=21.995, name="Apoteka", amenity="pharmacy")
+def test_node_and_way_tens_of_metres_apart_are_one_poi() -> None:
+    """A building centre sits well off the node inside it, but it is one shop."""
+    n = node(osm_id=10, lat=43.32, lon=21.895, name="Idea", shop="convenience")
+    w = way(osm_id=20, lat=43.32027, lon=21.895, name="Idea", shop="convenience")  # ~30 m
+    assert len(parse_elements([n, w])) == 1
+
+
+def test_same_name_at_different_addresses_are_separate_branches() -> None:
+    a = node(osm_id=10, lat=43.32, lon=21.895, name="Benu", amenity="pharmacy",
+             **{"addr:street": "Obrenoviceva"})
+    b = node(osm_id=11, lat=43.44, lon=21.995, name="Benu", amenity="pharmacy",
+             **{"addr:street": "Vozdova"})
     assert len(parse_elements([a, b])) == 2
+
+
+def test_same_name_and_different_phones_are_separate_branches() -> None:
+    a = node(osm_id=10, lat=43.32, lon=21.895, name="Benu", amenity="pharmacy", phone="018111111")
+    b = node(osm_id=11, lat=43.44, lon=21.995, name="Benu", amenity="pharmacy", phone="018222222")
+    assert len(parse_elements([a, b])) == 2
+
+
+def test_rows_nothing_can_tell_apart_collapse_however_far_apart() -> None:
+    """Same name, same missing address, same central number: one row in an
+    export, because there is nothing to act on differently."""
+    a = node(osm_id=10, lat=43.32, lon=21.895, name="Erste Bank", amenity="bank", phone="0800111")
+    b = node(osm_id=11, lat=43.44, lon=21.995, name="Erste Bank", amenity="bank", phone="0800111")
+    assert len(parse_elements([a, b])) == 1
+
+
+def test_same_name_different_categories_are_kept_apart() -> None:
+    """"Tvrdjava" the bakery and "Tvrdjava" the pharmacy are two businesses."""
+    a = node(osm_id=10, lat=43.32, lon=21.895, name="Tvrdjava", shop="bakery")
+    b = node(osm_id=11, lat=43.32045, lon=21.895, name="Tvrdjava", amenity="pharmacy")  # ~50 m
+    assert len(parse_elements([a, b])) == 2
+
+
+def test_same_name_different_categories_collapse_when_on_top_of_each_other() -> None:
+    """One shop double-tagged: a cafe that also sells groceries, mapped twice."""
+    a = node(osm_id=10, lat=43.32, lon=21.895, name="DriveCafe", amenity="cafe")
+    b = node(osm_id=11, lat=43.320045, lon=21.895, name="DriveCafe", shop="convenience")  # ~5 m
+    assert len(parse_elements([a, b])) == 1
 
 
 # --- phone ------------------------------------------------------------------
