@@ -24,7 +24,14 @@ Excel download instead of flags and a CSV file.
 uvicorn webapp.main:app --reload      # then open http://127.0.0.1:8000
 ```
 
-The page has three sections:
+The page is a fixed-height instrument, not a scrolling document: a control
+column on the left, the map as a permanent surface on the right, and results
+appearing as a third zone between them. Nothing navigates away — searching,
+drawing, working, failing and listing are all bands that appear in place, so
+the map is never lost. Below 720px the three zones become tabs with the map
+pinned above them and the rows shown as records rather than a table.
+
+The three sections:
 
 1. **Oblast** — type a place name to get the same Nominatim candidates
    `--list-areas` prints; picking one draws its boundary on the map. Or draw a
@@ -37,7 +44,9 @@ The page has three sections:
 3. **Rezultati** — the rows in a sortable, paginated table, with a text search,
    a "samo sa kontaktom" toggle, a "prikazi i one koje imaju sajt" toggle, and a
    checkbox per concrete category actually found (`bakery`, `cafe`, `dentist`,
-   …). "Preuzmi Excel" downloads exactly what the filters currently show.
+   …). Every row that survives the filters is also a dot on the map, so the
+   table and the map always show the same set. "Preuzmi Excel" downloads
+   exactly what the filters currently show.
 
    **The website toggle starts off, and off means businesses that already have
    a website are hidden.** That is deliberate: the default view is the outreach
@@ -73,10 +82,20 @@ its own timeout in the background.
 | `GET /api/jobs/{id}` | job status: `pending`/`running`/`done`/`error`/`cancelled` |
 | `DELETE /api/jobs/{id}` | cancel |
 | `GET /api/jobs/{id}/results` | filtered rows, paginated, plus per-category counts |
+| `GET /api/jobs/{id}/points` | `[lat, lon]` per filtered row, so the map can plot what the table lists |
 | `GET /api/jobs/{id}/export.xlsx` | the same filtered rows as a workbook |
 
-Both filtering routes take the same query parameters: `categories` (repeatable),
-`require_contact`, `website` (`any`, `yes` or `no`), `q`, `sort` and `order`.
+All three filtering routes take the same query parameters: `categories`
+(repeatable), `require_contact`, `website` (`any`, `yes` or `no`), `q`, `sort`
+and `order`. `points` is capped at 5000 coordinates and says so with
+`truncated`.
+
+`results` also carries `counts`, which describes the **area** rather than the
+filtered table: `area_total` and `area_without_site`. The page headline is
+"this area holds N businesses, M of them without a site" — a sentence about the
+area — while `total` is what the table is currently showing. Keeping them
+separate is what lets the page say "588 firmi je u oblasti — filteri ih sve
+iskljucuju" when a filter empties the table.
 
 The area in `POST /api/jobs` is one of:
 

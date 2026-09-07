@@ -278,6 +278,48 @@ def test_results_reject_an_unknown_website_value(wired):
     assert wired.get(f"/api/jobs/{job_id}/results", params={"website": "maybe"}).status_code == 422
 
 
+def test_results_carry_the_area_counts_and_the_export_name(wired):
+    job_id = post_job(wired).json()["job_id"]
+    wait_for_job(wired, job_id)
+
+    body = wired.get(f"/api/jobs/{job_id}/results").json()
+    assert body["counts"] == {"area_total": 2, "area_without_site": 1}
+    assert body["export_filename"].startswith("firme-nis-")
+
+
+def test_area_counts_describe_the_area_not_the_filtered_table(wired):
+    """The headline says what the area holds; only `total` follows the filters."""
+    job_id = post_job(wired).json()["job_id"]
+    wait_for_job(wired, job_id)
+
+    body = wired.get(f"/api/jobs/{job_id}/results", params={"q": "pekara"}).json()
+    assert body["total"] == 1
+    assert body["counts"] == {"area_total": 2, "area_without_site": 1}
+
+
+def test_points_return_a_coordinate_per_filtered_row(wired):
+    job_id = post_job(wired).json()["job_id"]
+    wait_for_job(wired, job_id)
+
+    body = wired.get(f"/api/jobs/{job_id}/points").json()
+    assert body["total"] == 2
+    assert body["truncated"] is False
+    assert sorted(body["points"]) == [[43.32, 21.9], [43.33, 21.91]]
+
+
+def test_points_honour_the_filters(wired):
+    job_id = post_job(wired).json()["job_id"]
+    wait_for_job(wired, job_id)
+
+    body = wired.get(f"/api/jobs/{job_id}/points", params={"website": "no"}).json()
+    assert body["points"] == [[43.33, 21.91]]  # Kafic, the one without a site
+
+
+def test_points_of_an_unfinished_job_are_409(wired, registry):
+    job = registry.create("Nis")
+    assert wired.get(f"/api/jobs/{job.job_id}/points").status_code == 409
+
+
 def test_static_files_must_be_revalidated(client):
     response = client.get("/static/app.js")
     assert response.status_code == 200

@@ -41,6 +41,7 @@ logger = logging.getLogger(__name__)
 
 STATIC_DIR = Path(__file__).parent / "static"
 MAX_TRACKED_JOBS = 20
+MAX_POINTS = 5000
 XLSX_MEDIA_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
 app = FastAPI(title="OSM firme")
@@ -216,6 +217,34 @@ def job_results(
         "page_size": page_size,
         "facets": facets(job.rows, filters),
         "area_label": job.area_label,
+        "export_filename": export_filename(job.area_label),
+        # The area as a whole, unaffected by the table's own filters: the page
+        # headline reports what the area holds and what the default view hides,
+        # while `total` reports what the table is actually showing.
+        "counts": {
+            "area_total": len(job.rows),
+            "area_without_site": sum(1 for row in job.rows if not row.website),
+        },
+    }
+
+
+@app.get("/api/jobs/{job_id}/points")
+def job_points(
+    job_id: str,
+    filters: ResultFilters = Depends(_filters),
+    registry: JobRegistry = Depends(get_registry),
+) -> dict:
+    """Coordinates of every filtered row, so the map can show what the table lists.
+
+    Capped: a city-sized area is thousands of businesses, and past a few
+    thousand dots the canvas costs more than the picture is worth.
+    """
+    job = _finished_job(registry, job_id)
+    kept = filter_rows(job.rows, filters)
+    return {
+        "points": [[round(row.lat, 6), round(row.lon, 6)] for row in kept[:MAX_POINTS]],
+        "total": len(kept),
+        "truncated": len(kept) > MAX_POINTS,
     }
 
 

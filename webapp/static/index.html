@@ -4,93 +4,238 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>OSM firme</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.css">
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <header>
+<div class="app" data-app data-tab="1">
+
+  <header class="topbar">
     <h1>OSM firme</h1>
-    <p>Izaberi mesto, pregledaj firme, preuzmi Excel.</p>
+    <div class="topbar-rule"></div>
+    <div class="topbar-sub">Izvlacenje firmi iz OpenStreetMap-a</div>
+    <div class="spacer"></div>
+    <div class="topbar-note">Overpass API</div>
+    <div class="topbar-note topbar-note--mobile" data-top-note-m></div>
   </header>
 
-  <section id="area">
-    <h2>1. Oblast</h2>
-    <input type="search" data-search-input placeholder="Ukucaj naziv mesta, npr. Nis" autocomplete="off">
-    <ul data-search-results hidden></ul>
+  <div class="body">
 
-    <div class="map-tools">
-      <button type="button" data-draw-rect>Nacrtaj pravougaonik</button>
-      <button type="button" data-draw-circle>Nacrtaj krug</button>
-      <button type="button" data-clear-area>Ponisti izbor</button>
+    <nav class="tabs" data-tabs role="tablist" aria-label="Koraci">
+      <button type="button" role="tab" data-tab-to="1" aria-selected="true"><span class="mono">1</span>Oblast</button>
+      <button type="button" role="tab" data-tab-to="2" aria-selected="false"><span class="mono">2</span>Sta trazimo</button>
+      <button type="button" role="tab" data-tab-to="3" aria-selected="false" disabled><span class="mono">3</span>Rezultati</button>
+    </nav>
+
+    <aside class="sidebar">
+
+      <section class="step step--area">
+        <div class="step-head">
+          <div class="step-num">1</div>
+          <div class="step-title">Oblast</div>
+        </div>
+
+        <div class="search-wrap">
+          <input type="search" data-search-input placeholder="Ukucaj naziv mesta, npr. Nis"
+                 autocomplete="off" spellcheck="false" aria-label="Pretrazi mesto">
+          <ul class="candidates" data-candidates hidden></ul>
+        </div>
+
+        <div class="or-draw"><span>ili nacrtaj</span></div>
+
+        <div class="draw-row">
+          <button type="button" data-draw-rect>Nacrtaj pravougaonik</button>
+          <button type="button" data-draw-circle>Nacrtaj krug</button>
+        </div>
+        <button type="button" class="btn-tertiary" data-clear-area>Ponisti izbor</button>
+        <div class="note" data-excl-note>Crtanje ponistava pretragu i obrnuto.</div>
+      </section>
+
+      <div class="area-summary is-empty" data-area-block>
+        <div class="area-summary-label">Izabrana oblast</div>
+        <div class="area-summary-value" data-area-summary>Nije izabrana nijedna oblast.</div>
+      </div>
+
+      <section class="step step--query">
+        <div class="step-head">
+          <div class="step-num">2</div>
+          <div class="step-title">Sta trazimo</div>
+        </div>
+        <fieldset class="category-grid" data-categories>
+          <legend>Kategorije</legend>
+          <label><input type="checkbox" value="shop" checked> <span>Prodavnice</span></label>
+          <label><input type="checkbox" value="amenity" checked> <span>Objekti i usluge</span></label>
+          <label><input type="checkbox" value="office" checked> <span>Kancelarije</span></label>
+          <label><input type="checkbox" value="craft" checked> <span>Zanati</span></label>
+          <label><input type="checkbox" value="tourism" checked> <span>Turizam</span></label>
+          <label><input type="checkbox" value="healthcare" checked> <span>Zdravstvo</span></label>
+        </fieldset>
+      </section>
+
+      <!-- Its own block, not part of step 2: on a phone it becomes the bar that
+           stays at the bottom of both input tabs, so Pretrazi is always in reach. -->
+      <div class="run-bar">
+        <div class="run-bar-text">
+          <div class="note">
+            <span data-category-note>6 / 6 kategorija</span><span class="run-bar-tip"> — manje cekirano, brzi upit</span>
+          </div>
+          <div class="run-bar-say" data-category-say>Sve kategorije su cekirane</div>
+        </div>
+        <button type="button" class="btn-primary" data-run disabled>Pretrazi</button>
+        <div class="note" data-run-hint>Izaberi oblast pa je pretraga moguca.</div>
+      </div>
+
+      <section class="band-error" data-error hidden>
+        <div class="band-error-line">
+          <div class="band-error-mark"></div>
+          <div class="band-error-text" data-error-text></div>
+        </div>
+        <div class="band-error-actions">
+          <button type="button" data-retry>Pokusaj ponovo</button>
+          <div class="note" data-error-note>oblast i kategorije su sacuvane</div>
+        </div>
+      </section>
+
+      <section class="band-working" data-working hidden>
+        <div class="band-working-head">
+          <strong>Posao u toku</strong>
+          <span class="note">poll 1 s</span>
+        </div>
+        <div class="sweep"><div class="sweep-bar"></div></div>
+        <div class="phases" data-phases>
+          <div class="phase" data-phase="start"><div class="phase-mark"></div><div class="phase-text">Pokrecem pretragu...</div></div>
+          <div class="phase" data-phase="querying"><div class="phase-mark"></div><div class="phase-text">Saljem upit Overpass API-ju. Za veci grad ovo zna da traje nekoliko minuta.</div></div>
+          <div class="phase" data-phase="parsing"><div class="phase-mark"></div><div class="phase-text">Obradjujem rezultate.</div></div>
+          <div class="phase" data-phase="finished"><div class="phase-mark"></div><div class="phase-text">Gotovo.</div></div>
+        </div>
+        <div class="elapsed-row">
+          <div>
+            <div class="elapsed-label">Proteklo</div>
+            <div class="elapsed-value" data-elapsed>0 s</div>
+          </div>
+          <button type="button" class="btn-secondary" data-cancel>Otkazi</button>
+        </div>
+        <div class="note">Server ne prijavljuje procenat. Proteklo vreme je jedini pouzdan pokazatelj.</div>
+      </section>
+
+      <section class="step step--results is-idle" data-step3>
+        <div class="step-head">
+          <div class="step-num">3</div>
+          <div class="step-title">Rezultati</div>
+        </div>
+        <div class="note" data-step3-note>Nema rezultata.</div>
+      </section>
+    </aside>
+
+    <section class="panel" data-panel hidden aria-label="Rezultati">
+
+      <div class="panel-head">
+        <div class="cache-stamp" data-cache-stamp hidden>
+          <div class="cache-stamp-tag">UCITANO IZ KESA</div>
+          <div class="cache-stamp-rule"></div>
+          <div class="cache-stamp-note" data-cache-note></div>
+        </div>
+
+        <div class="count-line" data-count-line></div>
+
+        <div class="site-band" data-site-band>
+          <div class="site-band-say" data-site-say hidden>Prikazane su samo firme bez sajta.</div>
+          <div class="site-band-chip" data-site-chip hidden></div>
+          <div class="site-band-math" data-site-math hidden></div>
+          <div class="spacer"></div>
+          <label class="site-toggle" data-site-toggle>
+            <input type="checkbox" data-filter-with-site>
+            <span>Prikazi i one koje imaju sajt</span>
+            <span class="site-band-chip" data-site-toggle-chip hidden></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <input type="search" data-filter-q placeholder="Pretrazi po nazivu ili ulici" autocomplete="off"
+               aria-label="Pretrazi po nazivu ili ulici">
+        <label><input type="checkbox" data-filter-contact> <span>Samo sa kontaktom</span></label>
+        <div class="spacer"></div>
+        <div class="filter-note" data-filter-note></div>
+      </div>
+
+      <div class="facet-bar">
+        <button type="button" class="facet-open" data-facet-open aria-expanded="false">
+          Kategorije <span class="mono" data-facet-total>0</span> &#9662;
+        </button>
+        <div class="facet-chips" data-facet-chips></div>
+        <div class="facet-rest" data-facet-rest></div>
+
+        <div class="facet-menu" data-facet-menu hidden>
+          <div class="facet-menu-search">
+            <input type="search" data-facet-filter placeholder="Filtriraj kategorije" autocomplete="off"
+                   aria-label="Filtriraj kategorije">
+          </div>
+          <div class="facet-menu-list" data-facet-list></div>
+          <div class="facet-menu-foot" data-facet-foot></div>
+        </div>
+      </div>
+
+      <div class="table">
+        <div class="grid-row table-head" data-table-head role="row">
+          <button type="button" data-sort="name">Naziv<span class="arrow"></span></button>
+          <button type="button" data-sort="category">Kategorija<span class="arrow"></span></button>
+          <button type="button" data-sort="street">Adresa<span class="arrow"></span></button>
+          <button type="button" data-sort="phone">Telefon<span class="arrow"></span></button>
+          <button type="button" data-sort="website">Sajt<span class="arrow"></span></button>
+          <button type="button" data-sort="opening_hours">Radno vreme<span class="arrow"></span></button>
+        </div>
+
+        <div class="table-body" data-table-body></div>
+        <div class="cards" data-cards hidden></div>
+
+        <div class="empty-state" data-empty hidden>
+          <div class="empty-state-say" data-empty-say></div>
+          <div class="empty-state-actions">
+            <button type="button" class="btn-primary" data-reset-filters>Ponisti filtere</button>
+            <button type="button" class="btn-secondary" data-show-with-site>Prikazi i one koje imaju sajt</button>
+          </div>
+          <div class="empty-state-note" data-empty-note></div>
+        </div>
+
+        <div class="pager">
+          <button type="button" data-prev>Prethodna</button>
+          <div class="pager-info" data-page-info></div>
+          <button type="button" data-next>Sledeca</button>
+          <div class="spacer"></div>
+          <div class="pager-download">
+            <div data-download-note></div>
+            <div data-download-name></div>
+          </div>
+          <button type="button" class="btn-primary" data-download>Preuzmi Excel</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="map-zone">
+      <div class="map-canvas" data-map></div>
+      <div class="map-tools">
+        <button type="button" class="map-tool" data-tool-rect title="Nacrtaj pravougaonik" aria-label="Nacrtaj pravougaonik"><span class="icon-rect"></span></button>
+        <button type="button" class="map-tool" data-tool-circle title="Nacrtaj krug" aria-label="Nacrtaj krug"><span class="icon-circle"></span></button>
+        <button type="button" class="map-tool" data-tool-clear title="Ponisti izbor" aria-label="Ponisti izbor"><span class="icon-clear">&#215;</span></button>
+      </div>
+      <button type="button" class="map-expand" data-map-expand>Razvuci mapu</button>
     </div>
+  </div>
 
-    <div data-map></div>
-    <p data-area-summary>Nije izabrana nijedna oblast.</p>
-  </section>
-
-  <section id="query">
-    <h2>2. Sta trazimo</h2>
-    <fieldset data-categories>
-      <legend>Kategorije</legend>
-      <label><input type="checkbox" value="shop" checked> Prodavnice</label>
-      <label><input type="checkbox" value="amenity" checked> Objekti i usluge</label>
-      <label><input type="checkbox" value="office" checked> Kancelarije</label>
-      <label><input type="checkbox" value="craft" checked> Zanati</label>
-      <label><input type="checkbox" value="tourism" checked> Turizam</label>
-      <label><input type="checkbox" value="healthcare" checked> Zdravstvo</label>
-    </fieldset>
-    <button type="button" data-run disabled>Pretrazi</button>
-
-    <div data-progress hidden>
-      <p data-progress-message></p>
-      <p><span data-progress-elapsed></span></p>
-      <button type="button" data-cancel>Otkazi</button>
-    </div>
-  </section>
-
-  <section id="results" data-results hidden>
-    <h2>3. Rezultati</h2>
-    <p data-results-count></p>
-
-    <div class="filters">
-      <input type="search" data-filter-q placeholder="Pretrazi po nazivu ili ulici">
-      <label><input type="checkbox" data-filter-contact> Samo sa kontaktom</label>
-      <label><input type="checkbox" data-filter-with-site> Prikazi i one koje imaju sajt</label>
-    </div>
-    <div data-facets></div>
-
-    <div class="table-wrap">
-      <table>
-        <thead data-table-head>
-          <tr>
-            <th data-sort="name">Naziv</th>
-            <th data-sort="category">Kategorija</th>
-            <th data-sort="street">Adresa</th>
-            <th data-sort="phone">Telefon</th>
-            <th data-sort="website">Sajt</th>
-            <th data-sort="opening_hours">Radno vreme</th>
-          </tr>
-        </thead>
-        <tbody data-table-body></tbody>
-      </table>
-    </div>
-
-    <div class="pager">
-      <button type="button" data-prev>Prethodna</button>
-      <span data-page-info></span>
-      <button type="button" data-next>Sledeca</button>
-    </div>
-
-    <button type="button" data-download>Preuzmi Excel</button>
-  </section>
-
-  <footer>
-    Podaci &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>, ODbL.
+  <footer class="statusbar">
+    <div>Podaci &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors, ODbL.</a></div>
+    <div class="spacer"></div>
+    <div class="statusbar-note" data-foot-note></div>
   </footer>
+</div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.min.js"></script>
-  <script src="/static/app.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@2.17.0/dist/leaflet-geoman.min.js"></script>
+<script src="/static/app.js"></script>
 </body>
 </html>
