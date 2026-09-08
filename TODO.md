@@ -67,7 +67,6 @@ Everything that stage touches:
    directories back in.
 3. Whether a paid search API is worth it, now that the free engines cost about
    two seconds each and a city is thousands of businesses.
-4. Whether the dead sites the reading pass turns up deserve their own view.
-   They are recorded (`contact_status == "dead"`) and struck through in the
-   table, but there is no filter for "show me only the businesses whose site
-   has gone", which is arguably the warmest list the tool can produce.
+4. ~~Whether the dead sites the reading pass turns up deserve their own view.~~
+   **Done** — `website=dead`, reached by clicking the dead count in the reading
+   line.

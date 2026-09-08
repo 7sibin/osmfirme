@@ -30,7 +30,6 @@ from webapp.contact_runner import (
     run_contacts,
 )
 from webapp.contacts import (
-    CONTACT_DEAD,
     ContactScraper,
     apply_contact_hits,
     pending_contacts,
@@ -48,6 +47,7 @@ from webapp.jobs import Job, JobRegistry
 from webapp.models import JobRequest
 from webapp.nominatim import GeometryClient
 from webapp.results import (
+    CONTACT_DEAD,
     DEFAULT_PAGE_SIZE,
     FOUND_STRONG,
     FOUND_WEAK,
@@ -235,7 +235,7 @@ def cancel_job(job_id: str, registry: JobRegistry = Depends(get_registry)) -> di
 def _filters(
     categories: list[str] = Query(default=[]),
     require_contact: bool = Query(default=False),
-    website: Literal["any", "yes", "no"] = Query(default="any"),
+    website: Literal["any", "yes", "no", "dead"] = Query(default="any"),
     q: str = Query(default=""),
     sort: str = Query(default="name"),
     order: str = Query(default="asc"),

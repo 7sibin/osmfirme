@@ -30,6 +30,8 @@ SEARCHABLE = ("name", "street", "place", "category")
 #: Accepted values for ResultFilters.website. Anything else means "any".
 WEBSITE_YES = "yes"
 WEBSITE_NO = "no"
+WEBSITE_DEAD = "dead"
+""""dead" keeps only rows whose site was read and turned out not to answer."""
 
 
 @dataclass
@@ -54,6 +56,15 @@ class ResultFilters:
 FOUND_STRONG = "strong"
 FOUND_WEAK = "weak"
 FOUND_NONE = "none"
+
+#: Values for Row.contact_status - how reading the business's own site went.
+#: Empty means it was never read, which is different from CONTACT_NONE.
+CONTACT_OK = "ok"
+CONTACT_NONE = "none"
+CONTACT_DEAD = "dead"
+"""Nothing answered at that address at all. A fact about the business, not the
+fetch: their site is gone, and a business that had one and lost it is a lead
+again. A bot filter or an unreadable page is CONTACT_NONE, never this."""
 
 #: `key=value` pairs that are on the map but are never a sales lead: a branch of
 #: an institution with no local decision to make, or a public body. Matched on
@@ -183,6 +194,8 @@ def filter_rows(rows: list[Row], filters: ResultFilters) -> list[Row]:
         kept = [row for row in kept if row.website]
     elif filters.website == WEBSITE_NO:
         kept = [row for row in kept if not row.website]
+    elif filters.website == WEBSITE_DEAD:
+        kept = [row for row in kept if row.contact_status == CONTACT_DEAD]
     needle = filters.q.strip().lower()
     if needle:
         kept = [row for row in kept if _matches_text(row, needle)]

@@ -75,6 +75,7 @@ const view = {
   withSite: false,
   facets: [],
   facetFilter: "",
+  deadOnly: false,  // only businesses whose website has stopped answering
 };
 
 /** The website search. Its timer lives on `state` with the others; these two
@@ -543,6 +544,7 @@ function resetResultsView() {
   view.order = "asc";
   view.categories.clear();
   view.withSite = false;
+  view.deadOnly = false;
   view.facets = [];
   view.facetFilter = "";
   state.results = null;
@@ -640,8 +642,13 @@ function onJobFinished(job) {
 // --- results ----------------------------------------------------------------
 
 /** Businesses that already have a website are hidden unless the box is ticked.
- *  The default is the useful one: whoever is missing a site. */
+ *  The default is the useful one: whoever is missing a site.
+ *
+ *  `dead` is the same axis rather than a filter of its own - it is another
+ *  answer to "what is the state of their website" - so it simply wins while it
+ *  is on, and the checkbox goes back to deciding once it is off. */
 function websiteFilter() {
+  if (view.deadOnly) return "dead";
   return view.withSite ? "any" : "no";
 }
 
@@ -708,8 +715,9 @@ async function loadPoints() {
 
 function renderHead(body) {
   const { area_total: areaTotal, area_without_site: areaWithoutSite } = body.counts;
-  const hiddenCount = areaTotal - areaWithoutSite;
-  const headline = view.withSite ? areaTotal : areaWithoutSite;
+  // With the dead filter on, "how many are missing a site" is not the sentence
+  // the table is answering, so the headline reports the area as a whole.
+  const headline = view.withSite || view.deadOnly ? areaTotal : areaWithoutSite;
 
   const line = $("data-count-line");
   clear(line);
@@ -727,6 +735,31 @@ function renderHead(body) {
     $("data-cache-note").textContent = `${state.elapsed.toFixed(1)} s — bez upita ka Overpass-u`;
   }
 
+  renderSiteBand(areaTotal, areaWithoutSite);
+
+  $("data-top-note-m").textContent =
+    `${body.total} ${plural(body.total, "firma", "firme", "firmi")}`;
+}
+
+function renderSiteBand(areaTotal, areaWithoutSite) {
+  const hiddenCount = areaTotal - areaWithoutSite;
+
+  // While the dead filter is on the table is neither "those without a site" nor
+  // "everyone", so the band says what it is instead of doing sums about a split
+  // it is not showing.
+  if (view.deadOnly) {
+    $("data-site-band").classList.remove("is-hiding");
+    $("data-site-say").hidden = false;
+    $("data-site-say").textContent = "Prikazane su samo firme kojima sajt ne radi.";
+    $("data-site-chip").hidden = true;
+    $("data-site-math").hidden = true;
+    $("data-site-toggle").hidden = true;
+    return;
+  }
+
+  $("data-site-toggle").hidden = false;
+  $("data-site-say").textContent = "Prikazane su samo firme bez sajta.";
+
   const hiding = !view.withSite;
   $("data-site-band").classList.toggle("is-hiding", hiding);
   $("data-site-say").hidden = !hiding;
@@ -739,9 +772,6 @@ function renderHead(body) {
   $("data-site-toggle").classList.toggle("is-on", view.withSite);
   $("data-site-toggle-chip").hidden = !hiding || hiddenCount === 0;
   $("data-site-toggle-chip").textContent = `+${hiddenCount}`;
-
-  $("data-top-note-m").textContent =
-    `${body.total} ${plural(body.total, "firma", "firme", "firmi")}`;
 }
 
 // --- the website search -----------------------------------------------------
@@ -817,7 +847,24 @@ function renderReadLine(body) {
   $("data-read-count").hidden = !read.running;
   $("data-read-count").textContent = `${progress.checked} / ${progress.total}`;
   $("data-read-say").textContent = readSentence(progress, unread, here, { emails, phones, dead });
+
+  const chip = $("data-dead-chip");
+  chip.hidden = dead === 0;
+  chip.textContent = view.deadOnly
+    ? `${dead} sa mrtvim sajtom — prikazi sve`
+    : `${dead} ${plural(dead, "mrtav sajt", "mrtva sajta", "mrtvih sajtova")}`;
+  chip.setAttribute("aria-pressed", String(view.deadOnly));
+  chip.title = "Firme koje su imale sajt pa vise ne odgovara — verovatno ne znaju";
 }
+
+/** Businesses whose site has gone: they had one, so they wanted one. */
+function toggleDeadOnly() {
+  view.deadOnly = !view.deadOnly;
+  view.page = 1;
+  loadResults();
+}
+
+$("data-dead-chip").addEventListener("click", toggleDeadOnly);
 
 function readSentence(progress, unread, here, found) {
   if (progress.status === "running") return "Citam sajtove. Ovo ide brzo.";
@@ -1001,6 +1048,7 @@ function activeFilterCount() {
   if ($("data-filter-q").value.trim()) count += 1;
   if ($("data-filter-contact").checked) count += 1;
   if (view.categories.size > 0) count += 1;
+  if (view.deadOnly) count += 1;
   if (!$("data-filter-collapse").checked) count += 1;
   if (!$("data-filter-commercial").checked) count += 1;
   if ($("data-filter-hide-found").checked) count += 1;
@@ -1234,6 +1282,17 @@ function renderCards(rows) {
 
 function renderEmptyState() {
   const counts = state.results.counts;
+  if (view.deadOnly) {
+    // Reached by filtering the dead ones down to nothing; offering "show those
+    // with a site" here would answer a question nobody asked.
+    $("data-empty-say").textContent =
+      "Nijedna firma sa mrtvim sajtom ne odgovara ostalim filterima.";
+    $("data-empty-note").textContent =
+      `${counts.dead_sites} ${plural(counts.dead_sites, "firmi je sajt crkao", "firmama je sajt crkao", "firmama je sajt crkao")} u oblasti`;
+    $("data-show-with-site").hidden = true;
+    $("data-reset-filters").disabled = false;
+    return;
+  }
   const scope = view.withSite ? counts.area_total : counts.area_without_site;
   const suffix = view.withSite ? "" : " Prikazane su samo firme bez sajta.";
   $("data-empty-say").textContent = `Nijedna firma ne odgovara filterima.${suffix}`;
@@ -1250,6 +1309,7 @@ $("data-reset-filters").addEventListener("click", () => {
   $("data-filter-commercial").checked = true;
   $("data-filter-hide-found").checked = false;
   view.categories.clear();
+  view.deadOnly = false;
   view.facetFilter = "";
   $("data-facet-filter").value = "";
   view.page = 1;
@@ -1308,6 +1368,7 @@ $("data-table-head").addEventListener("click", (event) => {
 
 function setWithSite(on) {
   view.withSite = on;
+  view.deadOnly = false;  // same axis: asking for one is dropping the other
   view.page = 1;
   loadResults();
 }

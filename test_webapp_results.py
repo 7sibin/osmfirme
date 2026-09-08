@@ -243,3 +243,70 @@ def test_facets_count_the_prepared_set_not_the_raw_one():
     prepared = prepare_rows(rows, ResultFilters())
     counts = {item["value"]: item["count"] for item in facets(prepared, ResultFilters())}
     assert counts == {"supermarket": 2}
+
+
+# --- the businesses whose website has gone ----------------------------------
+
+from webapp.results import CONTACT_DEAD, CONTACT_NONE, CONTACT_OK, WEBSITE_DEAD  # noqa: E402
+
+
+def sited(name, *, status="", website="https://x.rs"):
+    return replace(row(name, "bakery", website=website), contact_status=status)
+
+
+DEAD_ROWS = [
+    sited("Nekad Imali", status=CONTACT_DEAD),
+    sited("Sajt Radi", status=CONTACT_OK),
+    sited("Blokiran", status=CONTACT_NONE),
+    sited("Nije Citan", status=""),
+    replace(row("Nema Sajt", "bakery"), contact_status=""),
+]
+
+
+def test_the_dead_filter_keeps_only_businesses_whose_site_stopped_answering():
+    kept = filter_rows(DEAD_ROWS, ResultFilters(website=WEBSITE_DEAD))
+    assert [r.name for r in kept] == ["Nekad Imali"]
+
+
+def test_a_site_that_merely_refused_to_be_read_is_not_dead():
+    """A 403 from a bot filter is a working business. Listing it as dead is a lie."""
+    kept = filter_rows(DEAD_ROWS, ResultFilters(website=WEBSITE_DEAD))
+    assert "Blokiran" not in [r.name for r in kept]
+
+
+def test_an_unread_site_is_not_dead_either():
+    assert "Nije Citan" not in [
+        r.name for r in filter_rows(DEAD_ROWS, ResultFilters(website=WEBSITE_DEAD))
+    ]
+
+
+def test_the_dead_filter_combines_with_the_others():
+    """A dead site is not a way to reach anyone, so only the one with a phone survives."""
+    rows = [*DEAD_ROWS, replace(sited("Nekad Imali Drugi", status=CONTACT_DEAD), phone="+38118111")]
+    kept = filter_rows(rows, ResultFilters(website=WEBSITE_DEAD, require_contact=True))
+    assert [r.name for r in kept] == ["Nekad Imali Drugi"]
+
+
+def test_a_dead_website_is_not_a_way_to_reach_anyone():
+    gone = sited("Nekad Imali", status=CONTACT_DEAD)
+    assert not gone.has_contact
+    assert sited("Sajt Radi", status=CONTACT_OK).has_contact
+    assert replace(gone, phone="+38118111").has_contact
+    assert replace(gone, found_phone="018512345").has_contact
+
+
+def test_an_unread_website_still_counts_as_contact():
+    """Nothing changes until a site has actually been read and failed."""
+    assert sited("Nije Citan", status="").has_contact
+
+
+def test_facets_honour_the_dead_filter():
+    rows = [*DEAD_ROWS, replace(sited("Kafic Nestao", status=CONTACT_DEAD), category="cafe")]
+    counts = {item["value"]: item["count"] for item in facets(rows, ResultFilters(website=WEBSITE_DEAD))}
+    assert counts == {"bakery": 1, "cafe": 1}
+
+
+def test_the_other_website_values_ignore_contact_status():
+    """`no` still means "OSM has no website", not "the website does not work"."""
+    kept = filter_rows(DEAD_ROWS, ResultFilters(website="no"))
+    assert [r.name for r in kept] == ["Nema Sajt"]

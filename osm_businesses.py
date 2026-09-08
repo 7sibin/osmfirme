@@ -181,7 +181,17 @@ class Row:
 
     @property
     def has_contact(self) -> bool:
-        return bool(self.phone or self.website)
+        """Some way to actually reach them.
+
+        A website that has been read and turned out not to answer is not one, so
+        it does not count - otherwise "only with contact details" would list
+        businesses whose only listed detail is a domain that is gone. Nothing
+        changes for the CLI, which never reads sites and so never sets
+        `contact_status`.
+        """
+        if self.phone or self.found_phone:
+            return True
+        return bool(self.website) and self.contact_status != "dead"
 
 
 def parse_elements(elements: list[dict[str, Any]]) -> list[Row]:

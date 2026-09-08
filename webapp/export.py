@@ -13,7 +13,15 @@ from openpyxl.utils import get_column_letter
 
 from osm_businesses import COLUMNS, Row
 
-from webapp.results import FOUND_STRONG, FOUND_WEAK, WEBSITE_NO, WEBSITE_YES, ResultFilters
+from webapp.results import (
+    CONTACT_DEAD,
+    FOUND_STRONG,
+    FOUND_WEAK,
+    WEBSITE_DEAD,
+    WEBSITE_NO,
+    WEBSITE_YES,
+    ResultFilters,
+)
 
 HEADERS_SR: dict[str, str] = {
     "osm_type": "OSM tip",
@@ -168,6 +176,8 @@ def _write_info_sheet(book: Workbook, *, rows: list[Row], area_label: str, filte
         applied.append("samo sa sajtom")
     elif filters.website == WEBSITE_NO:
         applied.append("samo bez sajta")
+    elif filters.website == WEBSITE_DEAD:
+        applied.append("samo one kojima sajt ne radi")
     if filters.q.strip():
         applied.append(f"pretraga: {filters.q.strip()}")
     if filters.collapse:
@@ -179,7 +189,7 @@ def _write_info_sheet(book: Workbook, *, rows: list[Row], area_label: str, filte
 
     found = sum(1 for row in rows if row.found_website)
     emails = sum(1 for row in rows if row.found_email)
-    dead = sum(1 for row in rows if row.contact_status == "dead")
+    dead = sum(1 for row in rows if row.contact_status == CONTACT_DEAD)
 
     lines: list[tuple[str, object]] = [
         ("Oblast", area_label),

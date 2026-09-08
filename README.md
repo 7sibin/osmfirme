@@ -94,8 +94,8 @@ its own timeout in the background.
 | `DELETE /api/jobs/{id}/contacts` | stop it |
 
 All three filtering routes take the same query parameters: `categories`
-(repeatable), `require_contact`, `website` (`any`, `yes` or `no`), `q`, `sort`
-and `order`, plus the three below. `points` is capped at 5000 coordinates and
+(repeatable), `require_contact`, `website` (`any`, `yes`, `no` or `dead`), `q`,
+`sort` and `order`, plus the three below. `points` is capped at 5000 coordinates and
 says so with `truncated`.
 
 `results` also carries `counts`. All but one of them describe the **area**
@@ -223,6 +223,23 @@ Serbian sites are still http-only while OSM records them as `https`.
 
 A weak website guess from the search is deliberately *not* read: attaching a
 stranger's email to a lead is worse than an empty column.
+
+**`website=dead`** is the payoff. It keeps only the businesses whose site was
+read and did not answer — they had a website, so they wanted one, and it is
+gone. On a 600 m extract of central Nis that is 6 businesses out of 43 read.
+The page reaches it by clicking the dead count in the reading line, since the
+number is the only control that view needs.
+
+It is a fourth value of `website` rather than a filter of its own because it is
+the same axis: what is the state of their website. That also means `no` keeps
+its meaning — "OSM has no website" — rather than quietly growing to include
+"has one that does not work".
+
+One consequence worth knowing: `Row.has_contact` no longer counts a website
+that has been read and found dead, so `require_contact` combined with
+`website=dead` leaves only the businesses that also have a phone (2 of the 6
+above). A domain that is gone is not a way to reach anyone. Nothing changes for
+the CLI, which never reads sites and so never sets `contact_status`.
 
 The area in `POST /api/jobs` is one of:
 
@@ -447,7 +464,7 @@ rows survived parsing and filters, and how many carry a phone or a website.
 python -m pytest -q
 ```
 
-343 tests, no network anywhere — the HTTP layer is mocked, the search engine is
+354 tests, no network anywhere — the HTTP layer is mocked, the search engine is
 injected, and every fixture is hand-built.
 
 The CLI's 78: `test_parse.py` covers the pure `parse_elements` function
@@ -455,12 +472,12 @@ The CLI's 78: `test_parse.py` covers the pure `parse_elements` function
 normalization); `test_geo.py` covers area resolution (candidate filtering, the
 area-id arithmetic, `--pick`, the cache, and the rate limiter).
 
-The web app's 265: `test_webapp_models.py` (area validation and the translation
+The web app's 276: `test_webapp_models.py` (area validation and the translation
 into `AreaSpec`), `test_webapp_cache.py` (the key, the round trip, and every
 way an entry can be rejected), `test_webapp_jobs.py` (the job state machine and
 cancellation), `test_webapp_runner.py` (cache hit, query shape, Overpass
-failure), `test_webapp_results.py` (the blocklist, chain collapsing, filters,
-facets, sorting, pagination), `test_webapp_export.py` (the workbook, read back
+failure), `test_webapp_results.py` (the blocklist, chain collapsing, the dead-site
+filter, the other filters, facets, sorting, pagination), `test_webapp_export.py` (the workbook, read back
 with `openpyxl`), `test_webapp_nominatim.py` (the `/lookup` client) and
 `test_webapp_api.py` (every route, through `TestClient`, with Nominatim,
 Overpass and the website search stubbed — including that a pass takes on only

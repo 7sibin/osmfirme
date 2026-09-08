@@ -698,3 +698,27 @@ def test_the_two_passes_do_not_tread_on_each_other(reading):
     status = reading.get(f"/api/jobs/{job_id}").json()
     assert status["contacts"]["status"] == "done"
     assert status["enrich"]["status"] == "idle"
+
+
+def test_the_dead_filter_is_reachable_through_the_api(reading):
+    job_id = read_job(reading)
+    body = reading.get(f"/api/jobs/{job_id}/results", params={"website": "dead"}).json()
+    assert [row["name"] for row in body["rows"]] == ["Apoteka Jankovic"]
+    assert body["total"] == 1
+
+
+def test_the_dead_filter_reaches_the_export_and_the_map_too(reading):
+    job_id = read_job(reading)
+    assert reading.get(
+        f"/api/jobs/{job_id}/points", params={"website": "dead"}
+    ).json()["total"] == 1
+    assert reading.get(
+        f"/api/jobs/{job_id}/export.xlsx", params={"website": "dead"}
+    ).status_code == 200
+
+
+def test_an_unknown_website_value_is_still_refused(reading):
+    job_id = read_job(reading)
+    assert reading.get(
+        f"/api/jobs/{job_id}/results", params={"website": "nonsense"}
+    ).status_code == 422

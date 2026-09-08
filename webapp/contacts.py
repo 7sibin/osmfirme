@@ -27,7 +27,7 @@ from urllib.parse import unquote, urljoin, urlsplit
 from osm_businesses import Row, normalize_phone, normalize_website
 
 from webapp.enrich import domain_core, social_kind
-from webapp.results import FOUND_STRONG
+from webapp.results import CONTACT_DEAD, CONTACT_NONE, CONTACT_OK, FOUND_STRONG
 
 logger = logging.getLogger(__name__)
 
@@ -48,11 +48,12 @@ class SiteUnreachable(Exception):
     """
 
 
-#: Values for ContactHit.status. Empty means the site was never read, which is
-#: different from CONTACT_NONE: read, and it carried nothing.
-CONTACT_OK = "ok"
-CONTACT_NONE = "none"
-CONTACT_DEAD = "dead"
+__all__ = [  # noqa: RUF022 - the statuses are re-exported for readers of this module
+    "CONTACT_DEAD", "CONTACT_NONE", "CONTACT_OK", "ContactHit", "ContactScraper",
+    "SiteUnreachable", "apply_contact_hits", "contact_page_links", "emails_in",
+    "http_fetch", "needs_contacts", "pending_contacts", "phones_in", "pick_email",
+    "site_of", "socials_in",
+]
 
 #: Pages fetched per business: the homepage plus at most two `Kontakt` links.
 #: A site that hides its address deeper than that is not worth the requests.
