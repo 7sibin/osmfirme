@@ -95,11 +95,15 @@ All three filtering routes take the same query parameters: `categories`
 and `order`, plus the three below. `points` is capped at 5000 coordinates and
 says so with `truncated`.
 
-`results` also carries `counts`, which describes the **area** rather than the
-filtered table: `area_total`, `area_without_site`, `found_sites`, `maybe_sites`
-and `unchecked`. The page headline is "this area holds N businesses, M of them
-without a site" — a sentence about the area — while `total` is what the table
-is currently showing. Keeping them separate is what lets the page say "588
+`results` also carries `counts`. All but one of them describe the **area**
+rather than the filtered table: `area_total`, `area_without_site`,
+`found_sites`, `maybe_sites` and `unchecked`. The page headline is "this area
+holds N businesses, M of them without a site" — a sentence about the area —
+while `total` is what the table is currently showing.
+
+`unchecked_here` is the exception, and follows the filters: it is what the
+website search would take on right now, so the button can say how many it will
+actually check. Keeping them separate is what lets the page say "588
 firmi je u oblasti — filteri ih sve iskljucuju" when a filter empties the table.
 
 ### Preparing the rows
@@ -160,6 +164,15 @@ match some other bakery), findings are cached per business in
 `~/.cache/osm_businesses/sites` (60 days for a hit, 21 for a miss), and a pass
 is capped at `limit` businesses (default 150) with the next one continuing
 where it stopped.
+
+**A pass runs over the rows the panel's filters leave**, not over everything.
+A city is around an hour at two seconds apiece, and the queue is otherwise in
+`sort_rows` order — alphabetically by category — so a first pass spends two
+fifths of itself on artwork, attractions and bus stations while every
+restaurant in the area waits for the seventh. Narrowing to a trade and checking
+those forty costs nothing in total work, because the cache is keyed by the
+business rather than by the job: a shop checked while the table was narrowed to
+bakeries stays checked once the filter comes off.
 
 A search that *fails* is recorded as unchecked, not as "no site": caching a
 timeout would retire a real lead over a bad minute. Set `hide_found=true` to
@@ -392,7 +405,7 @@ rows survived parsing and filters, and how many carry a phone or a website.
 python -m pytest -q
 ```
 
-270 tests, no network anywhere — the HTTP layer is mocked, the search engine is
+275 tests, no network anywhere — the HTTP layer is mocked, the search engine is
 injected, and every fixture is hand-built.
 
 The CLI's 78: `test_parse.py` covers the pure `parse_elements` function
@@ -400,7 +413,7 @@ The CLI's 78: `test_parse.py` covers the pure `parse_elements` function
 normalization); `test_geo.py` covers area resolution (candidate filtering, the
 area-id arithmetic, `--pick`, the cache, and the rate limiter).
 
-The web app's 192: `test_webapp_models.py` (area validation and the translation
+The web app's 197: `test_webapp_models.py` (area validation and the translation
 into `AreaSpec`), `test_webapp_cache.py` (the key, the round trip, and every
 way an entry can be rejected), `test_webapp_jobs.py` (the job state machine and
 cancellation), `test_webapp_runner.py` (cache hit, query shape, Overpass
@@ -408,7 +421,8 @@ failure), `test_webapp_results.py` (the blocklist, chain collapsing, filters,
 facets, sorting, pagination), `test_webapp_export.py` (the workbook, read back
 with `openpyxl`), `test_webapp_nominatim.py` (the `/lookup` client) and
 `test_webapp_api.py` (every route, through `TestClient`, with Nominatim,
-Overpass and the website search stubbed).
+Overpass and the website search stubbed — including that a pass takes on only
+what the filters leave).
 
 The website search's own 58: `test_webapp_enrich.py` drives the whole decision
 path with canned search results — which domains are accepted, which directories

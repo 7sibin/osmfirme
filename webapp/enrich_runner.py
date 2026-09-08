@@ -10,6 +10,11 @@ blocked run. What keeps it bearable instead is doing less work:
   would belong to a different bakery
 - rows checked before come back from the site cache for free
 - a run is capped, and the next run picks up where it left off
+- the caller hands over only the rows the panel's filters left, so a pass spends
+  itself on the trade the user is actually working through
+
+That last one costs nothing in total work: the cache is keyed by the business,
+so a shop checked while the table was narrowed stays checked afterwards.
 
 Partial failure is normal and never fails the pass: one unreachable engine or
 one dead domain is one row's answer, not the run's.
@@ -56,7 +61,8 @@ class EnrichProgress:
     failed: int = 0
     """Searches that could not be run. These stay unchecked and retry next pass."""
     remaining: int = 0
-    """Still unchecked in the area after this pass - what a re-run would take on."""
+    """Still unchecked of the rows this pass was handed - i.e. within the filters
+    that started it, not across the area. The page reports both scopes itself."""
     message: str = ""
 
     def to_dict(self) -> dict[str, object]:
@@ -166,6 +172,13 @@ async def run_enrichment(
 
 
 def _summary(progress: EnrichProgress) -> str:
+    """What the pass did. What is *left* is the band's line, not this one.
+
+    `remaining` counts what is left of the rows this pass was handed, which is
+    now whatever the filters left. The page knows both that number and the
+    area's, and says them together; repeating one here would read as a third,
+    different total.
+    """
     parts = [f"Provereno {progress.checked}."]
     if progress.found:
         parts.append(f"Nadjeno {progress.found} sajtova.")
@@ -173,6 +186,4 @@ def _summary(progress: EnrichProgress) -> str:
         parts.append(f"{progress.maybe} za proveru.")
     if progress.failed:
         parts.append(f"{progress.failed} nije uspelo - probaj ponovo.")
-    if progress.remaining:
-        parts.append(f"Ostalo {progress.remaining}.")
     return " ".join(parts)

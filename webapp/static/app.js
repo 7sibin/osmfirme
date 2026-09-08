@@ -9,6 +9,9 @@ const POLL_INTERVAL_MS = 1000;
 const SEARCH_DEBOUNCE_MS = 400;
 const FILTER_DEBOUNCE_MS = 300;
 const PAGE_SIZE = 50;
+/** Mirrors DEFAULT_LIMIT in webapp/enrich_runner.py: how many businesses one
+ *  website-search pass will take on, so the button can name the number. */
+const CHECK_LIMIT = 150;
 const MIN_RADIUS_M = 50;
 const MAX_RADIUS_M = 50000;
 const VISIBLE_CHIPS = 5;
@@ -742,11 +745,15 @@ function renderHead(body) {
  * so it runs in capped passes, reports progress, and can be stopped. */
 
 function renderCheckBand(body) {
-  const { unchecked, found_sites: found, maybe_sites: maybe } = body.counts;
+  const {
+    unchecked, unchecked_here: here, found_sites: found, maybe_sites: maybe,
+  } = body.counts;
   const progress = body.enrich || { status: "idle" };
   const band = $("data-check-band");
 
-  // Nothing to check and nothing found means there is nothing to say.
+  // Nothing to check and nothing found means there is nothing to say. The area
+  // count decides, not the filtered one, so the band does not vanish the moment
+  // a filter excludes everything - that is exactly when it has something to say.
   band.hidden = unchecked === 0 && found === 0 && maybe === 0;
   if (band.hidden) return;
 
@@ -754,10 +761,13 @@ function renderCheckBand(body) {
   band.classList.toggle("is-running", check.running);
   $("data-check-sweep").hidden = !check.running;
   $("data-check-cancel").hidden = !check.running;
-  $("data-check-run").disabled = check.running || unchecked === 0;
-  $("data-check-run").textContent = found + maybe > 0 ? "Proveri jos" : "Proveri sajtove";
+  $("data-check-run").disabled = check.running || here === 0;
+  // One pass is capped, so the button names what it will actually get through
+  // rather than the whole queue.
+  const willDo = Math.min(here, CHECK_LIMIT);
+  $("data-check-run").textContent = willDo > 0 ? `Proveri ovih ${willDo}` : "Proveri sajtove";
 
-  $("data-check-say").textContent = checkSentence(progress, unchecked);
+  $("data-check-say").textContent = checkSentence(progress, unchecked, here);
   $("data-check-count").hidden = !check.running;
   $("data-check-count").textContent = `${progress.checked} / ${progress.total}`;
 
@@ -771,12 +781,26 @@ function renderCheckBand(body) {
     : "";
 }
 
-function checkSentence(progress, unchecked) {
+function checkSentence(progress, unchecked, here) {
   if (progress.status === "running") return "Trazim sajtove. Ide polako, oko 2 s po firmi.";
-  if (progress.status === "cancelled") return `Prekinuto. Jos ${unchecked} neprovereno.`;
   if (progress.status === "error") return progress.message || "Provera je pukla.";
-  if (progress.status === "done") return progress.message;
+  // The summary is labelled because it outlives the filters that produced it:
+  // check nine bakeries, then narrow to hairdressers, and a bare "Provereno 9"
+  // reads as nine hairdressers.
+  if (progress.status === "cancelled") return `Prekinuto. ${remainderSentence(unchecked, here)}`;
+  if (progress.status === "done") {
+    return `Poslednji prolaz: ${progress.message} ${remainderSentence(unchecked, here)}`.trim();
+  }
   if (unchecked === 0) return "Sve provereno.";
+  return remainderSentence(unchecked, here);
+}
+
+/** The two numbers only differ when a filter is narrowing, and that is the whole
+ *  point of saying both: the button works on `here`, the area holds `unchecked`. */
+function remainderSentence(unchecked, here) {
+  if (unchecked === 0) return "Sve provereno.";
+  if (here === 0) return `Filteri ne ostavljaju nista za proveru. U oblasti jos ${unchecked}.`;
+  if (here < unchecked) return `Filtrirano: ${here} neprovereno, u celoj oblasti jos ${unchecked}.`;
   return `${unchecked} ${plural(unchecked, "firma nije proverena", "firme nisu proverene", "firmi nije provereno")}.`;
 }
 

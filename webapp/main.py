@@ -240,13 +240,20 @@ def _working_set(job: Job, filters: ResultFilters) -> tuple[list[Row], list[Row]
     return base, shown
 
 
-def _counts(base: list[Row]) -> dict[str, int]:
+def _counts(base: list[Row], matching: list[Row]) -> dict[str, int]:
+    """Headline numbers for the area, plus the one number that follows the filters.
+
+    `unchecked_here` is what the website search would take on right now, and it
+    is the only count that moves with the filter bar - the button has to be able
+    to say how many it will actually check.
+    """
     return {
         "area_total": len(base),
         "area_without_site": sum(1 for row in base if not row.website),
         "found_sites": sum(1 for row in base if row.found_confidence == FOUND_STRONG),
         "maybe_sites": sum(1 for row in base if row.found_confidence == FOUND_WEAK),
         "unchecked": len(pending(base, {})),
+        "unchecked_here": len(pending(matching, {})),
     }
 
 
@@ -277,7 +284,11 @@ def job_results(
 ) -> dict:
     job = _finished_job(registry, job_id)
     base, shown = _working_set(job, filters)
-    kept = sort_filtered(filter_rows(shown, filters), filters.sort, filters.order)
+    # `matching` feeds both the table and `unchecked_here`. Filtering `shown`
+    # rather than `base` costs nothing extra: the rows `hide_found` removes are
+    # by definition already checked, so neither count can see them anyway.
+    matching = filter_rows(shown, filters)
+    kept = sort_filtered(matching, filters.sort, filters.order)
     window, total = paginate(kept, page, page_size)
     return {
         "rows": [_row_payload(row) for row in window],
@@ -290,7 +301,7 @@ def job_results(
         # The area as a whole, unaffected by the table's own filters: the page
         # headline reports what the area holds and what the default view hides,
         # while `total` reports what the table is actually showing.
-        "counts": _counts(base),
+        "counts": _counts(base, matching),
         "enrich": job.enrich.progress.to_dict(),
     }
 
@@ -345,19 +356,27 @@ async def start_enrichment(
 ) -> dict:
     """Search the web for the sites of businesses the map has none for.
 
-    Runs over the prepared set, not the raw rows: there is no point searching for
-    a branch that was collapsed away or an institution that was filtered out.
+    Runs over the prepared rows the panel's filters leave, not over everything.
+    Two reasons, both about the clock: at two seconds a business a city is about
+    an hour, and the queue is otherwise ordered by `sort_rows` - alphabetically
+    by category - so a first pass spends itself on artwork and bus stations
+    while every restaurant in the area waits for the seventh.
+
+    Filtering costs nothing in total work, because the site cache is keyed by
+    the business rather than by the job: a shop checked while the table was
+    narrowed to bakeries stays checked once the filter comes off.
     """
     job = _finished_job(registry, job_id)
     if job.enrich.progress.status == "running":
         raise HTTPException(status_code=409, detail="Provera sajtova je vec u toku.")
 
     base, _ = _working_set(job, filters)
+    queue = filter_rows(base, filters)
     job.enrich_cancel.clear()
     registry.start_side_task(
         job,
         run_enrichment(
-            base,
+            queue,
             job.enrich,
             cache=sites,
             finder_factory=finder_factory,

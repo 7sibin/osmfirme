@@ -287,7 +287,7 @@ def test_results_carry_the_area_counts_and_the_export_name(wired):
         "area_total": 2, "area_without_site": 1,
         "found_sites": 0, "maybe_sites": 0,
         # Both fixture names are bare trade words, so neither can be searched for.
-        "unchecked": 0,
+        "unchecked": 0, "unchecked_here": 0,
     }
     assert body["export_filename"].startswith("firme-nis-")
 
@@ -473,3 +473,68 @@ def test_turning_both_off_shows_every_row_again(searching):
         params={"collapse": "false", "commercial_only": "false"},
     ).json()
     assert body["total"] == 5
+
+
+def test_the_search_only_takes_on_what_the_filters_leave(searching, registry):
+    """Two seconds a business means the queue has to follow the filter bar.
+
+    Without this the queue is `sort_rows` order - alphabetical by category - so
+    a first pass never reaches the trade you actually sell to.
+    """
+    job_id = post_job(searching, categories=["shop", "amenity"]).json()["job_id"]
+    wait_for_job(searching, job_id)
+    searching.post(f"/api/jobs/{job_id}/enrich", params={"categories": ["bakery"]})
+    _run_side_tasks(searching, registry, job_id)
+
+    assert StubFinder.asked == ["Pekara Trpkovic"]
+
+
+def test_a_text_search_narrows_the_queue_too(searching, registry):
+    job_id = post_job(searching, categories=["shop", "amenity"]).json()["job_id"]
+    wait_for_job(searching, job_id)
+    searching.post(f"/api/jobs/{job_id}/enrich", params={"q": "jankovic"})
+    _run_side_tasks(searching, registry, job_id)
+
+    assert StubFinder.asked == ["Apoteka Jankovic"]
+
+
+def test_unchecked_here_follows_the_filters_while_unchecked_stays_the_area(searching):
+    job_id = post_job(searching, categories=["shop", "amenity"]).json()["job_id"]
+    wait_for_job(searching, job_id)
+
+    wide = searching.get(f"/api/jobs/{job_id}/results").json()["counts"]
+    assert wide["unchecked"] == 3 and wide["unchecked_here"] == 3
+
+    narrow = searching.get(
+        f"/api/jobs/{job_id}/results", params={"categories": ["bakery"]}
+    ).json()["counts"]
+    assert narrow["unchecked"] == 3, "the area count must not move with the filters"
+    assert narrow["unchecked_here"] == 1
+
+
+def test_filtering_to_nothing_leaves_the_search_nothing_to_do(searching, registry):
+    job_id = post_job(searching, categories=["shop", "amenity"]).json()["job_id"]
+    wait_for_job(searching, job_id)
+    counts = searching.get(
+        f"/api/jobs/{job_id}/results", params={"q": "nepostojeca firma"}
+    ).json()["counts"]
+    assert counts["unchecked_here"] == 0
+
+    searching.post(f"/api/jobs/{job_id}/enrich", params={"q": "nepostojeca firma"})
+    body = _run_side_tasks(searching, registry, job_id)
+    assert body["status"] == "done"
+    assert StubFinder.asked == []
+
+
+def test_a_filtered_pass_leaves_the_rest_for_the_next_one(searching, registry):
+    """Nothing is wasted: the site cache is keyed by business, not by pass."""
+    job_id = post_job(searching, categories=["shop", "amenity"]).json()["job_id"]
+    wait_for_job(searching, job_id)
+
+    searching.post(f"/api/jobs/{job_id}/enrich", params={"categories": ["bakery"]})
+    _run_side_tasks(searching, registry, job_id)
+    searching.post(f"/api/jobs/{job_id}/enrich")
+    _run_side_tasks(searching, registry, job_id)
+
+    assert StubFinder.asked == ["Pekara Trpkovic", "Apoteka Jankovic", "Maxi"]
+    assert searching.get(f"/api/jobs/{job_id}/results").json()["counts"]["unchecked"] == 0
