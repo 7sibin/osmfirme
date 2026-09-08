@@ -109,3 +109,137 @@ def test_website_filter_combines_with_the_others():
 def test_facets_honour_the_website_filter():
     result = facets(ROWS, ResultFilters(website="yes"))
     assert {item["value"]: item["count"] for item in result} == {"cafe": 1}
+
+
+# --- preparation: blocklist, chain collapsing, hiding what the search found ---
+
+from dataclasses import replace  # noqa: E402
+
+from webapp.results import (  # noqa: E402
+    NON_COMMERCIAL,
+    collapse_chains,
+    drop_non_commercial,
+    prepare_rows,
+)
+
+
+def public(name, category, category_key="amenity"):
+    return row(name, category, category_key=category_key)
+
+
+def test_blocklist_drops_banks_and_post_offices():
+    rows = [*ROWS, public("Posta 18000", "post_office"), public("Banka Intesa", "bank")]
+    assert drop_non_commercial(rows) == ROWS
+
+
+def test_blocklist_drops_public_institutions():
+    rows = [
+        public("OS Vuk Karadzic", "school"),
+        public("Vrtic Pcelica", "kindergarten"),
+        public("Opstina Nis", "townhall"),
+        public("Crkva Svetog Save", "place_of_worship"),
+        public("Klinicki centar", "hospital"),
+    ]
+    assert drop_non_commercial(rows) == []
+
+
+def test_blocklist_spares_private_businesses_in_neighbouring_categories():
+    """A dentist, a private pharmacy and a driving school are exactly the leads wanted."""
+    rows = [
+        public("Zubar Nikolic", "dentist"),
+        public("Apoteka Jankovic", "pharmacy"),
+        public("Auto skola Volan", "driving_school"),
+        row("Advokat Peric", "lawyer", category_key="office"),
+    ]
+    assert drop_non_commercial(rows) == rows
+
+
+def test_blocklist_matches_on_the_key_too_not_just_the_value():
+    """`office=insurance` goes; a shop that happened to be called `insurance` would not."""
+    assert "office=insurance" in NON_COMMERCIAL
+    assert "shop=insurance" not in NON_COMMERCIAL
+
+
+def test_chain_collapse_keeps_one_row_per_name_and_category():
+    rows = [
+        row("Maxi", "supermarket", street="Bulevar"),
+        row("Maxi", "supermarket", street="Nemanjina"),
+        row("Maxi", "supermarket", street="Vozdova"),
+        row("Lidl", "supermarket", street="Kralja Petra"),
+    ]
+    kept = collapse_chains(rows)
+    assert [r.name for r in kept] == ["Maxi", "Lidl"]
+
+
+def test_chain_collapse_keeps_the_richest_copy():
+    thin = row("Maxi", "supermarket")
+    rich = row("Maxi", "supermarket", street="Bulevar", phone="+38118333")
+    assert collapse_chains([thin, rich]) == [rich]
+    assert collapse_chains([rich, thin]) == [rich]
+
+
+def test_chain_collapse_ignores_case_and_serbian_diacritics():
+    rows = [
+        row("Pekara Trpkovic", "bakery", street="A"),
+        row("PEKARA TRPKOVIĆ", "bakery", street="B"),
+        row("Пекара Трпковић", "bakery", street="C"),
+    ]
+    assert len(collapse_chains(rows)) == 1
+
+
+def test_chain_collapse_keeps_same_name_different_trade_apart():
+    """`Apoteka` the pharmacy and `Apoteka` the cafe are two businesses, not one."""
+    rows = [row("Apoteka", "pharmacy"), row("Apoteka", "cafe", category_key="amenity")]
+    assert len(collapse_chains(rows)) == 2
+
+
+def test_chain_collapse_preserves_first_appearance_order():
+    rows = [row("B", "cafe"), row("A", "bakery"), row("B", "cafe", street="X")]
+    assert [r.name for r in collapse_chains(rows)] == ["B", "A"]
+
+
+def test_prepare_rows_applies_both_by_default():
+    rows = [
+        row("Maxi", "supermarket", street="A"),
+        row("Maxi", "supermarket", street="B"),
+        public("Posta", "post_office"),
+    ]
+    assert [r.name for r in prepare_rows(rows, ResultFilters())] == ["Maxi"]
+
+
+def test_prepare_rows_leaves_everything_alone_when_both_are_off():
+    rows = [
+        row("Maxi", "supermarket", street="A"),
+        row("Maxi", "supermarket", street="B"),
+        public("Posta", "post_office"),
+    ]
+    filters = ResultFilters(commercial_only=False, collapse=False)
+    assert prepare_rows(rows, filters) == rows
+
+
+def test_hide_found_drops_rows_the_search_turned_up_a_site_for():
+    found = replace(row("Pekara Sunce", "bakery"), found_website="https://sunce.rs",
+                    found_confidence="strong")
+    weak = replace(row("Pekara Zvezda", "bakery"), found_website="https://zvezda.rs",
+                   found_confidence="weak")
+    plain = row("Pekara Mesec", "bakery")
+    kept = prepare_rows([found, weak, plain], ResultFilters(hide_found=True))
+    assert [r.name for r in kept] == ["Pekara Zvezda", "Pekara Mesec"]
+
+
+def test_hide_found_is_off_by_default():
+    found = replace(row("Pekara Sunce", "bakery"), found_website="https://sunce.rs",
+                    found_confidence="strong")
+    assert prepare_rows([found], ResultFilters()) == [found]
+
+
+def test_facets_count_the_prepared_set_not_the_raw_one():
+    """Three Maxis collapsed to one must read as one supermarket, not three."""
+    rows = [
+        row("Maxi", "supermarket", street="A"),
+        row("Maxi", "supermarket", street="B"),
+        row("Lidl", "supermarket", street="C"),
+    ]
+    prepared = prepare_rows(rows, ResultFilters())
+    counts = {item["value"]: item["count"] for item in facets(prepared, ResultFilters())}
+    assert counts == {"supermarket": 2}

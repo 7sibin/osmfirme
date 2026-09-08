@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Callable
+from dataclasses import replace
 from functools import lru_cache
 from pathlib import Path
 from typing import Literal
@@ -19,23 +20,36 @@ from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 from geo import NominatimClient, RateLimiter
-from osm_businesses import USER_AGENT, OverpassClient
+from osm_businesses import USER_AGENT, OverpassClient, Row
 
 from webapp.cache import ResultCache, cache_key, default_cache_dir
+from webapp.enrich import WebsiteFinder, apply_site_hits
+from webapp.enrich_runner import (
+    DEFAULT_LIMIT,
+    MAX_LIMIT,
+    build_finder,
+    pending,
+    run_enrichment,
+)
 from webapp.export import build_workbook, export_filename
 from webapp.jobs import Job, JobRegistry
 from webapp.models import JobRequest
 from webapp.nominatim import GeometryClient
 from webapp.results import (
     DEFAULT_PAGE_SIZE,
+    FOUND_STRONG,
+    FOUND_WEAK,
     MAX_PAGE_SIZE,
     ResultFilters,
+    drop_found,
     facets,
     filter_rows,
     paginate,
+    prepare_rows,
     sort_filtered,
 )
 from webapp.runner import run_job
+from webapp.site_cache import SiteCache, default_site_cache_dir
 
 logger = logging.getLogger(__name__)
 
@@ -89,6 +103,20 @@ def get_cache() -> ResultCache:
 
 def get_overpass_factory() -> Callable[[], OverpassClient]:
     return lambda: OverpassClient()
+
+
+@lru_cache(maxsize=1)
+def _site_cache() -> SiteCache:
+    return SiteCache(default_site_cache_dir())
+
+
+def get_site_cache() -> SiteCache:
+    return _site_cache()
+
+
+def get_finder_factory() -> Callable[[], WebsiteFinder]:
+    """Built per pass rather than once: the searcher carries its own rate limiter."""
+    return lambda: build_finder(_session(), USER_AGENT)
 
 
 # --- routes -----------------------------------------------------------------
@@ -181,6 +209,9 @@ def _filters(
     q: str = Query(default=""),
     sort: str = Query(default="name"),
     order: str = Query(default="asc"),
+    commercial_only: bool = Query(default=True),
+    collapse: bool = Query(default=True),
+    hide_found: bool = Query(default=False),
 ) -> ResultFilters:
     return ResultFilters(
         categories=categories,
@@ -189,7 +220,44 @@ def _filters(
         q=q,
         sort=sort,
         order=order,
+        commercial_only=commercial_only,
+        collapse=collapse,
+        hide_found=hide_found,
     )
+
+
+def _working_set(job: Job, filters: ResultFilters) -> tuple[list[Row], list[Row]]:
+    """The rows this request is about, as (everything on the table, what is shown).
+
+    Two lists because the page reports both. The headline counts describe the
+    area - how many businesses, how many without a site, how many the search
+    found one for - and must not move when the user ticks "hide the ones we
+    found". Only the table below it moves.
+    """
+    overlaid = apply_site_hits(job.rows, job.enrich.hits)
+    base = prepare_rows(overlaid, replace(filters, hide_found=False))
+    shown = drop_found(base) if filters.hide_found else base
+    return base, shown
+
+
+def _counts(base: list[Row]) -> dict[str, int]:
+    return {
+        "area_total": len(base),
+        "area_without_site": sum(1 for row in base if not row.website),
+        "found_sites": sum(1 for row in base if row.found_confidence == FOUND_STRONG),
+        "maybe_sites": sum(1 for row in base if row.found_confidence == FOUND_WEAK),
+        "unchecked": len(pending(base, {})),
+    }
+
+
+def _row_payload(row: Row) -> dict:
+    """The CSV columns plus what the website search added, kept clearly apart."""
+    return {
+        **row.as_output_dict(),
+        "found_website": row.found_website,
+        "found_confidence": row.found_confidence,
+        "found_source": row.found_source,
+    }
 
 
 def _finished_job(registry: JobRegistry, job_id: str) -> Job:
@@ -208,23 +276,22 @@ def job_results(
     registry: JobRegistry = Depends(get_registry),
 ) -> dict:
     job = _finished_job(registry, job_id)
-    kept = sort_filtered(filter_rows(job.rows, filters), filters.sort, filters.order)
+    base, shown = _working_set(job, filters)
+    kept = sort_filtered(filter_rows(shown, filters), filters.sort, filters.order)
     window, total = paginate(kept, page, page_size)
     return {
-        "rows": [row.as_output_dict() for row in window],
+        "rows": [_row_payload(row) for row in window],
         "total": total,
         "page": page,
         "page_size": page_size,
-        "facets": facets(job.rows, filters),
+        "facets": facets(shown, filters),
         "area_label": job.area_label,
         "export_filename": export_filename(job.area_label),
         # The area as a whole, unaffected by the table's own filters: the page
         # headline reports what the area holds and what the default view hides,
         # while `total` reports what the table is actually showing.
-        "counts": {
-            "area_total": len(job.rows),
-            "area_without_site": sum(1 for row in job.rows if not row.website),
-        },
+        "counts": _counts(base),
+        "enrich": job.enrich.progress.to_dict(),
     }
 
 
@@ -240,7 +307,8 @@ def job_points(
     thousand dots the canvas costs more than the picture is worth.
     """
     job = _finished_job(registry, job_id)
-    kept = filter_rows(job.rows, filters)
+    _, shown = _working_set(job, filters)
+    kept = filter_rows(shown, filters)
     return {
         "points": [[round(row.lat, 6), round(row.lon, 6)] for row in kept[:MAX_POINTS]],
         "total": len(kept),
@@ -255,7 +323,8 @@ def job_export(
     registry: JobRegistry = Depends(get_registry),
 ) -> StreamingResponse:
     job = _finished_job(registry, job_id)
-    kept = sort_filtered(filter_rows(job.rows, filters), filters.sort, filters.order)
+    _, shown = _working_set(job, filters)
+    kept = sort_filtered(filter_rows(shown, filters), filters.sort, filters.order)
     buffer = build_workbook(kept, area_label=job.area_label, filters=filters)
     filename = export_filename(job.area_label)
     return StreamingResponse(
@@ -263,6 +332,52 @@ def job_export(
         media_type=XLSX_MEDIA_TYPE,
         headers={"Content-Disposition": f"attachment; filename*=UTF-8''{quote(filename)}"},
     )
+
+
+@app.post("/api/jobs/{job_id}/enrich")
+async def start_enrichment(
+    job_id: str,
+    limit: int = Query(default=DEFAULT_LIMIT, ge=1, le=MAX_LIMIT),
+    filters: ResultFilters = Depends(_filters),
+    registry: JobRegistry = Depends(get_registry),
+    sites: SiteCache = Depends(get_site_cache),
+    finder_factory: Callable[[], WebsiteFinder] = Depends(get_finder_factory),
+) -> dict:
+    """Search the web for the sites of businesses the map has none for.
+
+    Runs over the prepared set, not the raw rows: there is no point searching for
+    a branch that was collapsed away or an institution that was filtered out.
+    """
+    job = _finished_job(registry, job_id)
+    if job.enrich.progress.status == "running":
+        raise HTTPException(status_code=409, detail="Provera sajtova je vec u toku.")
+
+    base, _ = _working_set(job, filters)
+    job.enrich_cancel.clear()
+    registry.start_side_task(
+        job,
+        run_enrichment(
+            base,
+            job.enrich,
+            cache=sites,
+            finder_factory=finder_factory,
+            limit=limit,
+            is_cancelled=job.enrich_cancel.is_set,
+        ),
+    )
+    return job.enrich.progress.to_dict()
+
+
+@app.get("/api/jobs/{job_id}/enrich")
+def enrichment_status(job_id: str, registry: JobRegistry = Depends(get_registry)) -> dict:
+    return _require_job(registry, job_id).enrich.progress.to_dict()
+
+
+@app.delete("/api/jobs/{job_id}/enrich")
+def cancel_enrichment(job_id: str, registry: JobRegistry = Depends(get_registry)) -> dict:
+    job = _require_job(registry, job_id)
+    job.enrich_cancel.set()
+    return job.enrich.progress.to_dict()
 
 
 @app.get("/")

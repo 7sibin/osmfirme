@@ -157,12 +157,40 @@
             <span class="site-band-chip" data-site-toggle-chip hidden></span>
           </label>
         </div>
+
+        <!-- OSM's `website` tag is filled in by whoever mapped the shop, not by
+             the shop, so plenty of businesses here have a site the map never
+             heard of. This band goes and looks. -->
+        <div class="check-band" data-check-band hidden>
+          <div class="check-band-line">
+            <button type="button" class="btn-secondary" data-check-run>Proveri sajtove</button>
+            <div class="check-band-say" data-check-say></div>
+            <div class="spacer"></div>
+            <div class="check-band-count" data-check-count hidden></div>
+            <button type="button" class="btn-tertiary" data-check-cancel hidden>Prekini</button>
+          </div>
+          <div class="sweep" data-check-sweep hidden><div class="sweep-bar"></div></div>
+          <div class="check-band-foot" data-check-foot hidden>
+            <label class="site-toggle" data-check-toggle>
+              <input type="checkbox" data-filter-hide-found>
+              <span>Sakrij one kojima je pretraga nasla sajt</span>
+              <span class="site-band-chip" data-check-toggle-chip hidden></span>
+            </label>
+            <div class="check-band-note" data-check-note></div>
+          </div>
+        </div>
       </div>
 
       <div class="filter-bar">
         <input type="search" data-filter-q placeholder="Pretrazi po nazivu ili ulici" autocomplete="off"
                aria-label="Pretrazi po nazivu ili ulici">
         <label><input type="checkbox" data-filter-contact> <span>Samo sa kontaktom</span></label>
+        <label title="Tri Maxija u gradu su jedan lead, ne tri reda.">
+          <input type="checkbox" data-filter-collapse checked> <span>Sazmi lance</span>
+        </label>
+        <label title="Banke, poste, opstine, skole, bolnice i crkve nisu leadovi.">
+          <input type="checkbox" data-filter-commercial checked> <span>Bez javnih ustanova</span>
+        </label>
         <div class="spacer"></div>
         <div class="filter-note" data-filter-note></div>
       </div>

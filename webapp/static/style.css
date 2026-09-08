@@ -39,6 +39,10 @@
   --stop-fg: #8C1710;
   --stop-bg: #F7EAE8;
 
+  /* What the web search found, as opposed to what the map carries. */
+  --found: #1F7A4C;
+  --found-edge: #8FC3A8;
+
   --map-bg: #E9E4DC;
   --overlay: rgba(252, 252, 251, 0.8);
   --shadow-menu: 0 6px 14px rgba(20, 24, 26, 0.14);
@@ -84,6 +88,9 @@
     --stop: #FF7A6B;
     --stop-fg: #FF7A6B;
     --stop-bg: #2A1B19;
+
+    --found: #4FCE8D;
+    --found-edge: #2E6B4B;
 
     --map-bg: #1B1E1F;
     --overlay: rgba(21, 25, 27, 0.82);
@@ -530,6 +537,35 @@ input[type="checkbox"] { accent-color: var(--ink); margin: 0; }
 .site-toggle.is-on { background: var(--ink); color: var(--on-ink); }
 .site-toggle.is-on input { accent-color: var(--survey); }
 
+/* The website search. Its own band under the site band rather than a button in
+   the filter bar: it is a job that runs for minutes and reports on itself, not
+   a filter that flips. */
+.check-band {
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.check-band.is-running { border-top-color: var(--work); }
+.check-band-line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.check-band-line .btn-secondary { height: 28px; padding: 0 11px; font-size: 12.5px; }
+.check-band-line .btn-tertiary { font-size: 12px; }
+.check-band-say { font-size: 13px; color: var(--ink-soft); }
+.check-band.is-running .check-band-say { color: var(--work-fg); font-weight: 500; }
+.check-band-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--work-fg);
+  border: 1px solid var(--work-edge);
+  padding: 1px 5px;
+}
+.check-band-foot { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.check-band-foot .site-band-chip { color: var(--found); border-color: var(--found-edge); }
+.check-band-foot .site-toggle.is-on .site-band-chip { color: var(--on-ink); border-color: currentColor; }
+.check-band-note { font-family: var(--mono); font-size: 10.5px; color: var(--ink-soft); }
+
 .filter-bar {
   flex: none;
   display: flex;
@@ -674,6 +710,21 @@ input[type="checkbox"] { accent-color: var(--ink); margin: 0; }
 .cell-muted { color: var(--ink-soft); }
 .cell-hours { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); }
 .cell-site a { color: var(--survey); }
+/* A found site is not the map's word, so it never looks like one: different
+   colour, and a tag saying where it came from. */
+.cell-site .found-link { color: var(--found); }
+.cell-site.is-maybe .found-link { color: var(--work-fg); }
+.found-tag {
+  margin-left: 6px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0 4px;
+  border: 1px solid var(--found-edge);
+  color: var(--found);
+}
+.cell-site.is-maybe .found-tag { border-color: var(--work-edge); color: var(--work-fg); }
 
 .empty-state {
   flex: 1;
@@ -959,7 +1010,36 @@ input[type="checkbox"] { accent-color: var(--ink); margin: 0; }
   .site-toggle input { width: 18px; height: 18px; }
   .site-toggle .site-band-chip { margin-left: auto; }
 
-  .filter-bar { gap: 8px; padding: 8px 12px; }
+  /* The website search. Its own band under the site band rather than a button in
+   the filter bar: it is a job that runs for minutes and reports on itself, not
+   a filter that flips. */
+.check-band {
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.check-band.is-running { border-top-color: var(--work); }
+.check-band-line { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.check-band-line .btn-secondary { height: 28px; padding: 0 11px; font-size: 12.5px; }
+.check-band-line .btn-tertiary { font-size: 12px; }
+.check-band-say { font-size: 13px; color: var(--ink-soft); }
+.check-band.is-running .check-band-say { color: var(--work-fg); font-weight: 500; }
+.check-band-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--work-fg);
+  border: 1px solid var(--work-edge);
+  padding: 1px 5px;
+}
+.check-band-foot { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.check-band-foot .site-band-chip { color: var(--found); border-color: var(--found-edge); }
+.check-band-foot .site-toggle.is-on .site-band-chip { color: var(--on-ink); border-color: currentColor; }
+.check-band-note { font-family: var(--mono); font-size: 10.5px; color: var(--ink-soft); }
+
+.filter-bar { gap: 8px; padding: 8px 12px; }
   .filter-bar input[type="search"] { flex: 1; min-width: 0; width: auto; height: 38px; font-size: 13.5px; }
   .filter-bar label, .filter-note { display: none; }
   .facet-bar { padding: 8px 12px; }

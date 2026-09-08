@@ -20,6 +20,8 @@ from typing import Any, Literal
 
 from osm_businesses import Row
 
+from webapp.enrich_runner import EnrichState
+
 logger = logging.getLogger(__name__)
 
 JobStatus = Literal["pending", "running", "done", "error", "cancelled"]
@@ -43,6 +45,10 @@ class Job:
     rows: list[Row] = field(default_factory=list)
     error: str | None = None
     cancel_event: threading.Event = field(default_factory=threading.Event)
+    enrich: EnrichState = field(default_factory=EnrichState)
+    """What the website search has turned up for this job's rows so far."""
+    enrich_cancel: threading.Event = field(default_factory=threading.Event)
+    """Separate from `cancel_event`: the search is its own pass and is cancelled on its own."""
 
     def set_phase(self, phase: JobPhase, message: str) -> None:
         self.phase = phase
@@ -67,6 +73,7 @@ class Job:
             "elements_found": self.elements_found,
             "rows": len(self.rows) if self.status == "done" else None,
             "error": self.error,
+            "enrich": self.enrich.progress.to_dict(),
         }
 
 
@@ -74,6 +81,7 @@ class JobRegistry:
     def __init__(self) -> None:
         self._jobs: dict[str, Job] = {}
         self._tasks: dict[str, asyncio.Task[None]] = {}
+        self._side_tasks: dict[str, list[asyncio.Task[None]]] = {}
 
     def create(self, area_label: str) -> Job:
         job = Job(job_id=uuid.uuid4().hex, area_label=area_label)
@@ -109,6 +117,36 @@ class JobRegistry:
             job.finished_at = datetime.now(timezone.utc)
             self._tasks.pop(job.job_id, None)
 
+    def start_side_task(self, job: Job, work: Awaitable[None]) -> None:
+        """Run something alongside a finished job without touching its status.
+
+        The website search is a second pass over a job that is already `done`.
+        It reports through its own progress object, so a failure there must not
+        turn a completed scrape into an errored one - `run_enrichment` records
+        its own errors and never raises.
+        """
+        task = asyncio.create_task(self._supervise_side(job, work))
+        self._side_tasks.setdefault(job.job_id, []).append(task)
+
+    async def _supervise_side(self, job: Job, work: Awaitable[None]) -> None:
+        try:
+            await work
+        except Exception:  # noqa: BLE001 - already reported through its own progress
+            logger.exception("side task for job %s failed", job.job_id)
+        finally:
+            remaining = [
+                task for task in self._side_tasks.get(job.job_id, []) if not task.done()
+            ]
+            if remaining:
+                self._side_tasks[job.job_id] = remaining
+            else:
+                self._side_tasks.pop(job.job_id, None)
+
+    async def wait_side(self, job_id: str) -> None:
+        """Await the job's background passes. Used by the tests."""
+        for task in list(self._side_tasks.get(job_id, [])):
+            await task
+
     def cancel(self, job_id: str) -> bool:
         job = self._jobs.get(job_id)
         if job is None or job.status in TERMINAL:
@@ -131,3 +169,4 @@ class JobRegistry:
         excess = len(finished) - max_jobs
         for job in finished[: max(0, excess)]:
             self._jobs.pop(job.job_id, None)
+            self._side_tasks.pop(job.job_id, None)

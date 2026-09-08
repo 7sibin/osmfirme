@@ -14,6 +14,7 @@ import random
 import re
 import sys
 import time
+import unicodedata
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Iterable, Sequence, TextIO
@@ -157,6 +158,12 @@ class Row:
     lon: float
     category_key: str = field(default="", compare=True)
     """Which top-level key produced `category`; used by --category/--exclude-category."""
+    found_website: str = field(default="", compare=False)
+    """A site the web search turned up for a row OSM has no `website` for."""
+    found_confidence: str = field(default="", compare=False)
+    """How much to trust `found_website`: "strong" or "weak". Empty when unchecked."""
+    found_source: str = field(default="", compare=False)
+    """Where it came from: "search", "mention" or "social"."""
 
     def as_output_dict(self) -> dict[str, Any]:
         return {column: getattr(self, column) for column in COLUMNS}
@@ -279,6 +286,43 @@ def _phones(tags: dict[str, Any]) -> tuple[str, str]:
     return numbers[0], ";".join(numbers[1:])
 
 
+#: Serbian Cyrillic to Latin, so the same business matches whichever alphabet
+#: the mapper used. Serbian Cyrillic is a strict one-sound-one-letter script, so
+#: unlike Russian this transliteration is exact and reversible.
+_CYRILLIC_MAP = {
+    "а": "a", "б": "b", "в": "v", "г": "g", "д": "d", "ђ": "dj",
+    "е": "e", "ж": "z", "з": "z", "и": "i", "ј": "j", "к": "k",
+    "л": "l", "љ": "lj", "м": "m", "н": "n", "њ": "nj", "о": "o",
+    "п": "p", "р": "r", "с": "s", "т": "t", "ћ": "c", "у": "u",
+    "ф": "f", "х": "h", "ц": "c", "ч": "c", "џ": "dz", "ш": "s",
+}
+
+#: Serbian Latin letters NFKD does not decompose, or decomposes the wrong way
+#: for matching purposes. Applied before the generic accent strip.
+_FOLD_MAP = str.maketrans(
+    {
+        **_CYRILLIC_MAP,
+        "đ": "dj", "Đ": "dj",  # d with stroke
+        "ð": "dj", "Ð": "dj",  # eth, which some exports use for the same letter
+        "ł": "l", "Ł": "l",
+        "ß": "ss",
+    }
+)
+
+
+def fold_text(value: str) -> str:
+    """Casefold and strip accents, so `Pekara Čvorović` matches `pekara cvorovic`.
+
+    Both chain collapsing and the website search compare names that reach us in
+    every spelling at once: Cyrillic transliterations, Latin with and without
+    diacritics, and the ASCII a keyboard without them produces.
+    """
+    folded = value.casefold().translate(_FOLD_MAP)
+    decomposed = unicodedata.normalize("NFKD", folded)
+    stripped = "".join(ch for ch in decomposed if not unicodedata.combining(ch))
+    return " ".join(stripped.split())
+
+
 def normalize_phone(value: str) -> str:
     """Keep digits and a leading +; drop spaces, dashes, slashes and parens."""
     stripped = value.strip()
@@ -333,7 +377,7 @@ def _dedupe(rows: list[Row]) -> list[Row]:
         if index is None:
             group.append(len(kept))
             kept.append(row)
-        elif _is_better(row, kept[index]):
+        elif is_richer(row, kept[index]):
             kept[index] = row
     return kept
 
@@ -357,7 +401,8 @@ def _metres_between(a: Row, b: Row) -> float:
     return math.hypot(north, east)
 
 
-def _is_better(challenger: Row, incumbent: Row) -> bool:
+def is_richer(challenger: Row, incumbent: Row) -> bool:
+    """Whether `challenger` should replace `incumbent` as the kept copy of a repeat."""
     if challenger.filled_count != incumbent.filled_count:
         return challenger.filled_count > incumbent.filled_count
     # Tie: prefer the node, which is the POI itself rather than the building.

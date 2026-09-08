@@ -2,8 +2,22 @@
 
 ## Enhancers — enrich rows from sources beyond OSM
 
-Add a stage that takes the parsed rows and fills in what OSM does not carry.
-Not designed yet; this is the captured idea plus the decisions it is waiting on.
+**The first one is built.** Website discovery ships as `webapp/enrich.py` +
+`webapp/enrich_runner.py`: it searches the web for businesses OSM has no
+`website` for and records what it finds in `found_website` / `found_confidence`
+/ `found_source`. See "Finding sites the map does not know about" in the
+README. What follows is the rest of the idea, and the decisions it is still
+waiting on.
+
+Answers the first enhancer settled, which the next one should reuse:
+
+- It runs **on demand**, not automatically, and over the *prepared* rows — no
+  point searching for a branch that was collapsed away.
+- Enriched fields are their own columns, in the API and in the workbook, so it
+  stays obvious which half of the sheet is ODbL and which is not.
+- Its cache is separate from the Overpass one, keyed by the business rather
+  than the area, with a shorter life for a miss than for a hit.
+- A failed lookup is **unchecked**, never a negative answer.
 
 ### Where it plugs in
 
@@ -13,9 +27,11 @@ The pipeline in `webapp/runner.py` is linear:
 area -> build_query -> OverpassClient.fetch -> parse_elements -> sort_rows -> cache.save
 ```
 
-An enhancer stage sits between `sort_rows` and `cache.save`: it takes
-`list[Row]`, fetches per-business data from elsewhere, and returns rows with
-extra fields.
+The website search sits *after* the job instead, as a second pass over a
+finished job's prepared rows, reached through `POST /api/jobs/{id}/enrich`.
+That turned out to be the right shape: the scrape stays fast, the pass is
+cancellable on its own, and re-running an area does not force a re-search.
+A future enhancer should copy it rather than the plan below.
 
 Everything that stage touches:
 
@@ -38,17 +54,17 @@ Everything that stage touches:
 
 | Source | What it adds | Catch |
 |---|---|---|
-| Scrape the business's own site | email, extra phones, Facebook/Instagram links, and whether the domain is even alive (a dead site is still a lead) | only helps rows that already have a `website`; every site is shaped differently |
-| Find a site/socials for rows without one | the highest-value column for outreach, since the default view is businesses with no website | needs a paid search API (Brave/Bing/SerpAPI) or scraping search results, which is against ToS and gets blocked |
+| Scrape the business's own site | email, extra phones, Facebook/Instagram links | only helps rows that have a `website` — including, now, one the search found; every site is shaped differently |
+| ~~Find a site/socials for rows without one~~ | **done** — `ddgs` over several engines, domain-must-match-the-name, plus a liveness check | slow (~2 s per business) and precision-first, so it misses sites whose domain is not built from the name |
 | Official registries (APR, NBS) | PIB, matični broj, activity code, status (active / in liquidation), registered address | no public API; matching by name and address is unreliable |
 | Google Places | rating, review count, phone, website, opening hours | paid per call, and the README currently promises "OSM only. No Google Maps fallback" — adopting this is a deliberate break with that |
 
 ### Open questions
 
-1. Which of the sources above are actually wanted (see the table).
-2. Enrich every row of a job automatically, or only on demand for a selected
-   subset (cheaper, and keeps the job fast)?
-3. Are the enriched fields exported and filterable like the OSM ones, or shown
-   as a separate group so it stays obvious which data is ODbL and which is not?
-4. Provenance: does a scraped email need to record where it came from, given
-   the ODbL attribution rules only cover the OSM half?
+1. Which of the remaining sources above are actually wanted (see the table).
+2. Whether the website search should try harder for the businesses it misses -
+   a name whose domain is not built from it (`Zlatni Papagaj` at `zp.rs`) is
+   invisible to the current rule, and loosening the rule is what let the
+   directories back in.
+3. Whether a paid search API is worth it, now that the free engines cost about
+   two seconds each and a city is thousands of businesses.

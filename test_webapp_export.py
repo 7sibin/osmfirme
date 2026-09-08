@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+from dataclasses import replace
+
 from openpyxl import load_workbook
 
 from osm_businesses import COLUMNS, Row
-from webapp.export import build_workbook, export_filename
+
+from webapp.export import FOUND_COLUMNS, build_workbook, export_filename
 from webapp.results import ResultFilters
 
 
@@ -32,8 +35,34 @@ def test_workbook_has_a_data_sheet_and_an_info_sheet():
 def test_header_row_is_serbian_and_matches_the_column_count():
     sheet = load([make_row()])["Firme"]
     headers = [cell.value for cell in sheet[1]]
-    assert len(headers) == len(COLUMNS)
+    assert len(headers) == len(COLUMNS) + len(FOUND_COLUMNS)
     assert headers[2] == "Naziv"
+
+
+def test_what_the_search_found_is_its_own_labelled_column():
+    """Not folded into `Sajt`: it did not come from the map and ODbL does not cover it."""
+    found = replace(make_row("Pekara Trpkovic"), website="", found_website="https://trpkovic.rs",
+                    found_confidence="strong", found_source="search")
+    sheet = load([found])["Firme"]
+    headers = [cell.value for cell in sheet[1]]
+    values = dict(zip(headers, [cell.value for cell in sheet[2]]))
+    assert not values["Sajt"]  # openpyxl writes an empty cell as None
+    assert values["Sajt (pretraga)"] == "https://trpkovic.rs"
+    assert values["Pouzdanost"] == "sigurno"
+    assert values["Odakle"] == "rezultat pretrage"
+
+
+def test_a_weak_hit_is_labelled_as_needing_a_look():
+    found = replace(make_row("A"), found_website="https://x.rs", found_confidence="weak")
+    sheet = load([found])["Firme"]
+    values = dict(zip([c.value for c in sheet[1]], [c.value for c in sheet[2]]))
+    assert values["Pouzdanost"] == "za proveru"
+
+
+def test_an_unchecked_row_says_so_rather_than_looking_like_a_miss():
+    sheet = load([make_row("A")])["Firme"]
+    values = dict(zip([c.value for c in sheet[1]], [c.value for c in sheet[2]]))
+    assert values["Pouzdanost"] == "nije provereno"
 
 
 def test_one_row_per_business():

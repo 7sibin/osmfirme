@@ -26,9 +26,10 @@ def test_status_dict_has_the_documented_shape():
     status = job.to_status_dict()
     assert set(status) == {
         "job_id", "status", "phase", "message", "started_at", "elapsed_s",
-        "elements_found", "rows", "error", "area_label",
+        "elements_found", "rows", "error", "area_label", "enrich",
     }
     assert status["rows"] is None
+    assert status["enrich"]["status"] == "idle"
 
 
 @pytest.mark.asyncio

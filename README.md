@@ -13,7 +13,9 @@ python osm_businesses.py --help
 ```
 
 Python 3.11+. The CLI needs only the standard library plus `requests`; the web
-app adds `fastapi`, `uvicorn` and `openpyxl`; `pytest` runs the tests.
+app adds `fastapi`, `uvicorn`, `openpyxl` and `ddgs` (the last only for
+[finding sites the map does not know about](#finding-sites-the-map-does-not-know-about));
+`pytest` runs the tests.
 
 ## Web app
 
@@ -84,18 +86,89 @@ its own timeout in the background.
 | `GET /api/jobs/{id}/results` | filtered rows, paginated, plus per-category counts |
 | `GET /api/jobs/{id}/points` | `[lat, lon]` per filtered row, so the map can plot what the table lists |
 | `GET /api/jobs/{id}/export.xlsx` | the same filtered rows as a workbook |
+| `POST /api/jobs/{id}/enrich` | start a website-search pass over the prepared rows |
+| `GET /api/jobs/{id}/enrich` | how that pass is going |
+| `DELETE /api/jobs/{id}/enrich` | stop it |
 
 All three filtering routes take the same query parameters: `categories`
 (repeatable), `require_contact`, `website` (`any`, `yes` or `no`), `q`, `sort`
-and `order`. `points` is capped at 5000 coordinates and says so with
-`truncated`.
+and `order`, plus the three below. `points` is capped at 5000 coordinates and
+says so with `truncated`.
 
 `results` also carries `counts`, which describes the **area** rather than the
-filtered table: `area_total` and `area_without_site`. The page headline is
-"this area holds N businesses, M of them without a site" — a sentence about the
-area — while `total` is what the table is currently showing. Keeping them
-separate is what lets the page say "588 firmi je u oblasti — filteri ih sve
-iskljucuju" when a filter empties the table.
+filtered table: `area_total`, `area_without_site`, `found_sites`, `maybe_sites`
+and `unchecked`. The page headline is "this area holds N businesses, M of them
+without a site" — a sentence about the area — while `total` is what the table
+is currently showing. Keeping them separate is what lets the page say "588
+firmi je u oblasti — filteri ih sve iskljucuju" when a filter empties the table.
+
+### Preparing the rows
+
+Before any of the panel's filters run, `webapp/results.py` decides which rows
+are on the table at all. Two steps, both on by default and both switchable from
+the filter bar:
+
+- **`collapse`** — one row per business, however many branches of it the area
+  holds. `_dedupe` in the parser already merges the repeats OSM produces for a
+  *single* POI; three Maxis on three real addresses survive that and are three
+  legitimate rows there. For a call list they are one lead, so the richest copy
+  is kept and the rest dropped. The key is the folded name plus the category,
+  so `Apoteka` the pharmacy and `Apoteka` the cafe stay apart.
+- **`commercial_only`** — drops what is on the map but is never a sales lead:
+  banks, post offices, exchange offices, insurers, bookmakers, town halls,
+  courts, police and fire stations, schools, kindergartens, universities,
+  public hospitals and clinics, places of worship, libraries and community
+  centres. The full list is `NON_COMMERCIAL` in `webapp/results.py`, matched on
+  the `key=value` pair rather than the bare value. Dentists, pharmacies, vets,
+  driving schools, lawyers and the rest of the private practices are
+  deliberately *not* on it.
+
+This runs before both `filter_rows` and `facets`, so a chain collapsed to one
+row also counts as one in the category chips.
+
+### Finding sites the map does not know about
+
+OSM's `website` tag is filled in by whoever mapped the shop, which is usually
+not the shop. Plenty of businesses with a perfectly good site therefore land in
+the "no website" pile, and calling them is wasted time. `POST
+/api/jobs/{id}/enrich` goes and looks: it searches the web for each such
+business, and decides whether any result is the business's own site.
+
+The hard part is rejecting, not searching. A search for a Serbian business
+returns catalogues (companywall, navidiku, planplus), map mirrors and review
+sites long before it returns the business, and every one of those is *titled*
+with the business's name. So a result counts only when the **domain** is built
+from the name — `trpkovic.rs` for `Pekara Trpkovic` — after the trade word
+(`pekara`) and the legal form (`doo`) are stripped off. A domain that merely
+appears in a snippet counts too, but only on an exact match. Whatever survives
+then has to answer an HTTP request: a name-shaped domain is the easiest thing
+in the world to squat or let expire.
+
+Findings land in `found_website`, `found_confidence` (`strong`, `weak`, `none`
+or empty for unchecked) and `found_source` (`search`, `mention` or `social`),
+never in `website` — what a mapper wrote down beats what a search guessed, and
+ODbL covers the OSM half of the sheet and nothing else. A perfect name match on
+a foreign TLD is only `weak`: `restoranzlatnik.ba` for a restaurant in Nis is a
+Bosnian namesake. Facebook and Instagram profiles are recorded separately; for
+a lot of small businesses the Facebook page *is* the website.
+
+The pass is deliberately serial — every engine worth asking rate-limits a burst
+and answers a trickle indefinitely — so it costs about two seconds per
+business. What keeps it bearable is doing less work: rows that already carry a
+site are skipped, so are names that identify nothing (`Pekara` alone would
+match some other bakery), findings are cached per business in
+`~/.cache/osm_businesses/sites` (60 days for a hit, 21 for a miss), and a pass
+is capped at `limit` businesses (default 150) with the next one continuing
+where it stopped.
+
+A search that *fails* is recorded as unchecked, not as "no site": caching a
+timeout would retire a real lead over a bad minute. Set `hide_found=true` to
+drop the confident hits from the table — the counts above it do not move, so
+you can still see how many were hidden.
+
+`OSM_SEARCH_BACKEND` picks the engines (default
+`duckduckgo,brave,google,yahoo,startpage,mojeek`; breadth is what makes a long
+run possible, since any single engine blocks within a handful of queries).
 
 The area in `POST /api/jobs` is one of:
 
@@ -114,8 +187,14 @@ user gets a sentence.
 Two sheets. **Firme** holds the same columns as the CSV, with Serbian headers,
 a frozen header row, an autofilter, clickable website and email cells, and
 phone numbers stored as text so Excel keeps the leading `+`. **Info** records
-the area, the date, the row count, the filters applied and the ODbL
-attribution.
+the area, the date, the row count, the filters applied, how many sites the web
+search contributed, and the ODbL attribution.
+
+Three extra columns sit after the OSM ones — `Sajt (pretraga)`, `Pouzdanost`
+and `Odakle` — carrying what the website search found. They are kept separate
+and labelled rather than folded into `Sajt` on purpose: they did not come from
+the map, ODbL does not cover them, and a row marked `za proveru` is the user's
+call to make.
 
 That attribution is not decoration. Anything you publish from these
 spreadsheets carries the same obligation as the CLI's CSVs — see
@@ -313,22 +392,32 @@ rows survived parsing and filters, and how many carry a phone or a website.
 python -m pytest -q
 ```
 
-172 tests, no network anywhere — the HTTP layer is mocked and every fixture is
-hand-built.
+270 tests, no network anywhere — the HTTP layer is mocked, the search engine is
+injected, and every fixture is hand-built.
 
-The CLI's 73: `test_parse.py` covers the pure `parse_elements` function
+The CLI's 78: `test_parse.py` covers the pure `parse_elements` function
 (coordinates, name fallbacks, furniture exclusion, dedupe, phone and website
 normalization); `test_geo.py` covers area resolution (candidate filtering, the
 area-id arithmetic, `--pick`, the cache, and the rate limiter).
 
-The web app's 99: `test_webapp_models.py` (area validation and the translation
+The web app's 192: `test_webapp_models.py` (area validation and the translation
 into `AreaSpec`), `test_webapp_cache.py` (the key, the round trip, and every
 way an entry can be rejected), `test_webapp_jobs.py` (the job state machine and
 cancellation), `test_webapp_runner.py` (cache hit, query shape, Overpass
-failure), `test_webapp_results.py` (filters, facets, sorting, pagination),
-`test_webapp_export.py` (the workbook, read back with `openpyxl`),
-`test_webapp_nominatim.py` (the `/lookup` client) and `test_webapp_api.py`
-(every route, through `TestClient`, with Nominatim and Overpass stubbed).
+failure), `test_webapp_results.py` (the blocklist, chain collapsing, filters,
+facets, sorting, pagination), `test_webapp_export.py` (the workbook, read back
+with `openpyxl`), `test_webapp_nominatim.py` (the `/lookup` client) and
+`test_webapp_api.py` (every route, through `TestClient`, with Nominatim,
+Overpass and the website search stubbed).
+
+The website search's own 58: `test_webapp_enrich.py` drives the whole decision
+path with canned search results — which domains are accepted, which directories
+are rejected and why, the foreign-TLD downgrade, social profiles, dead domains,
+and a failed search staying *unchecked* rather than becoming a miss.
+`test_webapp_enrich_runner.py` covers a pass: what it skips, the cap and
+continuing, cancellation, and one broken row not losing the rest.
+`test_webapp_site_cache.py` covers the key, the two expiry rates, and surviving
+a corrupt shard or an unwritable disk.
 
 The frontend has no automated tests; it is checked by hand.
 

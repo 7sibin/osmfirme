@@ -57,6 +57,7 @@ const state = {
   filterTimer: null,
   candidatesOpen: false,
   results: null,
+  checkTimer: null,
 };
 
 const view = {
@@ -67,6 +68,13 @@ const view = {
   withSite: false,
   facets: [],
   facetFilter: "",
+};
+
+/** The website search. Its timer lives on `state` with the others; these two
+ *  are what the band itself needs to remember between polls. */
+const check = {
+  running: false,
+  autoHidden: false,  // the hide toggle is ticked for the user once, not every pass
 };
 
 // --- small helpers ----------------------------------------------------------
@@ -528,9 +536,16 @@ function resetResultsView() {
   view.facets = [];
   view.facetFilter = "";
   state.results = null;
+  clearTimeout(state.checkTimer);
+  check.running = false;
+  check.autoHidden = false;
   $("data-filter-q").value = "";
   $("data-filter-contact").checked = false;
   $("data-filter-with-site").checked = false;
+  $("data-filter-hide-found").checked = false;
+  $("data-filter-collapse").checked = true;
+  $("data-filter-commercial").checked = true;
+  $("data-check-band").hidden = true;
   closeFacetMenu();
   hidePanel();
 }
@@ -626,6 +641,10 @@ function filterParams() {
   if (website !== "any") params.set("website", website);
   const query = $("data-filter-q").value.trim();
   if (query) params.set("q", query);
+  // These two default to on, so only the unticked state is worth sending.
+  if (!$("data-filter-collapse").checked) params.set("collapse", "false");
+  if (!$("data-filter-commercial").checked) params.set("commercial_only", "false");
+  if ($("data-filter-hide-found").checked) params.set("hide_found", "true");
   params.set("sort", view.sort);
   params.set("order", view.order);
   return params;
@@ -655,6 +674,7 @@ async function loadResults() {
   if (wasHidden) selectTab("3");
 
   renderHead(body);
+  renderCheckBand(body);
   renderFilterNote();
   renderFacets();
   renderRows(body.rows);
@@ -712,11 +732,137 @@ function renderHead(body) {
     `${body.total} ${plural(body.total, "firma", "firme", "firmi")}`;
 }
 
+// --- the website search -----------------------------------------------------
+
+/* OSM's `website` tag is written by whoever mapped the shop, not by the shop, so
+ * a business with a perfectly good site still lands in the "no site" pile and
+ * costs a phone call to find that out. This band searches the web for them.
+ *
+ * It is slow by design - every search engine worth asking rate-limits a burst -
+ * so it runs in capped passes, reports progress, and can be stopped. */
+
+function renderCheckBand(body) {
+  const { unchecked, found_sites: found, maybe_sites: maybe } = body.counts;
+  const progress = body.enrich || { status: "idle" };
+  const band = $("data-check-band");
+
+  // Nothing to check and nothing found means there is nothing to say.
+  band.hidden = unchecked === 0 && found === 0 && maybe === 0;
+  if (band.hidden) return;
+
+  check.running = progress.status === "running";
+  band.classList.toggle("is-running", check.running);
+  $("data-check-sweep").hidden = !check.running;
+  $("data-check-cancel").hidden = !check.running;
+  $("data-check-run").disabled = check.running || unchecked === 0;
+  $("data-check-run").textContent = found + maybe > 0 ? "Proveri jos" : "Proveri sajtove";
+
+  $("data-check-say").textContent = checkSentence(progress, unchecked);
+  $("data-check-count").hidden = !check.running;
+  $("data-check-count").textContent = `${progress.checked} / ${progress.total}`;
+
+  const anyFound = found > 0;
+  $("data-check-foot").hidden = !anyFound;
+  $("data-check-toggle").classList.toggle("is-on", $("data-filter-hide-found").checked);
+  $("data-check-toggle-chip").hidden = !anyFound;
+  $("data-check-toggle-chip").textContent = `${found}`;
+  $("data-check-note").textContent = maybe
+    ? `${maybe} ${plural(maybe, "je za proveru", "su za proveru", "je za proveru")} — oznaceni su u koloni Sajt`
+    : "";
+}
+
+function checkSentence(progress, unchecked) {
+  if (progress.status === "running") return "Trazim sajtove. Ide polako, oko 2 s po firmi.";
+  if (progress.status === "cancelled") return `Prekinuto. Jos ${unchecked} neprovereno.`;
+  if (progress.status === "error") return progress.message || "Provera je pukla.";
+  if (progress.status === "done") return progress.message;
+  if (unchecked === 0) return "Sve provereno.";
+  return `${unchecked} ${plural(unchecked, "firma nije proverena", "firme nisu proverene", "firmi nije provereno")}.`;
+}
+
+async function startCheck() {
+  if (check.running || !state.jobId) return;
+  const params = filterParams();
+  params.delete("hide_found");  // the pass works on everything, not on what is shown
+  try {
+    const response = await fetch(`/api/jobs/${state.jobId}/enrich?${params}`, { method: "POST" });
+    if (!response.ok) throw new Error(await messageOf(response));
+  } catch (error) {
+    showError(humanError(error));
+    return;
+  }
+  check.running = true;
+  renderCheckRunning();
+  pollCheck();
+}
+
+/** Paint the running state at once rather than waiting a poll for it to show. */
+function renderCheckRunning() {
+  $("data-check-band").classList.add("is-running");
+  $("data-check-sweep").hidden = false;
+  $("data-check-cancel").hidden = false;
+  $("data-check-run").disabled = true;
+  $("data-check-say").textContent = "Trazim sajtove. Ide polako, oko 2 s po firmi.";
+}
+
+function pollCheck() {
+  clearTimeout(state.checkTimer);
+  state.checkTimer = setTimeout(async () => {
+    if (!state.jobId) return;
+    let progress;
+    try {
+      const response = await fetch(`/api/jobs/${state.jobId}/enrich`);
+      if (!response.ok) return;
+      progress = await response.json();
+    } catch {
+      return;  // a dropped poll is not worth an error band; the next one retries
+    }
+
+    $("data-check-count").textContent = `${progress.checked} / ${progress.total}`;
+    if (progress.status === "running") {
+      pollCheck();
+      return;
+    }
+    check.running = false;
+    // Reloading brings the findings down with the rows and repaints the band.
+    if (progress.found > 0 && !check.autoHidden) {
+      check.autoHidden = true;
+      $("data-filter-hide-found").checked = true;
+      view.page = 1;
+    }
+    loadResults();
+  }, POLL_INTERVAL_MS);
+}
+
+async function cancelCheck() {
+  clearTimeout(state.checkTimer);
+  if (!state.jobId) return;
+  try {
+    await fetch(`/api/jobs/${state.jobId}/enrich`, { method: "DELETE" });
+  } catch {
+    // Cancelling is cooperative anyway; the next poll reports what happened.
+  }
+  check.running = false;
+  loadResults();
+}
+
+$("data-check-run").addEventListener("click", startCheck);
+$("data-check-cancel").addEventListener("click", cancelCheck);
+$("data-filter-hide-found").addEventListener("change", () => {
+  view.page = 1;
+  loadResults();
+});
+
+/** Deviations from the default view, in either direction: unticking `Sazmi
+ *  lance` shows more rows, but it is still the user having changed something. */
 function activeFilterCount() {
   let count = 0;
   if ($("data-filter-q").value.trim()) count += 1;
   if ($("data-filter-contact").checked) count += 1;
   if (view.categories.size > 0) count += 1;
+  if (!$("data-filter-collapse").checked) count += 1;
+  if (!$("data-filter-commercial").checked) count += 1;
+  if ($("data-filter-hide-found").checked) count += 1;
   return count;
 }
 
@@ -853,16 +999,30 @@ function addressOf(row) {
   return [row.street, row.housenumber].filter(Boolean).join(" ");
 }
 
+function siteLink(url, className) {
+  const link = element("a", className);
+  link.href = url;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+  return link;
+}
+
+/** Two kinds of site, never blended: the one OSM carries, and the one the search
+ *  turned up. A found site is marked so the user knows nobody vouched for it. */
 function siteCell(row) {
   const cell = element("div", "cell cell-mono cell-site");
   if (row.website) {
-    const link = document.createElement("a");
-    link.href = row.website;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.textContent = row.website.replace(/^https?:\/\/(www\.)?/, "");
-    cell.appendChild(link);
+    cell.appendChild(siteLink(row.website));
+    return cell;
   }
+  if (!row.found_website) return cell;
+  const sure = row.found_confidence === "strong";
+  cell.classList.add(sure ? "is-found" : "is-maybe");
+  cell.append(
+    siteLink(row.found_website, "found-link"),
+    element("span", "found-tag", sure ? "pretraga" : "proveri"),
+  );
   return cell;
 }
 
@@ -913,6 +1073,9 @@ function renderEmptyState() {
 $("data-reset-filters").addEventListener("click", () => {
   $("data-filter-q").value = "";
   $("data-filter-contact").checked = false;
+  $("data-filter-collapse").checked = true;
+  $("data-filter-commercial").checked = true;
+  $("data-filter-hide-found").checked = false;
   view.categories.clear();
   view.facetFilter = "";
   $("data-facet-filter").value = "";
@@ -978,6 +1141,9 @@ function setWithSite(on) {
 
 $("data-filter-with-site").addEventListener("change", (event) => setWithSite(event.target.checked));
 $("data-filter-contact").addEventListener("change", () => { view.page = 1; loadResults(); });
+for (const attribute of ["data-filter-collapse", "data-filter-commercial"]) {
+  $(attribute).addEventListener("change", () => { view.page = 1; loadResults(); });
+}
 
 $("data-filter-q").addEventListener("input", () => {
   clearTimeout(state.filterTimer);

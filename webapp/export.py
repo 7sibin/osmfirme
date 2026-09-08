@@ -13,7 +13,7 @@ from openpyxl.utils import get_column_letter
 
 from osm_businesses import COLUMNS, Row
 
-from webapp.results import WEBSITE_NO, WEBSITE_YES, ResultFilters
+from webapp.results import FOUND_STRONG, FOUND_WEAK, WEBSITE_NO, WEBSITE_YES, ResultFilters
 
 HEADERS_SR: dict[str, str] = {
     "osm_type": "OSM tip",
@@ -33,6 +33,32 @@ HEADERS_SR: dict[str, str] = {
     "opening_hours": "Radno vreme",
     "lat": "Geo. sirina",
     "lon": "Geo. duzina",
+}
+
+#: Appended after the OSM columns. Kept separate and labelled rather than folded
+#: into `website`, because these did not come from the map: ODbL covers the OSM
+#: half of the sheet and nothing else, and a weak hit is the user's call to make.
+FOUND_COLUMNS: tuple[str, ...] = ("found_website", "found_confidence", "found_source")
+
+HEADERS_FOUND: dict[str, str] = {
+    "found_website": "Sajt (pretraga)",
+    "found_confidence": "Pouzdanost",
+    "found_source": "Odakle",
+}
+
+#: Turned into words: a spreadsheet full of `strong` helps nobody.
+FOUND_LABELS: dict[str, str] = {
+    FOUND_STRONG: "sigurno",
+    FOUND_WEAK: "za proveru",
+    "none": "nije nadjen",
+    "": "nije provereno",
+}
+
+SOURCE_LABELS: dict[str, str] = {
+    "search": "rezultat pretrage",
+    "mention": "pomenut u tekstu",
+    "social": "drustvena mreza",
+    "": "",
 }
 
 ATTRIBUTION = (
@@ -60,14 +86,22 @@ def build_workbook(rows: list[Row], *, area_label: str, filters: ResultFilters) 
     sheet = book.active
     sheet.title = "Firme"
 
-    for index, column in enumerate(COLUMNS, start=1):
-        cell = sheet.cell(row=1, column=index, value=HEADERS_SR[column])
+    sheet_columns = (*COLUMNS, *FOUND_COLUMNS)
+    headers = {**HEADERS_SR, **HEADERS_FOUND}
+
+    for index, column in enumerate(sheet_columns, start=1):
+        cell = sheet.cell(row=1, column=index, value=headers[column])
         cell.font = Font(bold=True)
         cell.alignment = Alignment(vertical="center")
 
     for row_index, row in enumerate(rows, start=2):
-        values = row.as_output_dict()
-        for column_index, column in enumerate(COLUMNS, start=1):
+        values = {
+            **row.as_output_dict(),
+            "found_website": row.found_website,
+            "found_confidence": FOUND_LABELS.get(row.found_confidence, row.found_confidence),
+            "found_source": SOURCE_LABELS.get(row.found_source, row.found_source),
+        }
+        for column_index, column in enumerate(sheet_columns, start=1):
             value = values[column]
             cell = sheet.cell(row=row_index, column=column_index)
             if column in ("lat", "lon"):
@@ -78,7 +112,7 @@ def build_workbook(rows: list[Row], *, area_label: str, filters: ResultFilters) 
                 cell.number_format = "@"  # text, so Excel keeps the leading +
             else:
                 cell.value = value
-            if value and column == "website":
+            if value and column in ("website", "found_website"):
                 cell.hyperlink = str(value)
                 cell.font = LINK_FONT
             elif value and column == "email":
@@ -86,9 +120,9 @@ def build_workbook(rows: list[Row], *, area_label: str, filters: ResultFilters) 
                 cell.font = LINK_FONT
 
     sheet.freeze_panes = "A2"
-    last_column = get_column_letter(len(COLUMNS))
+    last_column = get_column_letter(len(sheet_columns))
     sheet.auto_filter.ref = f"A1:{last_column}{max(1, len(rows) + 1)}"
-    _fit_columns(sheet, rows)
+    _fit_columns(sheet, rows, sheet_columns, headers)
 
     _write_info_sheet(book, rows=rows, area_label=area_label, filters=filters)
 
@@ -98,9 +132,9 @@ def build_workbook(rows: list[Row], *, area_label: str, filters: ResultFilters) 
     return buffer
 
 
-def _fit_columns(sheet, rows: list[Row]) -> None:
-    for index, column in enumerate(COLUMNS, start=1):
-        widest = len(HEADERS_SR[column])
+def _fit_columns(sheet, rows: list[Row], columns, headers) -> None:
+    for index, column in enumerate(columns, start=1):
+        widest = len(headers[column])
         for row in rows:
             widest = max(widest, len(str(getattr(row, column, ""))))
         sheet.column_dimensions[get_column_letter(index)].width = min(widest + 2, MAX_COLUMN_WIDTH)
@@ -119,6 +153,14 @@ def _write_info_sheet(book: Workbook, *, rows: list[Row], area_label: str, filte
         applied.append("samo bez sajta")
     if filters.q.strip():
         applied.append(f"pretraga: {filters.q.strip()}")
+    if filters.collapse:
+        applied.append("lanci sazeti na jedan red")
+    if filters.commercial_only:
+        applied.append("bez banaka, posta i javnih ustanova")
+    if filters.hide_found:
+        applied.append("sakriveni oni kojima je pretraga nasla sajt")
+
+    found = sum(1 for row in rows if row.found_website)
 
     lines: list[tuple[str, object]] = [
         ("Oblast", area_label),
@@ -126,6 +168,13 @@ def _write_info_sheet(book: Workbook, *, rows: list[Row], area_label: str, filte
         ("Broj firmi", len(rows)),
         ("Filteri", "; ".join(applied) or "bez filtera"),
         ("Izvor", ATTRIBUTION),
+        ("Sajtovi iz pretrage", found),
+        (
+            "Napomena",
+            "Kolone 'Sajt (pretraga)', 'Pouzdanost' i 'Odakle' nisu iz OpenStreetMap-a "
+            "nego iz veb pretrage, i nisu pokrivene ODbL licencom. Redove oznacene "
+            "'za proveru' pogledaj pre nego sto ih koristis.",
+        ),
     ]
     for row_index, (label, value) in enumerate(lines, start=1):
         info.cell(row=row_index, column=1, value=label).font = Font(bold=True)
