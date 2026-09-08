@@ -164,6 +164,12 @@ class Row:
     """How much to trust `found_website`: "strong" or "weak". Empty when unchecked."""
     found_source: str = field(default="", compare=False)
     """Where it came from: "search", "mention" or "social"."""
+    found_email: str = field(default="", compare=False)
+    """An address read off the business's own site, when OSM carries none."""
+    found_phone: str = field(default="", compare=False)
+    """A number read off the same page, likewise only when OSM carries none."""
+    contact_status: str = field(default="", compare=False)
+    """How reading the site went: "ok", "none", "dead". Empty means never tried."""
 
     def as_output_dict(self) -> dict[str, Any]:
         return {column: getattr(self, column) for column in COLUMNS}

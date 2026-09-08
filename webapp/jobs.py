@@ -20,6 +20,7 @@ from typing import Any, Literal
 
 from osm_businesses import Row
 
+from webapp.contact_runner import ContactState
 from webapp.enrich_runner import EnrichState
 
 logger = logging.getLogger(__name__)
@@ -49,6 +50,9 @@ class Job:
     """What the website search has turned up for this job's rows so far."""
     enrich_cancel: threading.Event = field(default_factory=threading.Event)
     """Separate from `cancel_event`: the search is its own pass and is cancelled on its own."""
+    contacts: ContactState = field(default_factory=ContactState)
+    """What reading those sites turned up: addresses, numbers, socials."""
+    contacts_cancel: threading.Event = field(default_factory=threading.Event)
 
     def set_phase(self, phase: JobPhase, message: str) -> None:
         self.phase = phase
@@ -74,6 +78,7 @@ class Job:
             "rows": len(self.rows) if self.status == "done" else None,
             "error": self.error,
             "enrich": self.enrich.progress.to_dict(),
+            "contacts": self.contacts.progress.to_dict(),
         }
 
 

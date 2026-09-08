@@ -23,6 +23,18 @@ from geo import NominatimClient, RateLimiter
 from osm_businesses import USER_AGENT, OverpassClient, Row
 
 from webapp.cache import ResultCache, cache_key, default_cache_dir
+from webapp.contact_runner import (
+    DEFAULT_LIMIT as CONTACT_LIMIT,
+    MAX_LIMIT as CONTACT_MAX_LIMIT,
+    build_scraper,
+    run_contacts,
+)
+from webapp.contacts import (
+    CONTACT_DEAD,
+    ContactScraper,
+    apply_contact_hits,
+    pending_contacts,
+)
 from webapp.enrich import WebsiteFinder, apply_site_hits
 from webapp.enrich_runner import (
     DEFAULT_LIMIT,
@@ -49,7 +61,12 @@ from webapp.results import (
     sort_filtered,
 )
 from webapp.runner import run_job
-from webapp.site_cache import SiteCache, default_site_cache_dir
+from webapp.site_cache import (
+    ContactCache,
+    SiteCache,
+    default_contact_cache_dir,
+    default_site_cache_dir,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -117,6 +134,19 @@ def get_site_cache() -> SiteCache:
 def get_finder_factory() -> Callable[[], WebsiteFinder]:
     """Built per pass rather than once: the searcher carries its own rate limiter."""
     return lambda: build_finder(_session(), USER_AGENT)
+
+
+@lru_cache(maxsize=1)
+def _contact_cache() -> ContactCache:
+    return ContactCache(default_contact_cache_dir())
+
+
+def get_contact_cache() -> ContactCache:
+    return _contact_cache()
+
+
+def get_scraper_factory() -> Callable[[], ContactScraper]:
+    return lambda: build_scraper(_session(), USER_AGENT)
 
 
 # --- routes -----------------------------------------------------------------
@@ -234,7 +264,10 @@ def _working_set(job: Job, filters: ResultFilters) -> tuple[list[Row], list[Row]
     found one for - and must not move when the user ticks "hide the ones we
     found". Only the table below it moves.
     """
+    # The site overlay first: the contact pass reads the site the search found,
+    # so its findings hang off a row that already knows it has one.
     overlaid = apply_site_hits(job.rows, job.enrich.hits)
+    overlaid = apply_contact_hits(overlaid, job.contacts.hits)
     base = prepare_rows(overlaid, replace(filters, hide_found=False))
     shown = drop_found(base) if filters.hide_found else base
     return base, shown
@@ -254,6 +287,12 @@ def _counts(base: list[Row], matching: list[Row]) -> dict[str, int]:
         "maybe_sites": sum(1 for row in base if row.found_confidence == FOUND_WEAK),
         "unchecked": len(pending(base, {})),
         "unchecked_here": len(pending(matching, {})),
+        # The contact pass has its own population: rows that *have* a site.
+        "found_emails": sum(1 for row in base if row.found_email),
+        "found_phones": sum(1 for row in base if row.found_phone),
+        "dead_sites": sum(1 for row in base if row.contact_status == CONTACT_DEAD),
+        "unread": len(pending_contacts(base, {})),
+        "unread_here": len(pending_contacts(matching, {})),
     }
 
 
@@ -264,6 +303,9 @@ def _row_payload(row: Row) -> dict:
         "found_website": row.found_website,
         "found_confidence": row.found_confidence,
         "found_source": row.found_source,
+        "found_email": row.found_email,
+        "found_phone": row.found_phone,
+        "contact_status": row.contact_status,
     }
 
 
@@ -303,6 +345,7 @@ def job_results(
         # while `total` reports what the table is actually showing.
         "counts": _counts(base, matching),
         "enrich": job.enrich.progress.to_dict(),
+        "contacts": job.contacts.progress.to_dict(),
     }
 
 
@@ -397,6 +440,54 @@ def cancel_enrichment(job_id: str, registry: JobRegistry = Depends(get_registry)
     job = _require_job(registry, job_id)
     job.enrich_cancel.set()
     return job.enrich.progress.to_dict()
+
+
+@app.post("/api/jobs/{job_id}/contacts")
+async def start_contacts(
+    job_id: str,
+    limit: int = Query(default=CONTACT_LIMIT, ge=1, le=CONTACT_MAX_LIMIT),
+    filters: ResultFilters = Depends(_filters),
+    registry: JobRegistry = Depends(get_registry),
+    contacts: ContactCache = Depends(get_contact_cache),
+    scraper_factory: Callable[[], ContactScraper] = Depends(get_scraper_factory),
+) -> dict:
+    """Read the websites of the filtered rows for the details OSM does not carry.
+
+    Follows the filter bar for the same reason the website search does, though
+    the clock is far kinder here: a different host per business means the work
+    goes wide, so this is minutes where a search pass is an hour.
+    """
+    job = _finished_job(registry, job_id)
+    if job.contacts.progress.status == "running":
+        raise HTTPException(status_code=409, detail="Citanje sajtova je vec u toku.")
+
+    base, _ = _working_set(job, filters)
+    queue = filter_rows(base, filters)
+    job.contacts_cancel.clear()
+    registry.start_side_task(
+        job,
+        run_contacts(
+            queue,
+            job.contacts,
+            cache=contacts,
+            scraper_factory=scraper_factory,
+            limit=limit,
+            is_cancelled=job.contacts_cancel.is_set,
+        ),
+    )
+    return job.contacts.progress.to_dict()
+
+
+@app.get("/api/jobs/{job_id}/contacts")
+def contacts_status(job_id: str, registry: JobRegistry = Depends(get_registry)) -> dict:
+    return _require_job(registry, job_id).contacts.progress.to_dict()
+
+
+@app.delete("/api/jobs/{job_id}/contacts")
+def cancel_contacts(job_id: str, registry: JobRegistry = Depends(get_registry)) -> dict:
+    job = _require_job(registry, job_id)
+    job.contacts_cancel.set()
+    return job.contacts.progress.to_dict()
 
 
 @app.get("/")

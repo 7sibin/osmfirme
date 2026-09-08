@@ -2,12 +2,11 @@
 
 ## Enhancers — enrich rows from sources beyond OSM
 
-**The first one is built.** Website discovery ships as `webapp/enrich.py` +
-`webapp/enrich_runner.py`: it searches the web for businesses OSM has no
-`website` for and records what it finds in `found_website` / `found_confidence`
-/ `found_source`. See "Finding sites the map does not know about" in the
-README. What follows is the rest of the idea, and the decisions it is still
-waiting on.
+**Two of them are built.** Website discovery ships as `webapp/enrich.py` +
+`webapp/enrich_runner.py`, and reading those sites for an email ships as
+`webapp/contacts.py` + `webapp/contact_runner.py`. See "Finding sites the map
+does not know about" and "Reading those sites for an email" in the README. What
+follows is the rest of the idea, and the decisions it is still waiting on.
 
 Answers the first enhancer settled, which the next one should reuse:
 
@@ -54,7 +53,7 @@ Everything that stage touches:
 
 | Source | What it adds | Catch |
 |---|---|---|
-| Scrape the business's own site | email, extra phones, Facebook/Instagram links | only helps rows that have a `website` — including, now, one the search found; every site is shaped differently |
+| ~~Scrape the business's own site~~ | **done** — email, extra phone, socials, and whether the domain still answers | only helps rows that have a `website`, including one the search found; misses an address that is only in an image or behind a form |
 | ~~Find a site/socials for rows without one~~ | **done** — `ddgs` over several engines, domain-must-match-the-name, plus a liveness check | slow (~2 s per business) and precision-first, so it misses sites whose domain is not built from the name |
 | Official registries (APR, NBS) | PIB, matični broj, activity code, status (active / in liquidation), registered address | no public API; matching by name and address is unreliable |
 | Google Places | rating, review count, phone, website, opening hours | paid per call, and the README currently promises "OSM only. No Google Maps fallback" — adopting this is a deliberate break with that |
@@ -68,3 +67,7 @@ Everything that stage touches:
    directories back in.
 3. Whether a paid search API is worth it, now that the free engines cost about
    two seconds each and a city is thousands of businesses.
+4. Whether the dead sites the reading pass turns up deserve their own view.
+   They are recorded (`contact_status == "dead"`) and struck through in the
+   table, but there is no filter for "show me only the businesses whose site
+   has gone", which is arguably the warmest list the tool can produce.

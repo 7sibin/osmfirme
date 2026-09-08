@@ -12,6 +12,9 @@ const PAGE_SIZE = 50;
 /** Mirrors DEFAULT_LIMIT in webapp/enrich_runner.py: how many businesses one
  *  website-search pass will take on, so the button can name the number. */
 const CHECK_LIMIT = 150;
+/** Mirrors DEFAULT_LIMIT in webapp/contact_runner.py. Higher than the search's
+ *  cap because reading a site costs a fraction of a second, not two of them. */
+const READ_LIMIT = 500;
 const MIN_RADIUS_M = 50;
 const MAX_RADIUS_M = 50000;
 const VISIBLE_CHIPS = 5;
@@ -61,6 +64,7 @@ const state = {
   candidatesOpen: false,
   results: null,
   checkTimer: null,
+  readTimer: null,
 };
 
 const view = {
@@ -79,6 +83,9 @@ const check = {
   running: false,
   autoHidden: false,  // the hide toggle is ticked for the user once, not every pass
 };
+
+/** Reading the sites: the same shape as `check`, its own pass. */
+const read = { running: false };
 
 // --- small helpers ----------------------------------------------------------
 
@@ -540,8 +547,10 @@ function resetResultsView() {
   view.facetFilter = "";
   state.results = null;
   clearTimeout(state.checkTimer);
+  clearTimeout(state.readTimer);
   check.running = false;
   check.autoHidden = false;
+  read.running = false;
   $("data-filter-q").value = "";
   $("data-filter-contact").checked = false;
   $("data-filter-with-site").checked = false;
@@ -779,7 +788,115 @@ function renderCheckBand(body) {
   $("data-check-note").textContent = maybe
     ? `${maybe} ${plural(maybe, "je za proveru", "su za proveru", "je za proveru")} — oznaceni su u koloni Sajt`
     : "";
+
+  renderReadLine(body);
 }
+
+/* Reading the sites of rows that have one. A separate pass over a separate set
+ * of rows: the search looks for businesses *without* a site, this reads the
+ * ones that have one for the email and phone the map almost never carries. */
+
+function renderReadLine(body) {
+  const {
+    unread, unread_here: here, found_emails: emails, found_phones: phones,
+    dead_sites: dead,
+  } = body.counts;
+  const progress = body.contacts || { status: "idle" };
+
+  const line = $("data-read-line");
+  line.hidden = unread === 0 && emails === 0 && phones === 0 && dead === 0;
+  if (line.hidden) return;
+
+  read.running = progress.status === "running";
+  $("data-read-sweep").hidden = !read.running;
+  $("data-read-cancel").hidden = !read.running;
+  $("data-read-run").disabled = read.running || here === 0;
+  const willDo = Math.min(here, READ_LIMIT);
+  $("data-read-run").textContent = willDo > 0 ? `Procitaj ovih ${willDo}` : "Procitaj sajtove";
+
+  $("data-read-count").hidden = !read.running;
+  $("data-read-count").textContent = `${progress.checked} / ${progress.total}`;
+  $("data-read-say").textContent = readSentence(progress, unread, here, { emails, phones, dead });
+}
+
+function readSentence(progress, unread, here, found) {
+  if (progress.status === "running") return "Citam sajtove. Ovo ide brzo.";
+  if (progress.status === "error") return progress.message || "Citanje je puklo.";
+
+  const tail = readRemainder(unread, here);
+  const haul = [];
+  if (found.emails) haul.push(`${found.emails} email`);
+  if (found.phones) haul.push(`${found.phones} telefona`);
+  if (found.dead) haul.push(`${found.dead} mrtvih sajtova`);
+  const got = haul.length ? `Sa sajtova: ${haul.join(", ")}.` : "";
+
+  if (progress.status === "cancelled") return `Prekinuto. ${got} ${tail}`.replace(/\s+/g, " ").trim();
+  if (progress.status === "done") return `${got} ${tail}`.replace(/\s+/g, " ").trim();
+  return tail;
+}
+
+function readRemainder(unread, here) {
+  if (unread === 0) return "Svi sajtovi procitani.";
+  if (here === 0) return `Filteri ne ostavljaju sajt za citanje. U oblasti jos ${unread}.`;
+  if (here < unread) return `Filtrirano: ${here} neprocitano, u celoj oblasti jos ${unread}.`;
+  return `${unread} ${plural(unread, "sajt nije procitan", "sajta nisu procitana", "sajtova nije procitano")}.`;
+}
+
+async function startRead() {
+  if (read.running || !state.jobId) return;
+  const params = filterParams();
+  params.delete("hide_found");
+  try {
+    const response = await fetch(`/api/jobs/${state.jobId}/contacts?${params}`, { method: "POST" });
+    if (!response.ok) throw new Error(await messageOf(response));
+  } catch (error) {
+    showError(humanError(error));
+    return;
+  }
+  read.running = true;
+  $("data-read-sweep").hidden = false;
+  $("data-read-cancel").hidden = false;
+  $("data-read-run").disabled = true;
+  $("data-read-say").textContent = "Citam sajtove. Ovo ide brzo.";
+  pollRead();
+}
+
+function pollRead() {
+  clearTimeout(state.readTimer);
+  state.readTimer = setTimeout(async () => {
+    if (!state.jobId) return;
+    let progress;
+    try {
+      const response = await fetch(`/api/jobs/${state.jobId}/contacts`);
+      if (!response.ok) return;
+      progress = await response.json();
+    } catch {
+      return;  // a dropped poll is not worth an error band; the next one retries
+    }
+    $("data-read-count").textContent = `${progress.checked} / ${progress.total}`;
+    if (progress.status === "running") {
+      pollRead();
+      return;
+    }
+    read.running = false;
+    loadResults();
+  }, POLL_INTERVAL_MS);
+}
+
+async function cancelRead() {
+  clearTimeout(state.readTimer);
+  if (!state.jobId) return;
+  try {
+    await fetch(`/api/jobs/${state.jobId}/contacts`, { method: "DELETE" });
+  } catch {
+    // Cancelling is cooperative anyway; the next load reports what happened.
+  }
+  read.running = false;
+  loadResults();
+}
+
+$("data-read-run").addEventListener("click", startRead);
+$("data-read-cancel").addEventListener("click", cancelRead);
 
 function checkSentence(progress, unchecked, here) {
   if (progress.status === "running") return "Trazim sajtove. Ide polako, oko 2 s po firmi.";
@@ -1037,6 +1154,9 @@ function siteLink(url, className) {
 function siteCell(row) {
   const cell = element("div", "cell cell-mono cell-site");
   if (row.website) {
+    // A site the map carries that no longer answers puts the business back in
+    // the pile: they need one again, they just do not look like it.
+    if (row.contact_status === "dead") cell.classList.add("cell-dead");
     cell.appendChild(siteLink(row.website));
     return cell;
   }
@@ -1050,6 +1170,31 @@ function siteCell(row) {
   return cell;
 }
 
+/** The address OSM carries, or the one read off the business's own site. */
+function mailCell(row) {
+  const cell = element("div", "cell cell-mono cell-mail");
+  const address = row.email || row.found_email;
+  if (!address) return cell;
+  const link = element("a", row.email ? "" : "found-link");
+  link.href = `mailto:${address}`;
+  link.textContent = address;
+  cell.appendChild(link);
+  return cell;
+}
+
+function phoneCell(row) {
+  const cell = element("div", "cell cell-mono");
+  if (row.phone) {
+    cell.textContent = row.phone;
+    return cell;
+  }
+  if (row.found_phone) {
+    cell.classList.add("cell-found");
+    cell.textContent = row.found_phone;
+  }
+  return cell;
+}
+
 function renderTable(rows) {
   const body = $("data-table-body");
   clear(body);
@@ -1059,7 +1204,8 @@ function renderTable(rows) {
       element("div", "cell", row.name),
       element("div", "cell cell-mono cell-muted", row.category),
       element("div", "cell", addressOf(row)),
-      element("div", "cell cell-mono", row.phone),
+      phoneCell(row),
+      mailCell(row),
       siteCell(row),
       element("div", "cell cell-hours", row.opening_hours),
     );
@@ -1075,7 +1221,10 @@ function renderCards(rows) {
     const top = element("div", "card-top");
     top.append(element("div", "card-name", row.name), element("div", "card-key", row.category));
     const contact = element("div", "card-contact");
-    if (row.phone) contact.appendChild(element("div", "card-phone", row.phone));
+    const phone = row.phone || row.found_phone;
+    const mail = row.email || row.found_email;
+    if (phone) contact.appendChild(element("div", "card-phone", phone));
+    if (mail) contact.appendChild(element("div", "card-mail", mail));
     if (row.opening_hours) contact.appendChild(element("div", "card-hours", row.opening_hours));
     card.append(top, element("div", "card-address", addressOf(row)));
     if (contact.childElementCount) card.appendChild(contact);

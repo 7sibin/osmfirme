@@ -38,12 +38,26 @@ HEADERS_SR: dict[str, str] = {
 #: Appended after the OSM columns. Kept separate and labelled rather than folded
 #: into `website`, because these did not come from the map: ODbL covers the OSM
 #: half of the sheet and nothing else, and a weak hit is the user's call to make.
-FOUND_COLUMNS: tuple[str, ...] = ("found_website", "found_confidence", "found_source")
+FOUND_COLUMNS: tuple[str, ...] = (
+    "found_website", "found_confidence", "found_source",
+    "found_email", "found_phone", "contact_status",
+)
 
 HEADERS_FOUND: dict[str, str] = {
     "found_website": "Sajt (pretraga)",
     "found_confidence": "Pouzdanost",
     "found_source": "Odakle",
+    "found_email": "Email (sa sajta)",
+    "found_phone": "Telefon (sa sajta)",
+    "contact_status": "Sajt procitan",
+}
+
+#: What reading the site came to, in words.
+CONTACT_LABELS: dict[str, str] = {
+    "ok": "da",
+    "none": "da, nema kontakta",
+    "dead": "sajt ne radi",
+    "": "nije citan",
 }
 
 #: Turned into words: a spreadsheet full of `strong` helps nobody.
@@ -67,7 +81,7 @@ ATTRIBUTION = (
 )
 
 MAX_COLUMN_WIDTH = 45
-TEXT_COLUMNS = ("phone", "phone_alt", "postcode", "housenumber")
+TEXT_COLUMNS = ("phone", "phone_alt", "postcode", "housenumber", "found_phone")
 LINK_FONT = Font(color="0563C1", underline="single")
 
 
@@ -100,6 +114,9 @@ def build_workbook(rows: list[Row], *, area_label: str, filters: ResultFilters) 
             "found_website": row.found_website,
             "found_confidence": FOUND_LABELS.get(row.found_confidence, row.found_confidence),
             "found_source": SOURCE_LABELS.get(row.found_source, row.found_source),
+            "found_email": row.found_email,
+            "found_phone": row.found_phone,
+            "contact_status": CONTACT_LABELS.get(row.contact_status, row.contact_status),
         }
         for column_index, column in enumerate(sheet_columns, start=1):
             value = values[column]
@@ -115,7 +132,7 @@ def build_workbook(rows: list[Row], *, area_label: str, filters: ResultFilters) 
             if value and column in ("website", "found_website"):
                 cell.hyperlink = str(value)
                 cell.font = LINK_FONT
-            elif value and column == "email":
+            elif value and column in ("email", "found_email"):
                 cell.hyperlink = f"mailto:{value}"
                 cell.font = LINK_FONT
 
@@ -161,6 +178,8 @@ def _write_info_sheet(book: Workbook, *, rows: list[Row], area_label: str, filte
         applied.append("sakriveni oni kojima je pretraga nasla sajt")
 
     found = sum(1 for row in rows if row.found_website)
+    emails = sum(1 for row in rows if row.found_email)
+    dead = sum(1 for row in rows if row.contact_status == "dead")
 
     lines: list[tuple[str, object]] = [
         ("Oblast", area_label),
@@ -169,11 +188,14 @@ def _write_info_sheet(book: Workbook, *, rows: list[Row], area_label: str, filte
         ("Filteri", "; ".join(applied) or "bez filtera"),
         ("Izvor", ATTRIBUTION),
         ("Sajtovi iz pretrage", found),
+        ("Email adresa sa sajtova", emails),
+        ("Sajtova koji ne rade", dead),
         (
             "Napomena",
-            "Kolone 'Sajt (pretraga)', 'Pouzdanost' i 'Odakle' nisu iz OpenStreetMap-a "
-            "nego iz veb pretrage, i nisu pokrivene ODbL licencom. Redove oznacene "
-            "'za proveru' pogledaj pre nego sto ih koristis.",
+            "Kolone koje pocinju sa 'Sajt (pretraga)' nisu iz OpenStreetMap-a nego iz "
+            "veb pretrage i sa sajtova samih firmi, i nisu pokrivene ODbL licencom. "
+            "Redove oznacene 'za proveru' pogledaj pre nego sto ih koristis. "
+            "'Sajt ne radi' znaci da firma ima sajt u OSM-u koji vise ne odgovara.",
         ),
     ]
     for row_index, (label, value) in enumerate(lines, start=1):

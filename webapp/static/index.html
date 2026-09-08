@@ -170,6 +170,19 @@
             <button type="button" class="btn-tertiary" data-check-cancel hidden>Prekini</button>
           </div>
           <div class="sweep" data-check-sweep hidden><div class="sweep-bar"></div></div>
+
+          <!-- The other half of the same job: once a row has a site, the email
+               and the phone are usually one page away. Its own line because it
+               is a different pass over a different set of rows - and a far
+               faster one, since there is no search engine to be polite to. -->
+          <div class="check-band-line" data-read-line>
+            <button type="button" class="btn-secondary" data-read-run>Procitaj sajtove</button>
+            <div class="check-band-say" data-read-say></div>
+            <div class="spacer"></div>
+            <div class="check-band-count" data-read-count hidden></div>
+            <button type="button" class="btn-tertiary" data-read-cancel hidden>Prekini</button>
+          </div>
+          <div class="sweep" data-read-sweep hidden><div class="sweep-bar"></div></div>
           <div class="check-band-foot" data-check-foot hidden>
             <label class="site-toggle" data-check-toggle>
               <input type="checkbox" data-filter-hide-found>
@@ -218,6 +231,7 @@
           <button type="button" data-sort="category">Kategorija<span class="arrow"></span></button>
           <button type="button" data-sort="street">Adresa<span class="arrow"></span></button>
           <button type="button" data-sort="phone">Telefon<span class="arrow"></span></button>
+          <button type="button" data-sort="email">Email<span class="arrow"></span></button>
           <button type="button" data-sort="website">Sajt<span class="arrow"></span></button>
           <button type="button" data-sort="opening_hours">Radno vreme<span class="arrow"></span></button>
         </div>

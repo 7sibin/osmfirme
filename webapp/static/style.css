@@ -663,7 +663,9 @@ input[type="checkbox"] { accent-color: var(--ink); margin: 0; }
 
 .grid-row {
   display: grid;
-  grid-template-columns: 24% 12% 18% 16% 15% 15%;
+  /* Naziv, kategorija, adresa, telefon, email, sajt, radno vreme. The
+     three contact columns sit together: that is what the list is for. */
+  grid-template-columns: 21% 10% 15% 13% 16% 13% 12%;
   align-items: center;
   padding: 0 10px;
 }
@@ -713,6 +715,12 @@ input[type="checkbox"] { accent-color: var(--ink); margin: 0; }
 /* A found site is not the map's word, so it never looks like one: different
    colour, and a tag saying where it came from. */
 .cell-site .found-link { color: var(--found); }
+/* Anything the web supplied rather than the map wears the same colour, whichever
+   column it lands in, so a glance down the table separates the two sources. */
+.cell-found { color: var(--found); }
+.cell-mail a { color: var(--survey); }
+.cell-mail .found-link { color: var(--found); }
+.cell-dead { color: var(--stop-fg); text-decoration: line-through; }
 .cell-site.is-maybe .found-link { color: var(--work-fg); }
 .found-tag {
   margin-left: 6px;
@@ -874,6 +882,7 @@ input[type="checkbox"] { accent-color: var(--ink); margin: 0; }
 .card-key { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); flex: none; margin-left: auto; }
 .card-address { font-size: 13px; }
 .card-contact { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.card-mail { font-family: var(--mono); font-size: 11.5px; color: var(--survey); }
 .card-phone { font-family: var(--mono); font-size: 12.5px; color: var(--survey); }
 .card-hours { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); }
 

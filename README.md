@@ -86,9 +86,12 @@ its own timeout in the background.
 | `GET /api/jobs/{id}/results` | filtered rows, paginated, plus per-category counts |
 | `GET /api/jobs/{id}/points` | `[lat, lon]` per filtered row, so the map can plot what the table lists |
 | `GET /api/jobs/{id}/export.xlsx` | the same filtered rows as a workbook |
-| `POST /api/jobs/{id}/enrich` | start a website-search pass over the prepared rows |
+| `POST /api/jobs/{id}/enrich` | start a website-search pass over the filtered rows |
 | `GET /api/jobs/{id}/enrich` | how that pass is going |
 | `DELETE /api/jobs/{id}/enrich` | stop it |
+| `POST /api/jobs/{id}/contacts` | start a pass that reads those websites for an email |
+| `GET /api/jobs/{id}/contacts` | how *that* pass is going |
+| `DELETE /api/jobs/{id}/contacts` | stop it |
 
 All three filtering routes take the same query parameters: `categories`
 (repeatable), `require_contact`, `website` (`any`, `yes` or `no`), `q`, `sort`
@@ -101,9 +104,11 @@ rather than the filtered table: `area_total`, `area_without_site`,
 holds N businesses, M of them without a site" — a sentence about the area —
 while `total` is what the table is currently showing.
 
-`unchecked_here` is the exception, and follows the filters: it is what the
-website search would take on right now, so the button can say how many it will
-actually check. Keeping them separate is what lets the page say "588
+`unchecked_here` and `unread_here` are the exceptions, and follow the filters:
+they are what each pass would take on right now, so its button can say how many
+it will actually get through. The rest of the reading pass's numbers -
+`found_emails`, `found_phones`, `dead_sites`, `unread` - describe the area like
+the others. Keeping them separate is what lets the page say "588
 firmi je u oblasti — filteri ih sve iskljucuju" when a filter empties the table.
 
 ### Preparing the rows
@@ -183,6 +188,42 @@ you can still see how many were hidden.
 `duckduckgo,brave,google,yahoo,startpage,mojeek`; breadth is what makes a long
 run possible, since any single engine blocks within a handful of queries).
 
+### Reading those sites for an email
+
+OSM has a phone for 26% of the businesses in the cached extracts and an email
+for 13%. The email is the column outreach actually runs on, and it is the one
+the map is worst at - a mapper records what is visible from the street.
+
+Once a row has a website, though, the missing details are usually one page
+away. `POST /api/jobs/{id}/contacts` fetches the homepage, reads the addresses,
+numbers and social links off it, and follows a `Kontakt` link when the homepage
+alone comes up short - at most three pages per business.
+
+This is the cheap half. There is no search engine to be polite to and every
+business is a different host, so the pass runs eight at a time: **43 real sites
+in central Nis took 18 seconds** and produced 17 emails, 22 phones and 6 dead
+sites. Businesses sharing one website - a chain, a franchise landing page - are
+read once, because that cache is keyed by the site rather than the business.
+
+Choosing between the addresses on a page is ranked, not filtered: one on the
+site's own domain is certainly theirs, a `gmail` address on their own site
+almost certainly is, and one on a third party's domain is somebody else's
+however plausible it looks, so it is dropped. `info@` beats a named person's on
+the same domain. Findings land in `found_email` and `found_phone`, never on top
+of the OSM columns.
+
+`contact_status` says how the reading went, and the distinction that matters is
+**`dead` versus `none`**. `dead` means nothing answered at that address at all,
+which is a fact about the business and a reason to call them - their site is
+gone and they may not know. A 403 from a bot filter, a login wall or an
+unreadable content type is `none`: a failed read, not a dead business. Getting
+that backwards would report a working company as having no website. `https`
+that refuses to connect is retried once over `http`, since plenty of small
+Serbian sites are still http-only while OSM records them as `https`.
+
+A weak website guess from the search is deliberately *not* read: attaching a
+stranger's email to a lead is worse than an empty column.
+
 The area in `POST /api/jobs` is one of:
 
 ```json
@@ -203,11 +244,12 @@ phone numbers stored as text so Excel keeps the leading `+`. **Info** records
 the area, the date, the row count, the filters applied, how many sites the web
 search contributed, and the ODbL attribution.
 
-Three extra columns sit after the OSM ones — `Sajt (pretraga)`, `Pouzdanost`
-and `Odakle` — carrying what the website search found. They are kept separate
-and labelled rather than folded into `Sajt` on purpose: they did not come from
-the map, ODbL does not cover them, and a row marked `za proveru` is the user's
-call to make.
+Six extra columns sit after the OSM ones — `Sajt (pretraga)`, `Pouzdanost` and
+`Odakle` from the website search, then `Email (sa sajta)`, `Telefon (sa sajta)`
+and `Sajt procitan` from reading it. They are kept separate and labelled rather
+than folded into `Sajt` and `Email` on purpose: they did not come from the map,
+ODbL does not cover them, and a row marked `za proveru` is the user's call to
+make.
 
 That attribution is not decoration. Anything you publish from these
 spreadsheets carries the same obligation as the CLI's CSVs — see
@@ -405,7 +447,7 @@ rows survived parsing and filters, and how many carry a phone or a website.
 python -m pytest -q
 ```
 
-275 tests, no network anywhere — the HTTP layer is mocked, the search engine is
+343 tests, no network anywhere — the HTTP layer is mocked, the search engine is
 injected, and every fixture is hand-built.
 
 The CLI's 78: `test_parse.py` covers the pure `parse_elements` function
@@ -413,7 +455,7 @@ The CLI's 78: `test_parse.py` covers the pure `parse_elements` function
 normalization); `test_geo.py` covers area resolution (candidate filtering, the
 area-id arithmetic, `--pick`, the cache, and the rate limiter).
 
-The web app's 197: `test_webapp_models.py` (area validation and the translation
+The web app's 265: `test_webapp_models.py` (area validation and the translation
 into `AreaSpec`), `test_webapp_cache.py` (the key, the round trip, and every
 way an entry can be rejected), `test_webapp_jobs.py` (the job state machine and
 cancellation), `test_webapp_runner.py` (cache hit, query shape, Overpass
@@ -430,8 +472,17 @@ are rejected and why, the foreign-TLD downgrade, social profiles, dead domains,
 and a failed search staying *unchecked* rather than becoming a miss.
 `test_webapp_enrich_runner.py` covers a pass: what it skips, the cap and
 continuing, cancellation, and one broken row not losing the rest.
-`test_webapp_site_cache.py` covers the key, the two expiry rates, and surviving
-a corrupt shard or an unwritable disk.
+`test_webapp_site_cache.py` covers both caches' keys, their two expiry rates,
+and surviving a corrupt shard or an unwritable disk.
+
+Reading the sites adds 55 more: `test_webapp_contacts.py` covers what counts as
+an address on a page and what only looks like one (a retina asset, the error
+reporter, a placeholder in a form), how one is chosen between several, Serbian
+phone shapes against the PIBs and prices that resemble them, following a
+`Kontakt` link without wandering off the host, and the distinction between a
+site that is dead and one that merely refused to be read.
+`test_webapp_contact_runner.py` covers a pass: the cap, continuing, cancelling
+mid-chunk, and a chain's branches sharing one fetch.
 
 The frontend has no automated tests; it is checked by hand.
 

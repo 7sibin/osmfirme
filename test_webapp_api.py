@@ -288,6 +288,9 @@ def test_results_carry_the_area_counts_and_the_export_name(wired):
         "found_sites": 0, "maybe_sites": 0,
         # Both fixture names are bare trade words, so neither can be searched for.
         "unchecked": 0, "unchecked_here": 0,
+        "found_emails": 0, "found_phones": 0, "dead_sites": 0,
+        # Pekara carries a website and no email, so its site is worth reading.
+        "unread": 1, "unread_here": 1,
     }
     assert body["export_filename"].startswith("firme-nis-")
 
@@ -538,3 +541,160 @@ def test_a_filtered_pass_leaves_the_rest_for_the_next_one(searching, registry):
 
     assert StubFinder.asked == ["Pekara Trpkovic", "Apoteka Jankovic", "Maxi"]
     assert searching.get(f"/api/jobs/{job_id}/results").json()["counts"]["unchecked"] == 0
+
+
+# --- reading the sites -------------------------------------------------------
+
+from webapp.contacts import CONTACT_DEAD, CONTACT_NONE, CONTACT_OK, ContactHit  # noqa: E402
+from webapp.main import get_contact_cache, get_scraper_factory  # noqa: E402
+from webapp.site_cache import ContactCache  # noqa: E402
+
+#: Rows that already carry a website, so the contact pass has something to read.
+SITED_ELEMENTS = [
+    {"type": "node", "id": 1, "lat": 43.32, "lon": 21.9,
+     "tags": {"name": "Pekara Trpkovic", "shop": "bakery", "addr:city": "Nis",
+              "website": "https://trpkovic.rs"}},
+    {"type": "node", "id": 2, "lat": 43.33, "lon": 21.91,
+     "tags": {"name": "Apoteka Jankovic", "shop": "chemist", "addr:city": "Nis",
+              "website": "https://jankovic.rs"}},
+    {"type": "node", "id": 3, "lat": 43.34, "lon": 21.92,
+     "tags": {"name": "Zubar Peric", "amenity": "dentist", "addr:city": "Nis",
+              "website": "https://peric.rs", "email": "vec@imam.rs", "phone": "+38118111"}},
+    # No site at all: nothing for this pass to do with it.
+    {"type": "node", "id": 4, "lat": 43.35, "lon": 21.93,
+     "tags": {"name": "Cvecara Ruza", "shop": "florist", "addr:city": "Nis"}},
+]
+
+PAGES = {
+    "https://trpkovic.rs": ContactHit(email="info@trpkovic.rs", phone="018512345",
+                                      status=CONTACT_OK, checked_at="2026-09-09T00:00:00+00:00"),
+    "https://jankovic.rs": ContactHit(status=CONTACT_DEAD, checked_at="2026-09-09T00:00:00+00:00"),
+}
+
+
+class StubScraper:
+    read_for: list[str] = []
+
+    def read(self, row):
+        StubScraper.read_for.append(row.name)
+        return PAGES.get(
+            row.website,
+            ContactHit(status=CONTACT_NONE, checked_at="2026-09-09T00:00:00+00:00"),
+        )
+
+
+@pytest.fixture
+def reading(tmp_path, registry):
+    StubScraper.read_for = []
+    app.dependency_overrides[get_registry] = lambda: registry
+    app.dependency_overrides[get_cache] = lambda: ResultCache(tmp_path / "results")
+    app.dependency_overrides[get_overpass_factory] = lambda: (lambda: StubOverpass(SITED_ELEMENTS))
+    app.dependency_overrides[get_contact_cache] = lambda: ContactCache(tmp_path / "contacts")
+    app.dependency_overrides[get_scraper_factory] = lambda: (lambda: StubScraper())
+    with TestClient(app) as test_client:
+        yield test_client
+    app.dependency_overrides.clear()
+
+
+def _run_contacts(client, job_id, tries=400):
+    for _ in range(tries):
+        body = client.get(f"/api/jobs/{job_id}/contacts").json()
+        if body["status"] in {"done", "error", "cancelled"}:
+            return body
+    raise AssertionError("the contact pass never finished")
+
+
+def read_job(client, **params):
+    job_id = post_job(client, categories=["shop", "amenity"]).json()["job_id"]
+    wait_for_job(client, job_id)
+    client.post(f"/api/jobs/{job_id}/contacts", params=params)
+    _run_contacts(client, job_id)
+    return job_id
+
+
+def test_the_contact_pass_reports_what_it_read(reading):
+    job_id = read_job(reading)
+    progress = reading.get(f"/api/jobs/{job_id}/contacts").json()
+    assert progress["status"] == "done"
+    assert progress["emails"] == 1
+    assert progress["phones"] == 1
+    assert progress["dead"] == 1
+
+
+def test_only_rows_with_a_site_and_something_missing_are_read(reading):
+    """The florist has no site; the dentist already has both an email and a phone."""
+    read_job(reading)
+    assert sorted(StubScraper.read_for) == ["Apoteka Jankovic", "Pekara Trpkovic"]
+
+
+def test_a_scraped_address_lands_beside_the_osm_columns_not_on_top_of_them(reading):
+    job_id = read_job(reading)
+    rows = reading.get(f"/api/jobs/{job_id}/results", params={"website": "any"}).json()["rows"]
+    trpkovic = next(row for row in rows if row["name"] == "Pekara Trpkovic")
+    assert trpkovic["email"] == ""
+    assert trpkovic["found_email"] == "info@trpkovic.rs"
+    assert trpkovic["found_phone"] == "018512345"
+    assert trpkovic["contact_status"] == CONTACT_OK
+
+
+def test_a_dead_site_is_recorded_as_such(reading):
+    job_id = read_job(reading)
+    rows = reading.get(f"/api/jobs/{job_id}/results", params={"website": "any"}).json()["rows"]
+    jankovic = next(row for row in rows if row["name"] == "Apoteka Jankovic")
+    assert jankovic["contact_status"] == CONTACT_DEAD
+
+
+def test_the_contact_pass_follows_the_filters_too(reading):
+    job_id = post_job(reading, categories=["shop", "amenity"]).json()["job_id"]
+    wait_for_job(reading, job_id)
+    reading.post(f"/api/jobs/{job_id}/contacts", params={"q": "trpkovic", "website": "any"})
+    _run_contacts(reading, job_id)
+    assert StubScraper.read_for == ["Pekara Trpkovic"]
+
+
+def test_counts_report_both_scopes_for_reading_as_well(reading):
+    job_id = post_job(reading, categories=["shop", "amenity"]).json()["job_id"]
+    wait_for_job(reading, job_id)
+
+    wide = reading.get(f"/api/jobs/{job_id}/results", params={"website": "any"}).json()["counts"]
+    assert wide["unread"] == 2 and wide["unread_here"] == 2
+
+    narrow = reading.get(
+        f"/api/jobs/{job_id}/results", params={"website": "any", "q": "trpkovic"}
+    ).json()["counts"]
+    assert narrow["unread"] == 2, "the area count must not move with the filters"
+    assert narrow["unread_here"] == 1
+
+
+def test_counts_report_what_reading_turned_up(reading):
+    job_id = read_job(reading)
+    counts = reading.get(f"/api/jobs/{job_id}/results", params={"website": "any"}).json()["counts"]
+    assert counts["found_emails"] == 1
+    assert counts["found_phones"] == 1
+    assert counts["dead_sites"] == 1
+    assert counts["unread"] == 0
+
+
+def test_starting_a_second_reading_pass_while_one_runs_is_refused(reading, registry):
+    job_id = post_job(reading, categories=["shop", "amenity"]).json()["job_id"]
+    wait_for_job(reading, job_id)
+    registry.get(job_id).contacts.progress.status = "running"
+    assert reading.post(f"/api/jobs/{job_id}/contacts").status_code == 409
+
+
+def test_reading_on_an_unfinished_job_is_refused(reading):
+    assert reading.post("/api/jobs/nope/contacts").status_code == 404
+
+
+def test_cancelling_the_reading_leaves_the_job_itself_done(reading):
+    job_id = read_job(reading)
+    reading.delete(f"/api/jobs/{job_id}/contacts")
+    assert reading.get(f"/api/jobs/{job_id}").json()["status"] == "done"
+
+
+def test_the_two_passes_do_not_tread_on_each_other(reading):
+    """Reading sites must not disturb what the website search recorded, or vice versa."""
+    job_id = read_job(reading)
+    status = reading.get(f"/api/jobs/{job_id}").json()
+    assert status["contacts"]["status"] == "done"
+    assert status["enrich"]["status"] == "idle"

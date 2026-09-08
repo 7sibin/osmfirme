@@ -59,10 +59,30 @@ def test_a_weak_hit_is_labelled_as_needing_a_look():
     assert values["Pouzdanost"] == "za proveru"
 
 
+def test_what_reading_the_site_found_is_also_its_own_column():
+    read = replace(make_row("Pekara Trpkovic"), email="", phone="",
+                   found_email="info@trpkovic.rs", found_phone="018512345",
+                   contact_status="ok")
+    sheet = load([read])["Firme"]
+    values = dict(zip([c.value for c in sheet[1]], [c.value for c in sheet[2]]))
+    assert not values["Email"]
+    assert values["Email (sa sajta)"] == "info@trpkovic.rs"
+    assert values["Telefon (sa sajta)"] == "018512345"
+    assert values["Sajt procitan"] == "da"
+
+
+def test_a_dead_site_says_so_in_words():
+    dead = replace(make_row("A"), contact_status="dead")
+    sheet = load([dead])["Firme"]
+    values = dict(zip([c.value for c in sheet[1]], [c.value for c in sheet[2]]))
+    assert values["Sajt procitan"] == "sajt ne radi"
+
+
 def test_an_unchecked_row_says_so_rather_than_looking_like_a_miss():
     sheet = load([make_row("A")])["Firme"]
     values = dict(zip([c.value for c in sheet[1]], [c.value for c in sheet[2]]))
     assert values["Pouzdanost"] == "nije provereno"
+    assert values["Sajt procitan"] == "nije citan"
 
 
 def test_one_row_per_business():
